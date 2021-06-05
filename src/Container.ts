@@ -1,5 +1,5 @@
 import { Container as _Container, Task, ITickerData } from '@tawaship/pixim.js';
-import { TCreatejsObject, CreatejsMovieClip as s } from '@tawaship/pixi-animate-core';
+import { TCreatejsObject } from '@tawaship/pixi-animate-core';
 import { CreatejsMovieClip } from './MovieClip';
 
 export interface ICreatejsMovieClipDictionary {

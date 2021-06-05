@@ -87,4 +87,4 @@ Pixim.animate.loadAssetAsync([{
 
 	|name|class|
 	|:--|:--|
-	|createjs.MovieClip|[CreatejsMovieClip](https://tawaship.github.io/pixi-animate-container/docs/pixim/classes/createjsmovieclip.html)|
+	|createjs.MovieClip|[CreatejsMovieClip](https://tawaship.github.io/Pixim-animate-container/docs/classes/createjsmovieclip.html)|

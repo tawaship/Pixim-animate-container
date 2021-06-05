@@ -2,6 +2,7 @@
 
 "Pixim-animate-container" is a plugin for using content created by Adobe Animate with "[Pixim.js](https://github.com/tawaship/Pixim.js)".
 
+[![Build Status](https://travis-ci.com/tawaship/Pixim-animate-container.svg?branch=master)](https://travis-ci.com/tawaship/Pixim-animate-container)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 ---

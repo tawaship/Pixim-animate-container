@@ -2,8 +2,8 @@
   "name": "@tawaship/pixim-animate-container",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/Pixim-animate-core.cjs.js",
-  "module": "dist/Pixim-animate-core.esm.js",
+  "main": "dist/Pixim-animate-container.cjs.js",
+  "module": "dist/Pixim-animate-container.esm.js",
   "types": "types/index.d.ts",
   "directories": {
     "doc": "docs",
@@ -14,6 +14,7 @@
     "d": "tsc --target ES6 --declaration --emitDeclarationOnly --outDir ./types",
     "docs": "typedoc --tsconfig tsconfig.json",
     "watch": "npm run rollup -- -w",
+    "test": "floss --path test/ --reporter=tap",
     "build": "ENV PROD=1 npm run rollup && npm run docs && npm run d && echo done."
   },
   "keywords": [
@@ -36,19 +37,25 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-typescript": "^5.0.2",
     "@tawaship/pixim.js": "^1.11.3",
+    "electron": "^11.1.1",
+    "floss": "^3.0.1",
+    "nyc": "^15.0.0",
     "del": "^5.1.0",
     "pixi.js": "^5.3.2",
+    "pixi.js-legacy": "^5.3.2",
     "rollup": "2.14.0",
     "rollup-plugin-terser": "^7.0.0",
     "tslib": "^1.11.0",
     "typedoc": "0.20.36",
-    "typescript": "4.2.4"
+    "typescript": "4.2.4",
+    "howler": "^2.2.0"
   },
   "dependencies": {
     "@tawaship/pixi-animate-core": "^3.0.0"
   },
   "peerDependencies": {
     "@tawaship/pixim.js": "^1.11.3",
-    "pixi.js": "^5.3.2"
+    "pixi.js": "^5.3.2",
+    "howler": "^2.2.0"
   }
 }

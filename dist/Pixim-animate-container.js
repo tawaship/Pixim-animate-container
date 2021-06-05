@@ -1760,6 +1760,9 @@ this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
         }
         for (var i$1 = 0; i$1 < targets.length; i$1++) {
             var target = targets[i$1];
+            if (!AdobeAn.getComposition(target.id)) {
+                throw new Error("no composition: " + target.id);
+            }
             promises.push(loadAssetAsync(target.id, target.basepath, target.options).then((function(lib) {
                 for (var i in lib) {
                     lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps);

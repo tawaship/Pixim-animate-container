@@ -8,7 +8,7 @@ export { ITickerData } from '@tawaship/pixi-animate-core';
 const P: number = 1000 / 60;
 
 /**
- * [[https://tawaship.github.io/pixi-animate-core/classes/createjsmovieclip.html | PixiAnimateCore.CreatejsMovieClip]]
+ * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsmovieclip.html | CreatejsMovieClip]]
  */
 export class CreatejsMovieClip extends _CreatejsMovieClip {
 	declare _framerateBase: number;

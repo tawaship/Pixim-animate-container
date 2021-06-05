@@ -47,6 +47,11 @@ export function loadAssetAsync(targets: IPrepareTarget | IPrepareTarget[]) {
 	for (let i = 0; i < targets.length; i++) {
 		const target = targets[i];
 		
+		const comp = AdobeAn.getComposition(target.id);
+		if (!comp) {
+			throw new Error(`no composition: ${target.id}`);
+		}
+		
 		promises.push(_loadAssetAsync(target.id, target.basepath, target.options)
 			.then((lib: IAnimateLibrary) => {
 				for (let i  in lib) {

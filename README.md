@@ -12,30 +12,46 @@
 ## Supported version
 
 - A complete set of content created with Adobe Animate version 20.02 | 20.5.1
-- pixi.js 5.3.2
-- Pixim.js 1.7.x | 1.8.x | 1.9.x
+- pixi.js 5.3.x
+- Pixim.js 1.11.x
 
 I have not confirmed the operation on other versions.
 
-## How to use
+## Setup
 
-1. Install
+### NPM
 
 ```sh
-git clone https://github.com/tawaship/pixi-animate-container
+npm install --save pixi.js @tawaship/pixim.js @tawaship/pixim-animate-container
 ```
 
-<br>
+<br />
+
+```javascript
+import * as PIXI from 'pixi.js';
+import * as Pixim from '@tawaship/pixim.js';
+import * as PiximAnimate from '@tawaship/pixim-animate-container';
+```
+
+### Browser
+
+```sh
+git clone https://github.com/tawaship/Pixim-animate-container
+```
+
+<br />
 
 ```html
 <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
-<script src="/path/to/lib/pixi.5.3.2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.2/pixi.min.js"></script>
 <script src="/path/to/lib/Pixim.min.js"></script>
 <script src="/path/to/dist/Pixim-animate-container.min.js"></script>
-<script src="[your content]"></script>
+<script src="[your content].js"></script>
 ```
 
-2. Use
+## Usage
+
+For browsers, this module is stored in the namespace "Pixim.animate".
 
 ```javascript
 const app = new Pixim.Application();

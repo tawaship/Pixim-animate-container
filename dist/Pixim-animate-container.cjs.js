@@ -1906,7 +1906,7 @@ function handleFileLoad(evt, comp) {
  */
 const P$6 = 1000 / 60;
 /**
- * [[https://tawaship.github.io/pixi-animate-core/classes/createjsmovieclip.html | PixiAnimateCore.CreatejsMovieClip]]
+ * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsmovieclip.html | CreatejsMovieClip]]
  */
 class CreatejsMovieClip$1 extends CreatejsMovieClip {
     constructor(...args) {
@@ -1944,6 +1944,10 @@ function loadAssetAsync$1(targets) {
     }
     for (let i = 0; i < targets.length; i++) {
         const target = targets[i];
+        const comp = AdobeAn.getComposition(target.id);
+        if (!comp) {
+            throw new Error(`no composition: ${target.id}`);
+        }
         promises.push(loadAssetAsync(target.id, target.basepath, target.options)
             .then((lib) => {
             for (let i in lib) {

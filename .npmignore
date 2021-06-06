@@ -9,3 +9,6 @@ npm/
 jsdoc.json
 tsconfig.json
 rollup.config.js
+sample/
+index.html
+style.css

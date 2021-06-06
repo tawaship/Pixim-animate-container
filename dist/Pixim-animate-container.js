@@ -1,20 +1,21 @@
 /*!
- * Pixim-animate-container - v1.0.0
+ * Pixim-animate-container - v1.0.1
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.11.3
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
-this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
+this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, pixim_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.0.0
+     * @tawaship/pixi-animate-core - v3.0.3
      * 
-     * @require pixi.js v5.3.2
+     * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
      * @license MIT
-     */    function createPixiData(pixi, regObj) {
+     */
+    function createPixiData(pixi, regObj) {
         return {
             regObj: regObj,
             instance: pixi
@@ -27,7 +28,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
         }
         return !0;
     }
-    var createjs = window.createjs, CreatejsStage = function(superclass) {
+    var CreatejsStage = function(superclass) {
         function CreatejsStage() {
             superclass.apply(this, arguments);
         }
@@ -36,7 +37,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
             return this.tickOnUpdate && this.tick(props), this.dispatchEvent("drawstart"), updateDisplayObjectChildren(this, props), 
             this.dispatchEvent("drawend"), !0;
         }, CreatejsStage;
-    }(createjs.Stage), CreatejsStageGL = function(superclass) {
+    }((createjs = createjs && Object.prototype.hasOwnProperty.call(createjs, "default") ? createjs.default : createjs).Stage), CreatejsStageGL = function(superclass) {
         function CreatejsStageGL() {
             superclass.apply(this, arguments);
         }
@@ -1643,10 +1644,8 @@ this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
             this._createjsParams.lineWidth = width;
         }, Object.defineProperties(CreatejsText.prototype, prototypeAccessors$11), CreatejsText;
     }(createjs.Text);
-    function loadAssetAsync(id, basepath, options) {
-        void 0 === options && (options = {});
-        var comp = AdobeAn.getComposition(id);
-        if (!comp) {
+    function loadAssetAsync(comp, basepath, options) {
+        if (void 0 === options && (options = {}), !comp) {
             throw new Error("no composition");
         }
         var lib = comp.getLibrary();
@@ -1750,20 +1749,15 @@ this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
             return this.removeChild(cjs.pixi), cjs;
         }, Container;
     }(pixim_js.Container);
-    exports.Container = Container, exports.CreatejsMovieClip = CreatejsMovieClip$1, 
-    exports.createjs = createjs, exports.loadAssetAsync = function(targets) {
+    exports.createjs = createjs, exports.Container = Container, exports.CreatejsMovieClip = CreatejsMovieClip$1, 
+    exports.loadAssetAsync = function(targets) {
         Array.isArray(targets) || (targets = [ targets ]);
         for (var promises = [], i = 0; i < targets.length; i++) {
-            if (!AdobeAn.getComposition(targets[i].id)) {
-                throw new Error("no composition: " + targets[i].id);
-            }
-        }
-        for (var i$1 = 0; i$1 < targets.length; i$1++) {
-            var target = targets[i$1];
-            if (!AdobeAn.getComposition(target.id)) {
+            var target = targets[i], comp = AdobeAn.getComposition(target.id);
+            if (!comp) {
                 throw new Error("no composition: " + target.id);
             }
-            promises.push(loadAssetAsync(target.id, target.basepath, target.options).then((function(lib) {
+            promises.push(loadAssetAsync(comp, target.basepath, target.options).then((function(lib) {
                 for (var i in lib) {
                     lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps);
                 }
@@ -1774,5 +1768,5 @@ this.Pixim = this.Pixim || {}, function(exports, pixi_js, pixim_js) {
             return 1 === resolvers.length ? resolvers[0] : resolvers;
         }));
     };
-}(this.Pixim.animate = this.Pixim.animate || {}, PIXI, Pixim);
+}(this.Pixim.animate = this.Pixim.animate || {}, createjs, PIXI, Pixim);
 //# sourceMappingURL=Pixim-animate-container.js.map

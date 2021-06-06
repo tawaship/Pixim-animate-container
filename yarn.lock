@@ -663,15 +663,13 @@
     "@types/buble" "^0.19.2"
     buble "^0.20.0"
 
-"@rollup/plugin-commonjs@^11.0.2":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-11.1.0.tgz#60636c7a722f54b41e419e1709df05c7234557ef"
-  integrity sha512-Ycr12N3ZPN96Fw2STurD21jMqzKwL9QuFhms3SD7KKRK7oaXUsBU9Zt0jL/rOPHiPYisI21/rXGO3jr9BnLHUA==
+"@rollup/plugin-commonjs@11.0.2":
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-11.0.2.tgz#837cc6950752327cb90177b608f0928a4e60b582"
+  integrity sha512-MPYGZr0qdbV5zZj8/2AuomVpnRVXRU5XKXb3HVniwRoRCreGlf5kOE081isNWeiLIi6IYkwTX9zE0/c7V8g81g==
   dependencies:
-    "@rollup/pluginutils" "^3.0.8"
-    commondir "^1.0.1"
+    "@rollup/pluginutils" "^3.0.0"
     estree-walker "^1.0.1"
-    glob "^7.1.2"
     is-reference "^1.1.2"
     magic-string "^0.25.2"
     resolve "^1.11.0"
@@ -695,7 +693,7 @@
     "@rollup/pluginutils" "^3.0.1"
     resolve "^1.14.1"
 
-"@rollup/pluginutils@^3.0.1", "@rollup/pluginutils@^3.0.8":
+"@rollup/pluginutils@^3.0.0", "@rollup/pluginutils@^3.0.1", "@rollup/pluginutils@^3.0.8":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-3.1.0.tgz#706b4524ee6dc8b103b3c995533e5ad680c02b9b"
   integrity sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==
@@ -716,15 +714,20 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@tawaship/createjs-module@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@tawaship/createjs-module/-/createjs-module-1.0.0.tgz#8b1f8a3e99f4f271deae56dcd45e2744af6ba084"
+  integrity sha512-EIQKK/Jnl8pSBk8iYLsAxAWI4pMQBj0y8WYg5WB8CvmraTsl/nJnuRlLXCavzwtOAumauRjtlOwWPoIe9TmH7w==
+
 "@tawaship/emitter@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@tawaship/emitter/-/emitter-3.1.1.tgz#b6360bc2853f3fc8a3627a089c3e3565404d49d8"
   integrity sha512-hKkgZmsCSLD4kvrhYHed0BhNZCZxAwPeGqB+ulCpbVU4PWw5D0wveJR7+XEPN9L6lWC91bgY5JFW2EnN5+Zttg==
 
-"@tawaship/pixi-animate-core@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@tawaship/pixi-animate-core/-/pixi-animate-core-3.0.0.tgz#c7168e545d87c591079dd296523e3b04f5ffc60f"
-  integrity sha512-micIjjub5cDVQLZqeFjs2Qi1czk6sNnowsXXi7uKPfhIY4/LS1/u0I1PLEevioJEL5y1fYfoffEHM1MfOIa/Ng==
+"@tawaship/pixi-animate-core@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@tawaship/pixi-animate-core/-/pixi-animate-core-3.0.3.tgz#3fa87726e5b6059fddc307018ac5b756fe69424b"
+  integrity sha512-FMFK8kBBnAhCnRfuTyEUQgak9+Xzk6w1HnXb3GLNAwR6/iZMTREdTXm8tp0NKQaM7n2ExdBaDBiLAIUvyE6Z8w==
 
 "@tawaship/pixim.js@^1.11.3":
   version "1.11.3"
@@ -1513,7 +1516,7 @@ glob@7.1.3:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^7.0.0, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
+glob@^7.0.0, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
   version "7.1.7"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.7.tgz#3b193e9233f01d42d0b3f78294bbeeb418f94a90"
   integrity sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==

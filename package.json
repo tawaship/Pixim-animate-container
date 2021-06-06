@@ -1,6 +1,6 @@
 {
   "name": "@tawaship/pixim-animate-container",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/Pixim-animate-container.cjs.js",
   "module": "dist/Pixim-animate-container.esm.js",
@@ -33,9 +33,10 @@
   "homepage": "https://tawaship.github.io/Pixim-animate-container/",
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
-    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-typescript": "^5.0.2",
+    "@tawaship/createjs-module": "^1.0.0",
     "@tawaship/pixim.js": "^1.11.3",
     "electron": "^11.1.1",
     "floss": "^3.0.1",
@@ -51,9 +52,10 @@
     "howler": "^2.2.0"
   },
   "dependencies": {
-    "@tawaship/pixi-animate-core": "^3.0.0"
+    "@tawaship/pixi-animate-core": "^3.0.3"
   },
   "peerDependencies": {
+    "@tawaship/createjs-module": "^1.0.0",
     "@tawaship/pixim.js": "^1.11.3",
     "pixi.js": "^5.3.2",
     "howler": "^2.2.0"

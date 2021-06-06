@@ -9,6 +9,6 @@ npm/
 jsdoc.json
 tsconfig.json
 rollup.config.js
-sample/
+samples/
 index.html
 style.css

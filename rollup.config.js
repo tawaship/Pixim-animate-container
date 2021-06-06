@@ -24,7 +24,7 @@ const banner = [
 
 export default (async () => {
 	if (process.env.PROD) {
-		await del(['./docs/docs/', './dist/']);
+		await del(['./docs/docs/', './dist/', './types/']);
 	}
 	
 	return [

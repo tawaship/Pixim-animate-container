@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.0.1
+ * Pixim-animate-container - v1.0.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.11.3
@@ -9,7 +9,7 @@
 this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, pixim_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.0.3
+     * @tawaship/pixi-animate-core - v3.0.4
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -1652,13 +1652,17 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, pixim_js) {
         return new Promise((function(resolve, reject) {
             0 === lib.properties.manifest.length && resolve({}), basepath && (basepath = (basepath + "/").replace(/([^\:])\/\//, "$1/"));
             var loader = new createjs.LoadQueue(!1, basepath);
-            if (loader.installPlugin(createjs.Sound), loader.addEventListener("fileload", (function(evt) {
+            loader.installPlugin(createjs.Sound);
+            var errors = [];
+            if (loader.addEventListener("fileload", (function(evt) {
                 !function(evt, comp) {
                     var images = comp.getImages();
                     evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
                 }(evt, comp);
             })), loader.addEventListener("complete", (function(evt) {
-                resolve(evt);
+                errors.length ? reject(errors) : resolve(evt);
+            })), loader.addEventListener("error", (function(evt) {
+                errors.push(evt.data);
             })), options.crossOrigin) {
                 for (var m = lib.properties.manifest, i = 0; i < m.length; i++) {
                     m[i].crossOrigin = !0;

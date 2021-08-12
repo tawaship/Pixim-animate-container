@@ -2,15 +2,15 @@
  * Pixim-animate-container - v1.0.3
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v^1.11.3
+ * @require @tawaship/pixim.js v../Pixim.js
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
 
+import { ContentManifestBase, Content, Container as Container$2, Task } from '@tawaship/pixim.js';
 import createjs from '@tawaship/createjs-module';
 export { default as createjs } from '@tawaship/createjs-module';
 import { filters, Container as Container$1, BaseTexture, Texture, LINE_CAP, LINE_JOIN, Text, Sprite, Graphics } from 'pixi.js';
-import { Container as Container$2, Task } from '@tawaship/pixim.js';
 
 /*!
  * @tawaship/pixi-animate-core - v3.0.4
@@ -1938,6 +1938,21 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
 }
 delete (CreatejsMovieClip$1.prototype.endAnimation);
 
+function loadJS(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.addEventListener('load', () => {
+            resolve();
+        });
+        script.addEventListener('error', (e) => {
+            reject(e);
+        });
+        document.body.appendChild(script);
+        document.body.removeChild(script);
+    });
+}
+
 /**
  * Load the assets of createjs content published by Adobe Animate.
  * If you use multiple contents, each composition ID must be unique.
@@ -1972,6 +1987,66 @@ function loadAssetAsync$1(targets) {
         return resolvers;
     });
 }
+class ContentAnimateManifest extends ContentManifestBase {
+    /**
+     * Load image resources.
+     *
+     * @override
+     */
+    _loadAsync(basepath, version, useCache) {
+        const manifests = this._manifests;
+        const promises = [];
+        for (let i in manifests) {
+            const manifest = manifests[i];
+            const dirpath = this._resolvePath(manifest.data.basepath, basepath);
+            const filepath = this._resolvePath(manifest.data.filepath, dirpath);
+            const url = version
+                ? `${filepath}${filepath.match(/\?/) ? '&' : '?'}_fv=${version}`
+                : filepath;
+            promises.push(loadJS(url)
+                .catch(e => {
+                throw `Animate: '${i}' cannot load.`;
+            }));
+        }
+        const keys = [];
+        const res = {};
+        return Promise.all(promises)
+            .then(() => {
+            const targets = [];
+            for (let i in manifests) {
+                const manifest = manifests[i];
+                keys.push(i);
+                targets.push({
+                    id: manifest.data.id,
+                    basepath: this._resolvePath(manifest.data.basepath, basepath),
+                    options: manifest.data.options
+                });
+            }
+            return loadAssetAsync$1(targets);
+        })
+            .then(libs => {
+            if (!Array.isArray(libs)) {
+                libs = [libs];
+            }
+            for (let i = 0; i < libs.length; i++) {
+                res[keys[i]] = {
+                    resource: libs[i],
+                    error: false
+                };
+            }
+            return res;
+        });
+    }
+    /**
+     * Destroy resources.
+     *
+     * @override
+     */
+    destroyResources(resources) {
+    }
+}
+
+Content.registerManifest('animate', ContentAnimateManifest);
 // overrides
 createjs.MovieClip = CreatejsMovieClip$1;
 
@@ -2045,5 +2120,5 @@ class Container extends Container$2 {
     }
 }
 
-export { Container, CreatejsMovieClip$1 as CreatejsMovieClip, loadAssetAsync$1 as loadAssetAsync };
+export { Container, ContentAnimateManifest, CreatejsMovieClip$1 as CreatejsMovieClip, loadAssetAsync$1 as loadAssetAsync };
 //# sourceMappingURL=Pixim-animate-container.esm.js.map

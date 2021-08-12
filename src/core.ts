@@ -1,70 +1,39 @@
-import { createjs, loadAssetAsync as _loadAssetAsync, ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-core';
+import { Content as PiximContent, IManifestDictionary } from '@tawaship/pixim.js';
 import { CreatejsMovieClip } from './MovieClip';
+import { ContentAnimateManifest, IContentAnimateManifestData } from './ContentAnimateManifest';
+import { createjs } from '@tawaship/pixi-animate-core';
 export { createjs, ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-core';
 
-/**
- * @ignore
- */
-declare const AdobeAn: any;
-
-export interface IPrepareTarget {
-	/**
-	 * "lib.properties.id" in Animate content.
-	 */
-	id: string;
-	
-	/**
-	 * Directory path of Animate content.
-	 */
-	basepath: string;
-	
-	/**
-	 * [[https://tawaship.github.io/pixi-animate-core/interfaces/iloadassetoption.html | PixiAnimateCore.ILoadAssetOption]]
-	 */
-	options?: ILoadAssetOption;
-};
+PiximContent.registerManifest('animates', ContentAnimateManifest);
 
 /**
- * Load the assets of createjs content published by Adobe Animate.
- * If you use multiple contents, each composition ID must be unique.
- * Please run "Pixim.animate.init" before running.
+ * This class is declared for documentation.<br />
+ * By loading the plugin, the following functions will be added to [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]].
+ * 
+ * See also below for argument types.
+ * 
+ * [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]]
  */
-export function loadAssetAsync(targets: IPrepareTarget | IPrepareTarget[]) {
-	if (!Array.isArray(targets)) {
-		targets = [targets];
-	}
+export declare class Content {
+	/**
+	 * Define animate assets for class.
+	 */
+	static defineAnimates(data: IManifestDictionary<IContentAnimateManifestData>): typeof Content;
 	
-	const promises: Promise<IAnimateLibrary>[] = [];
-	
-	for (let i = 0; i < targets.length; i++) {
-		const target = targets[i];
-		
-		const comp = AdobeAn.getComposition(target.id);
-		if (!comp) {
-			throw new Error(`no composition: ${target.id}`);
-		}
-		
-		promises.push(_loadAssetAsync(comp, target.basepath, target.options)
-			.then((lib: IAnimateLibrary) => {
-				for (let i  in lib) {
-					if (lib[i].prototype instanceof CreatejsMovieClip) {
-						lib[i].prototype._framerateBase = lib.properties.fps;
-					}
-				}
-				
-				return lib;
-			})
-		);
-	}
-	
-	return Promise.all(promises)
-		.then((resolvers: IAnimateLibrary[]) => {
-			if (resolvers.length === 1) {
-				return resolvers[0];
-			}
-			
-			return resolvers;
-		});
+	/**
+	 * Define animate assets for instance.
+	 */
+	addAnimates(data: IManifestDictionary<IContentAnimateManifestData>): this;
+}
+
+// @ts-ignore
+PiximContent.defineAnimates = function(data) {
+	return this.defineManifests('animates', data, {});
+}
+
+// @ts-ignore
+PiximContent.prototype.addAnimates = function(data) {
+	return this.addManifests('animates', data, {});
 }
 
 // overrides

@@ -1,12 +1,12 @@
 /*!
- * Pixim-animate-container - v1.0.3
+ * Pixim-animate-container - v1.1.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v^1.11.3
+ * @require @tawaship/pixim.js v1.12.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
-this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, pixim_js) {
+this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     "use strict";
     /*!
      * @tawaship/pixi-animate-core - v3.0.4
@@ -1713,7 +1713,77 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, pixim_js) {
             _CreatejsMovieClip.prototype.updateForPixi.call(this, e);
         }, CreatejsMovieClip;
     }(CreatejsMovieClip);
-    delete CreatejsMovieClip$1.prototype.endAnimation, createjs.MovieClip = CreatejsMovieClip$1;
+    function loadAssetAsync$1(targets) {
+        Array.isArray(targets) || (targets = [ targets ]);
+        for (var promises = [], i = 0; i < targets.length; i++) {
+            var target = targets[i], comp = AdobeAn.getComposition(target.id);
+            if (!comp) {
+                throw new Error("no composition: " + target.id);
+            }
+            promises.push(loadAssetAsync(comp, target.basepath, target.options).then((function(lib) {
+                for (var i in lib) {
+                    lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps);
+                }
+                return lib;
+            })));
+        }
+        return Promise.all(promises).then((function(resolvers) {
+            return 1 === resolvers.length ? resolvers[0] : resolvers;
+        }));
+    }
+    delete CreatejsMovieClip$1.prototype.endAnimation;
+    var ContentAnimateManifest = function(ContentManifestBase) {
+        function ContentAnimateManifest() {
+            ContentManifestBase.apply(this, arguments);
+        }
+        return ContentManifestBase && (ContentAnimateManifest.__proto__ = ContentManifestBase), 
+        ContentAnimateManifest.prototype = Object.create(ContentManifestBase && ContentManifestBase.prototype), 
+        ContentAnimateManifest.prototype.constructor = ContentAnimateManifest, ContentAnimateManifest.prototype._loadAsync = function(basepath, version, useCache) {
+            var this$1 = this, manifests = this._manifests, promises = [], loop = function(i) {
+                var src, manifest = manifests[i], contentPath = manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
+                promises.push((src = url, new Promise((function(resolve, reject) {
+                    var script = document.createElement("script");
+                    script.src = src, script.addEventListener("load", (function() {
+                        resolve();
+                    })), script.addEventListener("error", (function(e) {
+                        reject(e);
+                    })), document.body.appendChild(script), document.body.removeChild(script);
+                }))).catch((function(e) {
+                    throw "Animate: '" + i + "' cannot load.";
+                })));
+            };
+            for (var i in manifests) {
+                loop(i);
+            }
+            var keys = [], res = {};
+            return Promise.all(promises).then((function() {
+                var targets = [];
+                for (var i in manifests) {
+                    var manifest = manifests[i];
+                    keys.push(i), targets.push({
+                        id: manifest.data.id,
+                        basepath: this$1._resolvePath(manifest.data.basepath, basepath),
+                        options: manifest.data.options
+                    });
+                }
+                return loadAssetAsync$1(targets);
+            })).then((function(libs) {
+                Array.isArray(libs) || (libs = [ libs ]);
+                for (var i = 0; i < libs.length; i++) {
+                    res[keys[i]] = {
+                        resource: libs[i],
+                        error: !1
+                    };
+                }
+                return res;
+            }));
+        }, ContentAnimateManifest.prototype.destroyResources = function(resources) {}, ContentAnimateManifest;
+    }(pixim_js.ContentManifestBase);
+    pixim_js.Content.registerManifest("animates", ContentAnimateManifest), pixim_js.Content.defineAnimates = function(data) {
+        return this.defineManifests("animates", data, {});
+    }, pixim_js.Content.prototype.addAnimates = function(data) {
+        return this.addManifests("animates", data, {});
+    }, createjs.MovieClip = CreatejsMovieClip$1;
     var Container = function(_Container) {
         function Container() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -1756,24 +1826,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, pixim_js) {
             return this.removeChild(cjs.pixi), cjs;
         }, Container;
     }(pixim_js.Container);
-    exports.createjs = createjs, exports.Container = Container, exports.CreatejsMovieClip = CreatejsMovieClip$1, 
-    exports.loadAssetAsync = function(targets) {
-        Array.isArray(targets) || (targets = [ targets ]);
-        for (var promises = [], i = 0; i < targets.length; i++) {
-            var target = targets[i], comp = AdobeAn.getComposition(target.id);
-            if (!comp) {
-                throw new Error("no composition: " + target.id);
-            }
-            promises.push(loadAssetAsync(comp, target.basepath, target.options).then((function(lib) {
-                for (var i in lib) {
-                    lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps);
-                }
-                return lib;
-            })));
-        }
-        return Promise.all(promises).then((function(resolvers) {
-            return 1 === resolvers.length ? resolvers[0] : resolvers;
-        }));
-    };
-}(this.Pixim.animate = this.Pixim.animate || {}, createjs, PIXI, Pixim);
+    exports.createjs = createjs, exports.Container = Container, exports.ContentAnimateManifest = ContentAnimateManifest, 
+    exports.CreatejsMovieClip = CreatejsMovieClip$1, exports.loadAssetAsync = loadAssetAsync$1;
+}(this.Pixim.animate = this.Pixim.animate || {}, Pixim, createjs, PIXI);
 //# sourceMappingURL=Pixim-animate-container.js.map

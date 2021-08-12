@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.0.3
+ * Pixim-animate-container - v1.1.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v^1.11.3
+ * @require @tawaship/pixim.js v1.12.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -13,9 +13,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var pixim_js = require('@tawaship/pixim.js');
 var createjs = _interopDefault(require('@tawaship/createjs-module'));
 var pixi_js = require('pixi.js');
-var pixim_js = require('@tawaship/pixim.js');
 
 /*!
  * @tawaship/pixi-animate-core - v3.0.4
@@ -1943,6 +1943,21 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
 }
 delete (CreatejsMovieClip$1.prototype.endAnimation);
 
+function loadJS(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.addEventListener('load', () => {
+            resolve();
+        });
+        script.addEventListener('error', (e) => {
+            reject(e);
+        });
+        document.body.appendChild(script);
+        document.body.removeChild(script);
+    });
+}
+
 /**
  * Load the assets of createjs content published by Adobe Animate.
  * If you use multiple contents, each composition ID must be unique.
@@ -1977,6 +1992,75 @@ function loadAssetAsync$1(targets) {
         return resolvers;
     });
 }
+class ContentAnimateManifest extends pixim_js.ContentManifestBase {
+    /**
+     * Load image resources.
+     *
+     * @override
+     */
+    _loadAsync(basepath, version, useCache) {
+        const manifests = this._manifests;
+        const promises = [];
+        for (let i in manifests) {
+            const manifest = manifests[i];
+            const contentPath = manifest.data.basepath.replace(/([^/])$/, '$1/');
+            const dirpath = this._resolvePath(contentPath, basepath);
+            const filepath = this._resolvePath(manifest.data.filepath, dirpath);
+            const url = version
+                ? `${filepath}${filepath.match(/\?/) ? '&' : '?'}_fv=${version}`
+                : filepath;
+            promises.push(loadJS(url)
+                .catch(e => {
+                throw `Animate: '${i}' cannot load.`;
+            }));
+        }
+        const keys = [];
+        const res = {};
+        return Promise.all(promises)
+            .then(() => {
+            const targets = [];
+            for (let i in manifests) {
+                const manifest = manifests[i];
+                keys.push(i);
+                targets.push({
+                    id: manifest.data.id,
+                    basepath: this._resolvePath(manifest.data.basepath, basepath),
+                    options: manifest.data.options
+                });
+            }
+            return loadAssetAsync$1(targets);
+        })
+            .then(libs => {
+            if (!Array.isArray(libs)) {
+                libs = [libs];
+            }
+            for (let i = 0; i < libs.length; i++) {
+                res[keys[i]] = {
+                    resource: libs[i],
+                    error: false
+                };
+            }
+            return res;
+        });
+    }
+    /**
+     * Destroy resources.
+     *
+     * @override
+     */
+    destroyResources(resources) {
+    }
+}
+
+pixim_js.Content.registerManifest('animates', ContentAnimateManifest);
+// @ts-ignore
+pixim_js.Content.defineAnimates = function (data) {
+    return this.defineManifests('animates', data, {});
+};
+// @ts-ignore
+pixim_js.Content.prototype.addAnimates = function (data) {
+    return this.addManifests('animates', data, {});
+};
 // overrides
 createjs.MovieClip = CreatejsMovieClip$1;
 
@@ -2052,6 +2136,7 @@ class Container extends pixim_js.Container {
 
 exports.createjs = createjs;
 exports.Container = Container;
+exports.ContentAnimateManifest = ContentAnimateManifest;
 exports.CreatejsMovieClip = CreatejsMovieClip$1;
 exports.loadAssetAsync = loadAssetAsync$1;
 //# sourceMappingURL=Pixim-animate-container.cjs.js.map

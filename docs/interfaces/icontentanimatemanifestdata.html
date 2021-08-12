@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ILoadAssetOption | @tawaship/pixim-animate-container - v1.1.0</title>
+	<title>IContentAnimateManifestData | @tawaship/pixim-animate-container - v1.1.0</title>
 	<meta name="description" content="Documentation for @tawaship/pixim-animate-container - v1.1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">@tawaship/pixim-animate-container - v1.1.0</a>
 				</li>
 				<li>
-					<a href="iloadassetoption.html">ILoadAssetOption</a>
+					<a href="icontentanimatemanifestdata.html">IContentAnimateManifestData</a>
 				</li>
 			</ul>
-			<h1>Interface ILoadAssetOption</h1>
+			<h1>Interface IContentAnimateManifestData</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ILoadAssetOption</span>
+						<a href="ipreparetarget.html" class="tsd-signature-type" data-tsd-kind="Interface">IPrepareTarget</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">IContentAnimateManifestData</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -77,29 +82,80 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-external">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="iloadassetoption.html#crossorigin" class="tsd-kind-icon">cross<wbr>Origin</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="icontentanimatemanifestdata.html#basepath" class="tsd-kind-icon">basepath</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="icontentanimatemanifestdata.html#filepath" class="tsd-kind-icon">filepath</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="icontentanimatemanifestdata.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="icontentanimatemanifestdata.html#options" class="tsd-kind-icon">options</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="crossorigin" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cross<wbr>Origin</h3>
-					<div class="tsd-signature tsd-kind-icon">cross<wbr>Origin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="basepath" class="tsd-anchor"></a>
+					<h3>basepath</h3>
+					<div class="tsd-signature tsd-kind-icon">basepath<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="ipreparetarget.html">IPrepareTarget</a>.<a href="ipreparetarget.html#basepath">basepath</a></p>
 						<ul>
-							<li>Defined in node_modules/@tawaship/pixi-animate-core/types/core.d.ts:8</li>
+							<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/ContentAnimateManifest.ts#L20">src/ContentAnimateManifest.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Whether to use assets on a server in another domain.</p>
+							<p>Directory path of Animate content.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="filepath" class="tsd-anchor"></a>
+					<h3>filepath</h3>
+					<div class="tsd-signature tsd-kind-icon">filepath<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/ContentAnimateManifest.ts#L78">src/ContentAnimateManifest.ts:78</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Javascript file path of Animate content.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ipreparetarget.html">IPrepareTarget</a>.<a href="ipreparetarget.html#id">id</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/ContentAnimateManifest.ts#L15">src/ContentAnimateManifest.ts:15</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>&quot;lib.properties.id&quot; in Animate content.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="options" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> options</h3>
+					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <a href="iloadassetoption.html" class="tsd-signature-type" data-tsd-kind="Interface">ILoadAssetOption</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ipreparetarget.html">IPrepareTarget</a>.<a href="ipreparetarget.html#options">options</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/ContentAnimateManifest.ts#L25">src/ContentAnimateManifest.ts:25</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://tawaship.github.io/pixi-animate-core/interfaces/iloadassetoption.html" class="external">PixiAnimateCore.ILoadAssetOption</a></p>
 						</div>
 					</div>
 				</section>
@@ -130,27 +186,36 @@
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="ianimatelibrary.html" class="tsd-kind-icon">IAnimate<wbr>Library</a>
 					</li>
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="icontentanimatemanifestdata.html" class="tsd-kind-icon">IContent<wbr>Animate<wbr>Manifest<wbr>Data</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="icontentanimatemanifestdata.html#basepath" class="tsd-kind-icon">basepath</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="icontentanimatemanifestdata.html#filepath" class="tsd-kind-icon">filepath</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="icontentanimatemanifestdata.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="icontentanimatemanifestdata.html#options" class="tsd-kind-icon">options</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="icreatejsdata.html" class="tsd-kind-icon">ICreatejs<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="icreatejsmovieclipdictionary.html" class="tsd-kind-icon">ICreatejs<wbr>Movie<wbr>Clip<wbr>Dictionary</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-is-external">
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="iloadassetoption.html" class="tsd-kind-icon">ILoad<wbr>Asset<wbr>Option</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="iloadassetoption.html#crossorigin" class="tsd-kind-icon">cross<wbr>Origin</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="iloadedanimateresourcedictionary.html" class="tsd-kind-icon">ILoaded<wbr>Animate<wbr>Resource<wbr>Dictionary</a>
 					</li>

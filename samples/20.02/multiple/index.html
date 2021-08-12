@@ -7,8 +7,6 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.2/pixi.min.js"></script>
 		<script src="../../../lib/Pixim.min.js"></script>
 		<script src="../../../dist/Pixim-animate-container.js"></script>
-		<script src="../animation/game/game.js"></script>
-		<script src="../class/game/game.js"></script>
 	</head>
 	<body>
 		<script>
@@ -21,54 +19,52 @@
 				backgroundColor: 0xFFFFFF
 			});
 			
-			Pixim.animate.loadAssetAsync([
-				{
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
-					basepath: '../class/game/'
-				},
-				{
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
-					basepath: '../animation/game/'
-				}
-			])
-			.then(function(lib) {
-				const Game = Pixim.Content.create();
-				
-				Game.setConfig({
-					width: 450,
-					height: 800
-				});
-				
-				class Root extends Pixim.animate.Container {
-					constructor($) {
-						super();
-						
-						this.x = 10;
-						this.y = 10;
-						
-						this.scale.set(0.5);
-						
-						this.addCreatejs(new lib[0].game()).y = 100;
-						this.addCreatejs(new lib[1].game()).y = 500;
-					}
-				}
-				
-				Game.defineLibraries({
-					root: Root
-				});
-				
-				const game = new Game();
-				game.addVars({
-					lib: lib
-				});
-				
-				app
-					.fullScreen()
-					.attachAsync(game)
-					.then(function() {
-						app.play();
-					});
+			const Game = Pixim.Content.create();
+			
+			Game.setConfig({
+				width: 450,
+				height: 800
 			});
+			
+			Game.defineAnimates({
+				test: {
+					basepath: '../class/game/',
+					filepath: 'game.js',
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDF'
+				},
+				test2: {
+					basepath: '../animation/game/',
+					filepath: 'game.js',
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1'
+				}
+			})
+			
+			class Root extends Pixim.animate.Container {
+				constructor($) {
+					super();
+					
+					this.x = 10;
+					this.y = 10;
+					
+					this.scale.set(0.5);
+					
+					this.addCreatejs(new $.resources.animates.test.game()).y = 100;
+					this.addCreatejs(new $.resources.animates.test2.game()).y = 500;
+				}
+			}
+			
+			Game.defineLibraries({
+				root: Root
+			});
+			
+			const game = new Game();
+			
+			app
+				.fullScreen()
+				.attachAsync(game)
+				.then(function() {
+					app.play();
+				});
 		</script>
 	</div>
 	</body>

@@ -1740,7 +1740,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         ContentAnimateManifest.prototype = Object.create(ContentManifestBase && ContentManifestBase.prototype), 
         ContentAnimateManifest.prototype.constructor = ContentAnimateManifest, ContentAnimateManifest.prototype._loadAsync = function(basepath, version, useCache) {
             var this$1 = this, manifests = this._manifests, promises = [], loop = function(i) {
-                var src, manifest = manifests[i], dirpath = this$1._resolvePath(manifest.data.basepath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
+                var src, manifest = manifests[i], contentPath = manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
                 promises.push((src = url, new Promise((function(resolve, reject) {
                     var script = document.createElement("script");
                     script.src = src, script.addEventListener("load", (function() {

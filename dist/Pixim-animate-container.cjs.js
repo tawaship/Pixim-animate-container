@@ -2003,7 +2003,8 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
         const promises = [];
         for (let i in manifests) {
             const manifest = manifests[i];
-            const dirpath = this._resolvePath(manifest.data.basepath, basepath);
+            const contentPath = manifest.data.basepath.replace(/([^/])$/, '$1/');
+            const dirpath = this._resolvePath(contentPath, basepath);
             const filepath = this._resolvePath(manifest.data.filepath, dirpath);
             const url = version
                 ? `${filepath}${filepath.match(/\?/) ? '&' : '?'}_fv=${version}`

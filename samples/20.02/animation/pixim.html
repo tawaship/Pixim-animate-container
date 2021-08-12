@@ -7,7 +7,6 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.2/pixi.min.js"></script>
 		<script src="../../../lib/Pixim.min.js"></script>
 		<script src="../../../dist/Pixim-animate-container.js"></script>
-		<script src="game/game.js"></script>
 	</head>
 	<body>
 		<script>
@@ -28,14 +27,14 @@
 				height: 800
 			});
 			
-			Game.defineManifests('animate', {
+			Game.defineAnimates({
 				test: {
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
 					basepath: 'game/',
+					filepath: 'game.js',
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
 					options: {
 						crossOrigin: false
-					},
-					filepath: 'game.js'
+					}
 				}
 			});
 			
@@ -43,7 +42,7 @@
 				root: class Root extends PIXI.Container {
 					constructor($) {
 						super();
-						
+						console.log($.resources)
 						this.x = 10;
 						this.y = 10;
 						this.scale.set(0.7);
@@ -51,7 +50,7 @@
 						const container = this.addChild(new Pixim.animate.Container());
 						
 						container.addChild(new PIXI.Text('Library game'));
-						const a = container.addCreatejs(new $.resources.animate.test.game());
+						const a = container.addCreatejs(new $.resources.animates.test.game());
 						a.y = 50;
 					}
 				}

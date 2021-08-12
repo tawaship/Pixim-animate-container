@@ -2,7 +2,7 @@
  * Pixim-animate-container - v1.0.3
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v../Pixim.js
+ * @require @tawaship/pixim.js v1.12.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -1779,7 +1779,11 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             }));
         }, ContentAnimateManifest.prototype.destroyResources = function(resources) {}, ContentAnimateManifest;
     }(pixim_js.ContentManifestBase);
-    pixim_js.Content.registerManifest("animate", ContentAnimateManifest), createjs.MovieClip = CreatejsMovieClip$1;
+    pixim_js.Content.registerManifest("animates", ContentAnimateManifest), pixim_js.Content.defineAnimates = function(data) {
+        return this.defineManifests("animates", data, {});
+    }, pixim_js.Content.prototype.addAnimates = function(data) {
+        return this.addManifests("animates", data, {});
+    }, createjs.MovieClip = CreatejsMovieClip$1;
     var Container = function(_Container) {
         function Container() {
             for (var args = [], len = arguments.length; len--; ) {

@@ -2,7 +2,7 @@
  * Pixim-animate-container - v1.0.3
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v../Pixim.js
+ * @require @tawaship/pixim.js v1.12.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -2046,7 +2046,15 @@ class ContentAnimateManifest extends ContentManifestBase {
     }
 }
 
-Content.registerManifest('animate', ContentAnimateManifest);
+Content.registerManifest('animates', ContentAnimateManifest);
+// @ts-ignore
+Content.defineAnimates = function (data) {
+    return this.defineManifests('animates', data, {});
+};
+// @ts-ignore
+Content.prototype.addAnimates = function (data) {
+    return this.addManifests('animates', data, {});
+};
 // overrides
 createjs.MovieClip = CreatejsMovieClip$1;
 

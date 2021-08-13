@@ -7,33 +7,23 @@ export { createjs, ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-anim
 PiximContent.registerManifest('animates', ContentAnimateManifest);
 
 /**
- * This class is declared for documentation.<br />
- * By loading the plugin, the following functions will be added to [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]].
+ * Define animate assets for class.
  * 
- * See also below for argument types.
- * 
- * [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]]
+ * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] class.
+ * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
  */
-export declare class Content {
-	/**
-	 * Define animate assets for class.
-	 */
-	static defineAnimates(data: IManifestDictionary<IContentAnimateManifestData>): typeof Content;
-	
-	/**
-	 * Define animate assets for instance.
-	 */
-	addAnimates(data: IManifestDictionary<IContentAnimateManifestData>): this;
+export function defineAnimatesTo(Content: typeof PiximContent, data: IManifestDictionary<IContentAnimateManifestData>) {
+	Content.defineManifests('animates', data, {});
 }
 
-// @ts-ignore
-PiximContent.defineAnimates = function(data) {
-	return this.defineManifests('animates', data, {});
-}
-
-// @ts-ignore
-PiximContent.prototype.addAnimates = function(data) {
-	return this.addManifests('animates', data, {});
+/**
+ * Define animate assets for instance.
+ * 
+ * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] instance.
+ * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
+ */
+export function addAnimatesTo(content: PiximContent, data: IManifestDictionary<IContentAnimateManifestData>) {
+	content.addManifests('animates', data, {});
 }
 
 // overrides

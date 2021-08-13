@@ -2053,14 +2053,24 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
 }
 
 pixim_js.Content.registerManifest('animates', ContentAnimateManifest);
-// @ts-ignore
-pixim_js.Content.defineAnimates = function (data) {
-    return this.defineManifests('animates', data, {});
-};
-// @ts-ignore
-pixim_js.Content.prototype.addAnimates = function (data) {
-    return this.addManifests('animates', data, {});
-};
+/**
+ * Define animate assets for class.
+ *
+ * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] class.
+ * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
+ */
+function defineAnimatesTo(Content, data) {
+    Content.defineManifests('animates', data, {});
+}
+/**
+ * Define animate assets for instance.
+ *
+ * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] instance.
+ * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
+ */
+function addAnimatesTo(content, data) {
+    content.addManifests('animates', data, {});
+}
 // overrides
 createjs.MovieClip = CreatejsMovieClip$1;
 
@@ -2138,5 +2148,7 @@ exports.createjs = createjs;
 exports.Container = Container;
 exports.ContentAnimateManifest = ContentAnimateManifest;
 exports.CreatejsMovieClip = CreatejsMovieClip$1;
+exports.addAnimatesTo = addAnimatesTo;
+exports.defineAnimatesTo = defineAnimatesTo;
 exports.loadAssetAsync = loadAssetAsync$1;
 //# sourceMappingURL=Pixim-animate-container.cjs.js.map

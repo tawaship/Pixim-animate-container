@@ -65,7 +65,6 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class"><a href="classes/container.html" class="tsd-kind-icon">Container</a></li>
-								<li class="tsd-kind-class"><a href="classes/content.html" class="tsd-kind-icon">Content</a></li>
 								<li class="tsd-kind-class"><a href="classes/contentanimatemanifest.html" class="tsd-kind-icon">Content<wbr>Animate<wbr>Manifest</a></li>
 								<li class="tsd-kind-class"><a href="classes/createjsmovieclip.html" class="tsd-kind-icon">Createjs<wbr>Movie<wbr>Clip</a></li>
 							</ul>
@@ -92,6 +91,8 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function"><a href="modules.html#addanimatesto" class="tsd-kind-icon">add<wbr>Animates<wbr>To</a></li>
+								<li class="tsd-kind-function"><a href="modules.html#defineanimatesto" class="tsd-kind-icon">define<wbr>Animates<wbr>To</a></li>
 								<li class="tsd-kind-function"><a href="modules.html#loadassetasync" class="tsd-kind-icon">load<wbr>Asset<wbr>Async</a></li>
 							</ul>
 						</section>
@@ -121,6 +122,74 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="addanimatesto" class="tsd-anchor"></a>
+					<h3>add<wbr>Animates<wbr>To</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Animates<wbr>To<span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PiximContent</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IManifestDictionary</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/icontentanimatemanifestdata.html" class="tsd-signature-type" data-tsd-kind="Interface">IContentAnimateManifestData</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/core.ts#L25">src/core.ts:25</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Define animate assets for instance.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>content: <span class="tsd-signature-type">PiximContent</span></h5>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">IManifestDictionary</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/icontentanimatemanifestdata.html" class="tsd-signature-type" data-tsd-kind="Interface">IContentAnimateManifestData</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>see also <a href="https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html" class="external">Pixim.IManifestDictionary</a>.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="defineanimatesto" class="tsd-anchor"></a>
+					<h3>define<wbr>Animates<wbr>To</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">define<wbr>Animates<wbr>To<span class="tsd-signature-symbol">(</span>Content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">PiximContent</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IManifestDictionary</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/icontentanimatemanifestdata.html" class="tsd-signature-type" data-tsd-kind="Interface">IContentAnimateManifestData</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/core.ts#L15">src/core.ts:15</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Define animate assets for class.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>Content: <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">PiximContent</span></h5>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">IManifestDictionary</span><span class="tsd-signature-symbol">&lt;</span><a href="interfaces/icontentanimatemanifestdata.html" class="tsd-signature-type" data-tsd-kind="Interface">IContentAnimateManifestData</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>see also <a href="https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html" class="external">Pixim.IManifestDictionary</a>.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="loadassetasync" class="tsd-anchor"></a>
 					<h3>load<wbr>Asset<wbr>Async</h3>
@@ -167,9 +236,6 @@
 						<a href="classes/container.html" class="tsd-kind-icon">Container</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/content.html" class="tsd-kind-icon">Content</a>
-					</li>
-					<li class=" tsd-kind-class">
 						<a href="classes/contentanimatemanifest.html" class="tsd-kind-icon">Content<wbr>Animate<wbr>Manifest</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -203,6 +269,12 @@
 						<a href="modules.html#createjs" class="tsd-kind-icon">createjs</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#addanimatesto" class="tsd-kind-icon">add<wbr>Animates<wbr>To</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#defineanimatesto" class="tsd-kind-icon">define<wbr>Animates<wbr>To</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#loadassetasync" class="tsd-kind-icon">load<wbr>Asset<wbr>Async</a>
 					</li>
 				</ul>
@@ -231,9 +303,6 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

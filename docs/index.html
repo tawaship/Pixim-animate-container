@@ -75,7 +75,7 @@
 				<ul>
 					<li>A complete set of content created with Adobe Animate version 20.02 | 20.5.1</li>
 					<li>pixi.js 5.3.x</li>
-					<li>Pixim.js 1.11.x</li>
+					<li>Pixim.js 1.12.x</li>
 				</ul>
 				<p>I have not confirmed the operation on other versions.</p>
 				<a href="#setup" id="setup" style="color: inherit; text-decoration: none;">
@@ -101,7 +101,6 @@
 <span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.2/pixi.min.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
 <span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;/path/to/lib/Pixim.min.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
 <span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;/path/to/dist/Pixim-animate-container.min.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
-<span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;[your content].js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
 </code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
@@ -109,43 +108,42 @@
 				<p>For browsers, this module is stored in the namespace &quot;Pixim.animate&quot;.</p>
 				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">app</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">Pixim</span><span style="color: #000000">.</span><span style="color: #795E26">Application</span><span style="color: #000000">();</span>
 
-<span style="color: #001080">Pixim</span><span style="color: #000000">.</span><span style="color: #001080">animate</span><span style="color: #000000">.</span><span style="color: #795E26">loadAssetAsync</span><span style="color: #000000">([{</span>
-<span style="color: #000000">    </span><span style="color: #001080">id:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;[conposition id]&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// &quot;lib.properties.id&quot; in Animate content.</span>
-<span style="color: #000000">    </span><span style="color: #001080">basepath:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;[content directory path]&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// Directory path of Animate content.</span>
-<span style="color: #000000">    </span><span style="color: #001080">options:</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #001080">crossOrigin:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span>
-<span style="color: #000000">    }</span>
-<span style="color: #000000">}]).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #0000FF">function</span><span style="color: #000000">(</span><span style="color: #001080">lib</span><span style="color: #000000">) {</span>
-<span style="color: #000000">    </span><span style="color: #008000">// If you load multiple contents, the argument &quot;lib&quot; will be an array and the &quot;lib&quot; of each content will be stored in order.</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Game</span><span style="color: #000000"> = </span><span style="color: #001080">Pixim</span><span style="color: #000000">.</span><span style="color: #001080">Content</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">();</span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #001080">Game</span><span style="color: #000000">.</span><span style="color: #795E26">setConfig</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">width:</span><span style="color: #000000"> </span><span style="color: #098658">450</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">height:</span><span style="color: #000000"> </span><span style="color: #098658">800</span>
-<span style="color: #000000">    });</span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #001080">Game</span><span style="color: #000000">.</span><span style="color: #795E26">defineLibraries</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">root:</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Root</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Pixim</span><span style="color: #000000">.</span><span style="color: #267F99">animate</span><span style="color: #000000">.</span><span style="color: #267F99">Container</span><span style="color: #000000"> {</span>
-<span style="color: #000000">            </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span><span style="color: #001080">$</span><span style="color: #000000">) {</span>
-<span style="color: #000000">                </span><span style="color: #0000FF">super</span><span style="color: #000000">();</span>
-<span style="color: #000000">                </span>
-<span style="color: #000000">                </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #795E26">addCreatejs</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">lib</span><span style="color: #000000">.</span><span style="color: #795E26">game</span><span style="color: #000000">()); </span><span style="color: #008000">// The class you want to use.</span>
-<span style="color: #000000">            }</span>
-<span style="color: #000000">        }</span>
-<span style="color: #000000">    });</span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">game</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Game</span><span style="color: #000000">();</span>
-<span style="color: #000000">    </span><span style="color: #001080">game</span><span style="color: #000000">.</span><span style="color: #795E26">addVars</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">lib:</span><span style="color: #000000"> </span><span style="color: #001080">lib</span>
-<span style="color: #000000">    });</span>
-<span style="color: #000000">    </span>
-<span style="color: #000000">    </span><span style="color: #001080">app</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">fullScreen</span><span style="color: #000000">()</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">attachAsync</span><span style="color: #000000">(</span><span style="color: #001080">game</span><span style="color: #000000">)</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #0000FF">function</span><span style="color: #000000">() {</span>
-<span style="color: #000000">            </span><span style="color: #001080">app</span><span style="color: #000000">.</span><span style="color: #795E26">play</span><span style="color: #000000">();</span>
-<span style="color: #000000">        });</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Game</span><span style="color: #000000"> = </span><span style="color: #001080">Pixim</span><span style="color: #000000">.</span><span style="color: #001080">Content</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">Game</span><span style="color: #000000">.</span><span style="color: #795E26">setConfig</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">width:</span><span style="color: #000000"> </span><span style="color: #098658">450</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #001080">height:</span><span style="color: #000000"> </span><span style="color: #098658">800</span>
 <span style="color: #000000">});</span>
+
+<span style="color: #001080">Pixim</span><span style="color: #000000">.</span><span style="color: #001080">animate</span><span style="color: #000000">.</span><span style="color: #795E26">defineAnimatesTo</span><span style="color: #000000">(</span><span style="color: #001080">Game</span><span style="color: #000000">, {</span>
+<span style="color: #000000">    </span><span style="color: #001080">test:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #001080">basepath:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;[content directory path]&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// Directory path of Animate content.</span>
+<span style="color: #000000">        </span><span style="color: #001080">filepath:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;[content js file path], // Javascript file path from basepath</span><span style="color: #CD3131">.</span>
+<span style="color: #000000">        </span><span style="color: #001080">id</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;[conposition id]&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// &quot;lib.properties.id&quot; in Animate content.</span>
+<span style="color: #000000">        </span><span style="color: #001080">options:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">            </span><span style="color: #001080">crossOrigin:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">Game</span><span style="color: #000000">.</span><span style="color: #795E26">defineLibraries</span><span style="color: #000000">({</span>
+<span style="color: #000000">    </span><span style="color: #001080">root:</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Root</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Pixim</span><span style="color: #000000">.</span><span style="color: #267F99">animate</span><span style="color: #000000">.</span><span style="color: #267F99">Container</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">constructor</span><span style="color: #000000">(</span><span style="color: #001080">$</span><span style="color: #000000">) {</span>
+<span style="color: #000000">            </span><span style="color: #0000FF">super</span><span style="color: #000000">();</span>
+<span style="color: #000000">            </span>
+<span style="color: #000000">            </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #795E26">addCreatejs</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">$</span><span style="color: #000000">.</span><span style="color: #001080">resources</span><span style="color: #000000">.</span><span style="color: #001080">animates</span><span style="color: #000000">.</span><span style="color: #001080">test</span><span style="color: #000000">.</span><span style="color: #795E26">game</span><span style="color: #000000">()); </span><span style="color: #008000">// The class you want to use.</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">game</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Game</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">app</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">fullScreen</span><span style="color: #000000">()</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">attachAsync</span><span style="color: #000000">(</span><span style="color: #001080">game</span><span style="color: #000000">)</span>
+<span style="color: #000000">    .</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #0000FF">function</span><span style="color: #000000">() {</span>
+<span style="color: #000000">        </span><span style="color: #001080">app</span><span style="color: #000000">.</span><span style="color: #795E26">play</span><span style="color: #000000">();</span>
+<span style="color: #000000">    });</span>
 </code></pre>
 				<a href="#change-log" id="change-log" style="color: inherit; text-decoration: none;">
 					<h2>Change log</h2>
@@ -185,9 +183,6 @@
 						<a href="classes/container.html" class="tsd-kind-icon">Container</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/content.html" class="tsd-kind-icon">Content</a>
-					</li>
-					<li class=" tsd-kind-class">
 						<a href="classes/contentanimatemanifest.html" class="tsd-kind-icon">Content<wbr>Animate<wbr>Manifest</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -221,6 +216,12 @@
 						<a href="modules.html#createjs" class="tsd-kind-icon">createjs</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="modules.html#addanimatesto" class="tsd-kind-icon">add<wbr>Animates<wbr>To</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#defineanimatesto" class="tsd-kind-icon">define<wbr>Animates<wbr>To</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="modules.html#loadassetasync" class="tsd-kind-icon">load<wbr>Asset<wbr>Async</a>
 					</li>
 				</ul>
@@ -249,9 +250,6 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

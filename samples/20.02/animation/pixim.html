@@ -27,7 +27,7 @@
 				height: 800
 			});
 			
-			Game.defineAnimates({
+			Pixim.animate.defineAnimatesTo(Game, {
 				test: {
 					basepath: 'game/',
 					filepath: 'game.js',
@@ -42,7 +42,7 @@
 				root: class Root extends PIXI.Container {
 					constructor($) {
 						super();
-						console.log($.resources)
+						
 						this.x = 10;
 						this.y = 10;
 						this.scale.set(0.7);

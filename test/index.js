@@ -74,7 +74,7 @@ describe('Pixim-animate-container', () => {
 				height: 800
 			});
 			
-			Game.defineAnimates({
+			PiximAnimate.defineAnimatesTo(Game, {
 				test: {
 					basepath: path.resolve(__dirname, 'game/'),
 					filepath: 'game.js',
@@ -143,7 +143,7 @@ describe('Pixim-animate-container', () => {
 			
 			const game = new Game();
 			
-			game.addAnimates({
+			PiximAnimate.addAnimatesTo(game, {
 				test: {
 					basepath: path.resolve(__dirname, 'game/'),
 					filepath: 'game.js',

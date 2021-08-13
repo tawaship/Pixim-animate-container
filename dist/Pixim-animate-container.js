@@ -1779,11 +1779,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             }));
         }, ContentAnimateManifest.prototype.destroyResources = function(resources) {}, ContentAnimateManifest;
     }(pixim_js.ContentManifestBase);
-    pixim_js.Content.registerManifest("animates", ContentAnimateManifest), pixim_js.Content.defineAnimates = function(data) {
-        return this.defineManifests("animates", data, {});
-    }, pixim_js.Content.prototype.addAnimates = function(data) {
-        return this.addManifests("animates", data, {});
-    }, createjs.MovieClip = CreatejsMovieClip$1;
+    pixim_js.Content.registerManifest("animates", ContentAnimateManifest), createjs.MovieClip = CreatejsMovieClip$1;
     var Container = function(_Container) {
         function Container() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -1827,6 +1823,10 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         }, Container;
     }(pixim_js.Container);
     exports.createjs = createjs, exports.Container = Container, exports.ContentAnimateManifest = ContentAnimateManifest, 
-    exports.CreatejsMovieClip = CreatejsMovieClip$1, exports.loadAssetAsync = loadAssetAsync$1;
+    exports.CreatejsMovieClip = CreatejsMovieClip$1, exports.addAnimatesTo = function(content, data) {
+        content.addManifests("animates", data, {});
+    }, exports.defineAnimatesTo = function(Content, data) {
+        Content.defineManifests("animates", data, {});
+    }, exports.loadAssetAsync = loadAssetAsync$1;
 }(this.Pixim.animate = this.Pixim.animate || {}, Pixim, createjs, PIXI);
 //# sourceMappingURL=Pixim-animate-container.js.map

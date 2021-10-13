@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.1
+ * Pixim-animate-container - v1.1.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -1940,8 +1940,81 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
         }
         return super.updateForPixi(e);
     }
+    /**
+     * Replace child instance
+     *
+     * @param name Name of old instancee.
+     * @param cls Class of new instance.
+     */
+    replaceInstance(name, cls) {
+        const old = this[name];
+        if (!old) {
+            console.warn(`instance '${name}' was not found.`);
+        }
+        const props = ['x', 'y', 'scaleX', 'scaleY', 'rotation', 'skewX', 'skewY', 'regX', 'regY', '_off', 'alpha'];
+        const instance = this[name] = new cls(old.mode, old.startPosition, old.loop, old.timeline.reversed);
+        const tweens = this.timeline.tweens;
+        for (let i = 0; i < tweens.length; i++) {
+            const target = tweens[i].target;
+            console.log(target);
+            if (Array.isArray(target.state)) {
+                for (let j = 0; j < target.state.length; j++) {
+                    console.log(target);
+                    if (target.state[j].t === old) {
+                        target.state[j].t = instance;
+                    }
+                }
+            }
+            else if (target === old) {
+                tweens[i].target = instance;
+            }
+        }
+        for (let i = 0; i < props.length; i++) {
+            instance[props[i]] = old[props[i]];
+        }
+        if (old.mask) {
+            instance.mask = old.mask;
+            old.mask = null;
+        }
+        if (old.filters) {
+            instance.filters = old.filters;
+            old.filters = null;
+            const nominalBounds = instance.nominalBounds;
+            instance.cache(nominalBounds.x - 2, nominalBounds.y - 2, nominalBounds.width + 4, nominalBounds.height + 4);
+        }
+        this.removeChild(old);
+        return instance;
+    }
 }
 delete (CreatejsMovieClip$1.prototype.endAnimation);
+
+/**
+ * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsbitmap.html | CreatejsBitmap]]
+ */
+class CreatejsBitmap$1 extends CreatejsBitmap {
+    /**
+     * Replace texture.
+     *
+     * @param texture Texture to replace.
+     */
+    replaceTexture(texture) {
+        this._pixiData.instance.texture = texture;
+    }
+}
+
+/**
+ * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjssprite.html | CreatejsSprite]]
+ */
+class CreatejsSprite$1 extends CreatejsSprite {
+    /**
+     * Replace texture.
+     *
+     * @param texture Texture to replace.
+     */
+    replaceTexture(texture) {
+        this._pixiData.instance.texture = texture;
+    }
+}
 
 function loadJS(src) {
     return new Promise((resolve, reject) => {
@@ -2003,7 +2076,7 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
         const promises = [];
         for (let i in manifests) {
             const manifest = manifests[i];
-            const contentPath = manifest.data.basepath.replace(/([^/])$/, '$1/');
+            const contentPath = (manifest.data.basepath === '.' || manifest.data.basepath === './') ? '' : manifest.data.basepath.replace(/([^/])$/, '$1/');
             const dirpath = this._resolvePath(contentPath, basepath);
             const filepath = this._resolvePath(manifest.data.filepath, dirpath);
             const url = version
@@ -2073,6 +2146,8 @@ function addAnimatesTo(content, data) {
 }
 // overrides
 createjs.MovieClip = CreatejsMovieClip$1;
+createjs.Bitmap = CreatejsBitmap$1;
+createjs.Sprite = CreatejsSprite$1;
 
 /**
  * [[https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container]]
@@ -2147,7 +2222,9 @@ class Container extends pixim_js.Container {
 exports.createjs = createjs;
 exports.Container = Container;
 exports.ContentAnimateManifest = ContentAnimateManifest;
+exports.CreatejsBitmap = CreatejsBitmap$1;
 exports.CreatejsMovieClip = CreatejsMovieClip$1;
+exports.CreatejsSprite = CreatejsSprite$1;
 exports.addAnimatesTo = addAnimatesTo;
 exports.defineAnimatesTo = defineAnimatesTo;
 exports.loadAssetAsync = loadAssetAsync$1;

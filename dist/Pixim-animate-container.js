@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.1
+ * Pixim-animate-container - v1.1.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -1711,8 +1711,48 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             var currentFrame = this.currentFrame;
             return this.advance(16.666666666666668), currentFrame !== this.currentFrame && this.currentFrame === this.totalFrames - 1 && this.dispatchEvent(new createjs.Event("endAnimation")), 
             _CreatejsMovieClip.prototype.updateForPixi.call(this, e);
+        }, CreatejsMovieClip.prototype.replaceInstance = function(name, cls) {
+            var old = this[name];
+            old || console.warn("instance '" + name + "' was not found.");
+            for (var props = [ "x", "y", "scaleX", "scaleY", "rotation", "skewX", "skewY", "regX", "regY", "_off", "alpha" ], instance = this[name] = new cls(old.mode, old.startPosition, old.loop, old.timeline.reversed), tweens = this.timeline.tweens, i = 0; i < tweens.length; i++) {
+                var target = tweens[i].target;
+                if (console.log(target), Array.isArray(target.state)) {
+                    for (var j = 0; j < target.state.length; j++) {
+                        console.log(target), target.state[j].t === old && (target.state[j].t = instance);
+                    }
+                } else {
+                    target === old && (tweens[i].target = instance);
+                }
+            }
+            for (var i$1 = 0; i$1 < props.length; i$1++) {
+                instance[props[i$1]] = old[props[i$1]];
+            }
+            if (old.mask && (instance.mask = old.mask, old.mask = null), old.filters) {
+                instance.filters = old.filters, old.filters = null;
+                var nominalBounds = instance.nominalBounds;
+                instance.cache(nominalBounds.x - 2, nominalBounds.y - 2, nominalBounds.width + 4, nominalBounds.height + 4);
+            }
+            return this.removeChild(old), instance;
         }, CreatejsMovieClip;
     }(CreatejsMovieClip);
+    delete CreatejsMovieClip$1.prototype.endAnimation;
+    var CreatejsBitmap$1 = function(_CreatejsBitmap) {
+        function CreatejsBitmap() {
+            _CreatejsBitmap.apply(this, arguments);
+        }
+        return _CreatejsBitmap && (CreatejsBitmap.__proto__ = _CreatejsBitmap), CreatejsBitmap.prototype = Object.create(_CreatejsBitmap && _CreatejsBitmap.prototype), 
+        CreatejsBitmap.prototype.constructor = CreatejsBitmap, CreatejsBitmap.prototype.replaceTexture = function(texture) {
+            this._pixiData.instance.texture = texture;
+        }, CreatejsBitmap;
+    }(CreatejsBitmap), CreatejsSprite$1 = function(_CreatejsSprite) {
+        function CreatejsSprite() {
+            _CreatejsSprite.apply(this, arguments);
+        }
+        return _CreatejsSprite && (CreatejsSprite.__proto__ = _CreatejsSprite), CreatejsSprite.prototype = Object.create(_CreatejsSprite && _CreatejsSprite.prototype), 
+        CreatejsSprite.prototype.constructor = CreatejsSprite, CreatejsSprite.prototype.replaceTexture = function(texture) {
+            this._pixiData.instance.texture = texture;
+        }, CreatejsSprite;
+    }(CreatejsSprite);
     function loadAssetAsync$1(targets) {
         Array.isArray(targets) || (targets = [ targets ]);
         for (var promises = [], i = 0; i < targets.length; i++) {
@@ -1731,7 +1771,6 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             return 1 === resolvers.length ? resolvers[0] : resolvers;
         }));
     }
-    delete CreatejsMovieClip$1.prototype.endAnimation;
     var ContentAnimateManifest = function(ContentManifestBase) {
         function ContentAnimateManifest() {
             ContentManifestBase.apply(this, arguments);
@@ -1740,7 +1779,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         ContentAnimateManifest.prototype = Object.create(ContentManifestBase && ContentManifestBase.prototype), 
         ContentAnimateManifest.prototype.constructor = ContentAnimateManifest, ContentAnimateManifest.prototype._loadAsync = function(basepath, version, useCache) {
             var this$1 = this, manifests = this._manifests, promises = [], loop = function(i) {
-                var src, manifest = manifests[i], contentPath = manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
+                var src, manifest = manifests[i], contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
                 promises.push((src = url, new Promise((function(resolve, reject) {
                     var script = document.createElement("script");
                     script.src = src, script.addEventListener("load", (function() {
@@ -1779,7 +1818,8 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             }));
         }, ContentAnimateManifest.prototype.destroyResources = function(resources) {}, ContentAnimateManifest;
     }(pixim_js.ContentManifestBase);
-    pixim_js.Content.registerManifest("animates", ContentAnimateManifest), createjs.MovieClip = CreatejsMovieClip$1;
+    pixim_js.Content.registerManifest("animates", ContentAnimateManifest), createjs.MovieClip = CreatejsMovieClip$1, 
+    createjs.Bitmap = CreatejsBitmap$1, createjs.Sprite = CreatejsSprite$1;
     var Container = function(_Container) {
         function Container() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -1823,7 +1863,8 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         }, Container;
     }(pixim_js.Container);
     exports.createjs = createjs, exports.Container = Container, exports.ContentAnimateManifest = ContentAnimateManifest, 
-    exports.CreatejsMovieClip = CreatejsMovieClip$1, exports.addAnimatesTo = function(content, data) {
+    exports.CreatejsBitmap = CreatejsBitmap$1, exports.CreatejsMovieClip = CreatejsMovieClip$1, 
+    exports.CreatejsSprite = CreatejsSprite$1, exports.addAnimatesTo = function(content, data) {
         content.addManifests("animates", data, {});
     }, exports.defineAnimatesTo = function(Content, data) {
         Content.defineManifests("animates", data, {});

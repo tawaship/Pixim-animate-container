@@ -91,7 +91,7 @@ export class ContentAnimateManifest extends ContentManifestBase<IContentAnimateM
 		
 		for (let i in manifests) {
 			const manifest = manifests[i];
-			const contentPath = manifest.data.basepath.replace(/([^/])$/, '$1/');
+			const contentPath = (manifest.data.basepath === '.' || manifest.data.basepath === './') ? '' : manifest.data.basepath.replace(/([^/])$/, '$1/');
 			const dirpath = this._resolvePath(contentPath, basepath);
 			const filepath = this._resolvePath(manifest.data.filepath, dirpath);
 			const url =

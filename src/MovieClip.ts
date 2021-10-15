@@ -7,6 +7,34 @@ export { ITickerData } from '@tawaship/pixi-animate-core';
  */
 const P: number = 1000 / 60;
 
+export class AnimateEvent extends createjs.Event {
+	constructor(type: string) {
+		super(type);
+	}
+};
+
+export interface IReachLabelData {
+	/**
+	 * Label name.
+	 */
+	label: string;
+	
+	/**
+	 * Frame number of label.
+	 */
+	position: number;
+}
+
+export class ReachLabelEvent extends AnimateEvent {
+	data: IReachLabelData;
+	
+	constructor(type: string, label: IReachLabelData) {
+		super(type);
+		
+		this.data = label;
+	}
+}
+
 /**
  * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsmovieclip.html | CreatejsMovieClip]]
  */
@@ -18,7 +46,14 @@ export class CreatejsMovieClip extends _CreatejsMovieClip {
 	 * 
 	 * @event
 	 */
-	endAnimation?(): void {}
+	endAnimation?(e: AnimateEvent): void {}
+	
+	/**
+	 * When either labels is reached.
+	 * 
+	 * @event
+	 */
+	reachLabel?(e: ReachLabelEvent): void {}
 	
 	constructor(...args: any[]) {
 		super(...args);
@@ -41,8 +76,18 @@ export class CreatejsMovieClip extends _CreatejsMovieClip {
 		// this.advance(e.delta * P);
 		this.advance(P);
 		
-		if (currentFrame !== this.currentFrame && this.currentFrame === (this.totalFrames - 1)) {
-			this.dispatchEvent(new createjs.Event('endAnimation'));
+		if (currentFrame !== this.currentFrame) {
+			if (this.currentFrame === (this.totalFrames - 1)) {
+				this.dispatchEvent(new AnimateEvent('endAnimation'));
+			}
+			
+			for (let i = 0; i < this.labels.length; i++) {
+				const label = this.labels[i];
+				if (this.currentFrame === label.position) {
+					this.dispatchEvent(new ReachLabelEvent('reachLabel', label));
+					break;
+				}
+			}
 		}
 		
 		return super.updateForPixi(e);
@@ -68,7 +113,7 @@ export class CreatejsMovieClip extends _CreatejsMovieClip {
 		const tweens = this.timeline.tweens;
 		for (let i = 0; i < tweens.length; i++) {
 			const target = tweens[i].target;
-			console.log(target)
+			
 			if (Array.isArray(target.state)) {
 				for (let j = 0; j < target.state.length; j++) {
 					console.log(target)
@@ -105,3 +150,4 @@ export class CreatejsMovieClip extends _CreatejsMovieClip {
 }
 
 delete(CreatejsMovieClip.prototype.endAnimation);
+delete(CreatejsMovieClip.prototype.reachLabel);

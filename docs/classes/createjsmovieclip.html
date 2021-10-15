@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CreatejsMovieClip | @tawaship/pixim-animate-container - v1.1.2</title>
-	<meta name="description" content="Documentation for @tawaship/pixim-animate-container - v1.1.2">
+	<title>CreatejsMovieClip | @tawaship/pixim-animate-container - v1.1.3</title>
+	<meta name="description" content="Documentation for @tawaship/pixim-animate-container - v1.1.3">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 	<script async src="../assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">@tawaship/pixim-animate-container - v1.1.2</a>
+					<a href="../index.html" class="title">@tawaship/pixim-animate-container - v1.1.3</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -52,7 +52,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../modules.html">@tawaship/pixim-animate-container - v1.1.2</a>
+					<a href="../modules.html">@tawaship/pixim-animate-container - v1.1.3</a>
 				</li>
 				<li>
 					<a href="createjsmovieclip.html">CreatejsMovieClip</a>
@@ -99,6 +99,7 @@
 							<h3>Events</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-event tsd-parent-kind-class"><a href="createjsmovieclip.html#endanimation" class="tsd-kind-icon">end<wbr>Animation</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-class"><a href="createjsmovieclip.html#reachlabel" class="tsd-kind-icon">reach<wbr>Label</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -160,7 +161,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides _CreatejsMovieClip.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L21">src/MovieClip.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L56">src/MovieClip.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -180,13 +181,13 @@
 					<a name="endanimation" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> end<wbr>Animation</h3>
 					<ul class="tsd-signatures tsd-kind-event tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">end<wbr>Animation<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">end<wbr>Animation<span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><a href="animateevent.html" class="tsd-signature-type" data-tsd-kind="Class">AnimateEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L21">src/MovieClip.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L49">src/MovieClip.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -194,6 +195,40 @@
 									<p>When the last frame of the timeline is reached.</p>
 								</div>
 							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>e: <a href="animateevent.html" class="tsd-signature-type" data-tsd-kind="Class">AnimateEvent</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-class">
+					<a name="reachlabel" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> reach<wbr>Label</h3>
+					<ul class="tsd-signatures tsd-kind-event tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">reach<wbr>Label<span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><a href="reachlabelevent.html" class="tsd-signature-type" data-tsd-kind="Class">ReachLabelEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L56">src/MovieClip.ts:56</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>When either labels is reached.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>e: <a href="reachlabelevent.html" class="tsd-signature-type" data-tsd-kind="Class">ReachLabelEvent</a></h5>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -218,7 +253,7 @@
 					<div class="tsd-signature tsd-kind-icon">_framerate<wbr>Base<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L14">src/MovieClip.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L42">src/MovieClip.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -796,7 +831,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides _CreatejsMovieClip.initialize</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L29">src/MovieClip.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L64">src/MovieClip.ts:64</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -915,7 +950,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L57">src/MovieClip.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L102">src/MovieClip.ts:102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -953,7 +988,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides _CreatejsMovieClip.updateForPixi</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L38">src/MovieClip.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/tawaship/Pixim-animate-container/blob/master/src/MovieClip.ts#L73">src/MovieClip.ts:73</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -985,6 +1020,9 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
+						<a href="animateevent.html" class="tsd-kind-icon">Animate<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="container.html" class="tsd-kind-icon">Container</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -1003,6 +1041,9 @@
 							</li>
 							<li class=" tsd-kind-event tsd-parent-kind-class">
 								<a href="createjsmovieclip.html#endanimation" class="tsd-kind-icon">end<wbr>Animation</a>
+							</li>
+							<li class=" tsd-kind-event tsd-parent-kind-class">
+								<a href="createjsmovieclip.html#reachlabel" class="tsd-kind-icon">reach<wbr>Label</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
 								<a href="createjsmovieclip.html#_createjsparams" class="tsd-kind-icon">_createjs<wbr>Params</a>
@@ -1095,6 +1136,9 @@
 					<li class=" tsd-kind-class">
 						<a href="createjssprite.html" class="tsd-kind-icon">Createjs<wbr>Sprite</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="reachlabelevent.html" class="tsd-kind-icon">Reach<wbr>Label<wbr>Event</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="../interfaces/ianimatelibrary.html" class="tsd-kind-icon">IAnimate<wbr>Library</a>
 					</li>
@@ -1115,6 +1159,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/ipreparetarget.html" class="tsd-kind-icon">IPrepare<wbr>Target</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/ireachlabeldata.html" class="tsd-kind-icon">IReach<wbr>Label<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="../interfaces/itickerdata.html" class="tsd-kind-icon">ITicker<wbr>Data</a>

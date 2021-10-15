@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.2
+ * Pixim-animate-container - v1.1.3
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -1692,7 +1692,19 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     createjs.Sprite = CreatejsSprite, createjs.Shape = CreatejsShape, createjs.Bitmap = CreatejsBitmap, 
     createjs.Graphics = CreatejsGraphics, createjs.Text = CreatejsText, createjs.ButtonHelper = CreatejsButtonHelper, 
     createjs.MotionGuidePlugin.install();
-    var CreatejsMovieClip$1 = function(_CreatejsMovieClip) {
+    var AnimateEvent = function(superclass) {
+        function AnimateEvent(type) {
+            superclass.call(this, type);
+        }
+        return superclass && (AnimateEvent.__proto__ = superclass), AnimateEvent.prototype = Object.create(superclass && superclass.prototype), 
+        AnimateEvent.prototype.constructor = AnimateEvent, AnimateEvent;
+    }(createjs.Event), ReachLabelEvent = function(AnimateEvent) {
+        function ReachLabelEvent(type, label) {
+            AnimateEvent.call(this, type), this.data = label;
+        }
+        return AnimateEvent && (ReachLabelEvent.__proto__ = AnimateEvent), ReachLabelEvent.prototype = Object.create(AnimateEvent && AnimateEvent.prototype), 
+        ReachLabelEvent.prototype.constructor = ReachLabelEvent, ReachLabelEvent;
+    }(AnimateEvent), CreatejsMovieClip$1 = function(_CreatejsMovieClip) {
         function CreatejsMovieClip() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -1701,22 +1713,31 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         }
         return _CreatejsMovieClip && (CreatejsMovieClip.__proto__ = _CreatejsMovieClip), 
         CreatejsMovieClip.prototype = Object.create(_CreatejsMovieClip && _CreatejsMovieClip.prototype), 
-        CreatejsMovieClip.prototype.constructor = CreatejsMovieClip, CreatejsMovieClip.prototype.endAnimation = function() {}, 
-        CreatejsMovieClip.prototype.initialize = function() {
+        CreatejsMovieClip.prototype.constructor = CreatejsMovieClip, CreatejsMovieClip.prototype.endAnimation = function(e) {}, 
+        CreatejsMovieClip.prototype.reachLabel = function(e) {}, CreatejsMovieClip.prototype.initialize = function() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
             }
             _CreatejsMovieClip.prototype.initialize.apply(this, args), this.framerate = this._framerateBase;
         }, CreatejsMovieClip.prototype.updateForPixi = function(e) {
             var currentFrame = this.currentFrame;
-            return this.advance(16.666666666666668), currentFrame !== this.currentFrame && this.currentFrame === this.totalFrames - 1 && this.dispatchEvent(new createjs.Event("endAnimation")), 
-            _CreatejsMovieClip.prototype.updateForPixi.call(this, e);
+            if (this.advance(16.666666666666668), currentFrame !== this.currentFrame) {
+                this.currentFrame === this.totalFrames - 1 && this.dispatchEvent(new AnimateEvent("endAnimation"));
+                for (var i = 0; i < this.labels.length; i++) {
+                    var label = this.labels[i];
+                    if (this.currentFrame === label.position) {
+                        this.dispatchEvent(new ReachLabelEvent("reachLabel", label));
+                        break;
+                    }
+                }
+            }
+            return _CreatejsMovieClip.prototype.updateForPixi.call(this, e);
         }, CreatejsMovieClip.prototype.replaceInstance = function(name, cls) {
             var old = this[name];
             old || console.warn("instance '" + name + "' was not found.");
             for (var props = [ "x", "y", "scaleX", "scaleY", "rotation", "skewX", "skewY", "regX", "regY", "_off", "alpha" ], instance = this[name] = new cls(old.mode, old.startPosition, old.loop, old.timeline.reversed), tweens = this.timeline.tweens, i = 0; i < tweens.length; i++) {
                 var target = tweens[i].target;
-                if (console.log(target), Array.isArray(target.state)) {
+                if (Array.isArray(target.state)) {
                     for (var j = 0; j < target.state.length; j++) {
                         console.log(target), target.state[j].t === old && (target.state[j].t = instance);
                     }
@@ -1735,7 +1756,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             return this.removeChild(old), instance;
         }, CreatejsMovieClip;
     }(CreatejsMovieClip);
-    delete CreatejsMovieClip$1.prototype.endAnimation;
+    delete CreatejsMovieClip$1.prototype.endAnimation, delete CreatejsMovieClip$1.prototype.reachLabel;
     var CreatejsBitmap$1 = function(_CreatejsBitmap) {
         function CreatejsBitmap() {
             _CreatejsBitmap.apply(this, arguments);
@@ -1862,9 +1883,10 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             return this.removeChild(cjs.pixi), cjs;
         }, Container;
     }(pixim_js.Container);
-    exports.createjs = createjs, exports.Container = Container, exports.ContentAnimateManifest = ContentAnimateManifest, 
-    exports.CreatejsBitmap = CreatejsBitmap$1, exports.CreatejsMovieClip = CreatejsMovieClip$1, 
-    exports.CreatejsSprite = CreatejsSprite$1, exports.addAnimatesTo = function(content, data) {
+    exports.createjs = createjs, exports.AnimateEvent = AnimateEvent, exports.Container = Container, 
+    exports.ContentAnimateManifest = ContentAnimateManifest, exports.CreatejsBitmap = CreatejsBitmap$1, 
+    exports.CreatejsMovieClip = CreatejsMovieClip$1, exports.CreatejsSprite = CreatejsSprite$1, 
+    exports.ReachLabelEvent = ReachLabelEvent, exports.addAnimatesTo = function(content, data) {
         content.addManifests("animates", data, {});
     }, exports.defineAnimatesTo = function(Content, data) {
         Content.defineManifests("animates", data, {});

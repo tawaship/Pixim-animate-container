@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.2
+ * Pixim-animate-container - v1.1.3
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -1910,6 +1910,17 @@ function handleFileLoad(evt, comp) {
  * @ignore
  */
 const P$6 = 1000 / 60;
+class AnimateEvent extends createjs.Event {
+    constructor(type) {
+        super(type);
+    }
+}
+class ReachLabelEvent extends AnimateEvent {
+    constructor(type, label) {
+        super(type);
+        this.data = label;
+    }
+}
 /**
  * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsmovieclip.html | CreatejsMovieClip]]
  */
@@ -1919,7 +1930,13 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
      *
      * @event
      */
-    endAnimation() { }
+    endAnimation(e) { }
+    /**
+     * When either labels is reached.
+     *
+     * @event
+     */
+    reachLabel(e) { }
     constructor(...args) {
         super(...args);
         this.framerate = this._framerateBase;
@@ -1935,8 +1952,17 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
         const currentFrame = this.currentFrame;
         // this.advance(e.delta * P);
         this.advance(P$6);
-        if (currentFrame !== this.currentFrame && this.currentFrame === (this.totalFrames - 1)) {
-            this.dispatchEvent(new createjs.Event('endAnimation'));
+        if (currentFrame !== this.currentFrame) {
+            if (this.currentFrame === (this.totalFrames - 1)) {
+                this.dispatchEvent(new AnimateEvent('endAnimation'));
+            }
+            for (let i = 0; i < this.labels.length; i++) {
+                const label = this.labels[i];
+                if (this.currentFrame === label.position) {
+                    this.dispatchEvent(new ReachLabelEvent('reachLabel', label));
+                    break;
+                }
+            }
         }
         return super.updateForPixi(e);
     }
@@ -1956,7 +1982,6 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
         const tweens = this.timeline.tweens;
         for (let i = 0; i < tweens.length; i++) {
             const target = tweens[i].target;
-            console.log(target);
             if (Array.isArray(target.state)) {
                 for (let j = 0; j < target.state.length; j++) {
                     console.log(target);
@@ -1987,6 +2012,7 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
     }
 }
 delete (CreatejsMovieClip$1.prototype.endAnimation);
+delete (CreatejsMovieClip$1.prototype.reachLabel);
 
 /**
  * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsbitmap.html | CreatejsBitmap]]
@@ -2220,11 +2246,13 @@ class Container extends pixim_js.Container {
 }
 
 exports.createjs = createjs;
+exports.AnimateEvent = AnimateEvent;
 exports.Container = Container;
 exports.ContentAnimateManifest = ContentAnimateManifest;
 exports.CreatejsBitmap = CreatejsBitmap$1;
 exports.CreatejsMovieClip = CreatejsMovieClip$1;
 exports.CreatejsSprite = CreatejsSprite$1;
+exports.ReachLabelEvent = ReachLabelEvent;
 exports.addAnimatesTo = addAnimatesTo;
 exports.defineAnimatesTo = defineAnimatesTo;
 exports.loadAssetAsync = loadAssetAsync$1;

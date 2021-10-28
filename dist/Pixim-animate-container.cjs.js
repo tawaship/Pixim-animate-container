@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.3
+ * Pixim-animate-container - v1.1.4
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -2047,13 +2047,14 @@ function loadJS(src) {
         const script = document.createElement('script');
         script.src = src;
         script.addEventListener('load', () => {
+            document.body.removeChild(script);
             resolve();
         });
         script.addEventListener('error', (e) => {
+            document.body.removeChild(script);
             reject(e);
         });
         document.body.appendChild(script);
-        document.body.removeChild(script);
     });
 }
 

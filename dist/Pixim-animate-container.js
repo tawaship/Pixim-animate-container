@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.3
+ * Pixim-animate-container - v1.1.4
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -1804,10 +1804,10 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
                 promises.push((src = url, new Promise((function(resolve, reject) {
                     var script = document.createElement("script");
                     script.src = src, script.addEventListener("load", (function() {
-                        resolve();
+                        document.body.removeChild(script), resolve();
                     })), script.addEventListener("error", (function(e) {
-                        reject(e);
-                    })), document.body.appendChild(script), document.body.removeChild(script);
+                        document.body.removeChild(script), reject(e);
+                    })), document.body.appendChild(script);
                 }))).catch((function(e) {
                     throw "Animate: '" + i + "' cannot load.";
                 })));

@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.4
+ * Pixim-animate-container - v1.1.4-a
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -18,7 +18,7 @@ var createjs = _interopDefault(require('@tawaship/createjs-module'));
 var pixi_js = require('pixi.js');
 
 /*!
- * @tawaship/pixi-animate-core - v3.0.4
+ * @tawaship/pixi-animate-core - v3.0.4-a
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -100,9 +100,12 @@ function createObject(proto) {
  */
 const DEG_TO_RAD = Math.PI / 180;
 
+/**
+ * @ignore
+ */
+let _isDown = false;
 class EventManager {
     constructor(cjs) {
-        this._isDown = false;
         this._events = {
             pointerdown: [],
             pointerover: [],
@@ -183,7 +186,7 @@ class EventManager {
             const ev = e.data;
             e.rawX = ev.global.x;
             e.rawY = ev.global.y;
-            this._isDown = true;
+            _isDown = true;
             cb(e);
         };
     }
@@ -194,7 +197,7 @@ class EventManager {
             const ev = e.data;
             e.rawX = ev.global.x;
             e.rawY = ev.global.y;
-            this._isDown = true;
+            //_isDown = true;
             cb(e);
         };
     }
@@ -205,13 +208,13 @@ class EventManager {
             const ev = e.data;
             e.rawX = ev.global.x;
             e.rawY = ev.global.y;
-            this._isDown = true;
+            //_isDown = true;
             cb(e);
         };
     }
     _pressmoveFactory(cjs, cb) {
         return (e) => {
-            if (!this._isDown) {
+            if (!_isDown) {
                 return;
             }
             e.currentTarget = cjs;
@@ -224,11 +227,11 @@ class EventManager {
     }
     _pressupFactory(cjs, cb) {
         return (e) => {
-            if (!this._isDown) {
+            if (!_isDown) {
                 return;
             }
             e.currentTarget = cjs;
-            this._isDown = false;
+            _isDown = false;
             e.target = e.target && e.target.createjs;
             const ev = e.data;
             e.rawX = ev.global.x;

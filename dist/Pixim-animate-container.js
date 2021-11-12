@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.4
+ * Pixim-animate-container - v1.1.4-a
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -9,7 +9,7 @@
 this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.0.4
+     * @tawaship/pixi-animate-core - v3.0.4-a
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -50,9 +50,9 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     function createObject(proto) {
         return Object.create(proto);
     }
-    var DEG_TO_RAD = Math.PI / 180, EventManager = function(cjs) {
+    var DEG_TO_RAD = Math.PI / 180, _isDown = !1, EventManager = function(cjs) {
         var this$1 = this;
-        this._isDown = !1, this._events = {
+        this._events = {
             pointerdown: [],
             pointerover: [],
             pointerout: [],
@@ -115,40 +115,35 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             }
         }
     }, EventManager.prototype._mousedownFactory = function(cjs, cb) {
-        var this$1 = this;
         return function(e) {
             e.currentTarget = e.currentTarget.createjs, e.target = e.target.createjs;
             var ev = e.data;
-            e.rawX = ev.global.x, e.rawY = ev.global.y, this$1._isDown = !0, cb(e);
+            e.rawX = ev.global.x, e.rawY = ev.global.y, _isDown = !0, cb(e);
         };
     }, EventManager.prototype._rolloverFactory = function(cjs, cb) {
-        var this$1 = this;
         return function(e) {
             e.currentTarget = e.currentTarget.createjs, e.target = e.currentTarget.createjs;
             var ev = e.data;
-            e.rawX = ev.global.x, e.rawY = ev.global.y, this$1._isDown = !0, cb(e);
+            e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
         };
     }, EventManager.prototype._rolloutFactory = function(cjs, cb) {
-        var this$1 = this;
         return function(e) {
             e.currentTarget = e.currentTarget.createjs, e.target = e.currentTarget.createjs;
             var ev = e.data;
-            e.rawX = ev.global.x, e.rawY = ev.global.y, this$1._isDown = !0, cb(e);
+            e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
         };
     }, EventManager.prototype._pressmoveFactory = function(cjs, cb) {
-        var this$1 = this;
         return function(e) {
-            if (this$1._isDown) {
+            if (_isDown) {
                 e.currentTarget = cjs, e.target = e.target && e.target.createjs;
                 var ev = e.data;
                 e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
             }
         };
     }, EventManager.prototype._pressupFactory = function(cjs, cb) {
-        var this$1 = this;
         return function(e) {
-            if (this$1._isDown) {
-                e.currentTarget = cjs, this$1._isDown = !1, e.target = e.target && e.target.createjs;
+            if (_isDown) {
+                e.currentTarget = cjs, _isDown = !1, e.target = e.target && e.target.createjs;
                 var ev = e.data;
                 e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
             }

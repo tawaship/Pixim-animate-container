@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.4-a
+ * Pixim-animate-container - v1.1.4-b
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -18,7 +18,7 @@ var createjs = _interopDefault(require('@tawaship/createjs-module'));
 var pixi_js = require('pixi.js');
 
 /*!
- * @tawaship/pixi-animate-core - v3.0.4-a
+ * @tawaship/pixi-animate-core - v3.0.4-b
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -53,10 +53,6 @@ function updateDisplayObjectChildren(cjs, e) {
     const list = cjs.children.slice();
     for (let i = 0, l = list.length; i < l; i++) {
         const child = list[i];
-        if (!child.isVisible()) {
-            continue;
-        }
-        //child.draw();
         child.updateForPixi(e);
     }
     return true;

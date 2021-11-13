@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.4-a
+ * Pixim-animate-container - v1.1.4-b
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.0
@@ -9,7 +9,7 @@
 this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.0.4-a
+     * @tawaship/pixi-animate-core - v3.0.4-b
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -23,8 +23,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     }
     function updateDisplayObjectChildren(cjs, e) {
         for (var list = cjs.children.slice(), i = 0, l = list.length; i < l; i++) {
-            var child = list[i];
-            child.isVisible() && child.updateForPixi(e);
+            list[i].updateForPixi(e);
         }
         return !0;
     }

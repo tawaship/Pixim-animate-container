@@ -1,6 +1,6 @@
 {
   "name": "@tawaship/pixim-animate-container",
-  "version": "1.1.5",
+  "version": "1.1.5-a",
   "description": "",
   "main": "dist/Pixim-animate-container.cjs.js",
   "module": "dist/Pixim-animate-container.esm.js",

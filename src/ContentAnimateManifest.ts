@@ -75,7 +75,7 @@ export interface IContentAnimateManifestData extends IPrepareTarget {
 	/**
 	 * Javascript file path of Animate content.
 	 */
-	filepath: string;
+	filepath?: string;
 }
 
 export class ContentAnimateManifest extends ContentManifestBase<IContentAnimateManifestData, IAnimateLibrary> {

@@ -1,4 +1,4 @@
-import { ContentManifestBase, ILoadedResourceDictionary, IResourceDictionary } from '@tawaship/pixim.js';
+import { ContentManifestBase, ILoadedResourceDictionary, IResourceDictionary, resolvePath, resolveQuery } from '@tawaship/pixim.js';
 import { loadAssetAsync as _loadAssetAsync, ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-core';
 import { CreatejsMovieClip } from './MovieClip';
 import loadJS from './loadJS';
@@ -91,9 +91,16 @@ export class ContentAnimateManifest extends ContentManifestBase<IContentAnimateM
 		
 		for (let i in manifests) {
 			const manifest = manifests[i];
+			
+			if (!manifest.data.filepath) {
+				promises.push(Promise.resolve());
+				continue;
+			}
+			
 			const contentPath = (manifest.data.basepath === '.' || manifest.data.basepath === './') ? '' : manifest.data.basepath.replace(/([^/])$/, '$1/');
 			const dirpath = this._resolvePath(contentPath, basepath);
 			const filepath = this._resolvePath(manifest.data.filepath, dirpath);
+			
 			const url =
 				version
 				?`${filepath}${filepath.match(/\?/) ? '&' : '?'}_fv=${version}`

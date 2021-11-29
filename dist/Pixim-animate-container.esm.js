@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.1.4-b
+ * Pixim-animate-container - v1.1.5
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.12.0
+ * @require @tawaship/pixim.js v1.12.2
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -10,10 +10,10 @@
 import { ContentManifestBase, Content, Container as Container$2, Task } from '@tawaship/pixim.js';
 import createjs from '@tawaship/createjs-module';
 export { default as createjs } from '@tawaship/createjs-module';
-import { filters, Container as Container$1, BaseTexture, Texture, LINE_CAP, LINE_JOIN, Text, Sprite, Graphics } from 'pixi.js';
+import { filters, Container as Container$1, BaseTexture, Texture, LINE_CAP, LINE_JOIN, utils, Text, Sprite, Graphics } from 'pixi.js';
 
 /*!
- * @tawaship/pixi-animate-core - v3.0.4-b
+ * @tawaship/pixi-animate-core - v3.0.5
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -1821,6 +1821,9 @@ Object.defineProperties(CreatejsText.prototype, {
     }
 });
 
+function resolvePath(path, basepath) {
+    return utils.url.resolve(basepath, path);
+}
 /**
  * Load assets of createjs content published with Adobe Animate.
  *
@@ -1837,9 +1840,9 @@ function loadAssetAsync(comp, basepath, options = {}) {
             resolve({});
         }
         if (basepath) {
-            basepath = (basepath + '/').replace(/([^\:])\/\//, "$1/");
+            basepath = basepath.replace(/([^\/])$/, "$1/");
         }
-        const loader = new createjs.LoadQueue(false, basepath);
+        const loader = new createjs.LoadQueue(false);
         loader.installPlugin(createjs.Sound);
         const errors = [];
         loader.addEventListener('fileload', (evt) => {
@@ -1855,13 +1858,28 @@ function loadAssetAsync(comp, basepath, options = {}) {
         loader.addEventListener('error', (evt) => {
             errors.push(evt.data);
         });
-        if (options.crossOrigin) {
-            const m = lib.properties.manifest;
-            for (let i = 0; i < m.length; i++) {
-                m[i].crossOrigin = true;
+        const manifests = [];
+        const origin = lib.properties.manifest;
+        for (let i = 0; i < origin.length; i++) {
+            const o = origin[i];
+            const m = {
+                src: resolvePath(o.src, basepath),
+                id: o.id
+            };
+            for (let i in o) {
+                if (!m[i]) {
+                    m[i] = o[i];
+                }
             }
+            if (options.crossOrigin) {
+                m.crossOrigin = true;
+            }
+            if (o.src.indexOf('data:') === 0) {
+                m.type = 'image';
+            }
+            manifests.push(m);
         }
-        loader.loadManifest(lib.properties.manifest);
+        loader.loadManifest(manifests);
     })
         .then((evt) => {
         const ss = comp.getSpriteSheet();
@@ -2097,6 +2115,10 @@ class ContentAnimateManifest extends ContentManifestBase {
         const promises = [];
         for (let i in manifests) {
             const manifest = manifests[i];
+            if (!manifest.data.filepath) {
+                promises.push(Promise.resolve());
+                continue;
+            }
             const contentPath = (manifest.data.basepath === '.' || manifest.data.basepath === './') ? '' : manifest.data.basepath.replace(/([^/])$/, '$1/');
             const dirpath = this._resolvePath(contentPath, basepath);
             const filepath = this._resolvePath(manifest.data.filepath, dirpath);

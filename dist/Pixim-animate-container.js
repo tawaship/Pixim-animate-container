@@ -1,15 +1,15 @@
 /*!
- * Pixim-animate-container - v1.1.4-b
+ * Pixim-animate-container - v1.1.5
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.12.0
+ * @require @tawaship/pixim.js v1.12.2
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
 this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.0.4-b
+     * @tawaship/pixi-animate-core - v3.0.5
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -1638,17 +1638,20 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             this._createjsParams.lineWidth = width;
         }, Object.defineProperties(CreatejsText.prototype, prototypeAccessors$11), CreatejsText;
     }(createjs.Text);
+    function resolvePath(path, basepath) {
+        return pixi_js.utils.url.resolve(basepath, path);
+    }
     function loadAssetAsync(comp, basepath, options) {
         if (void 0 === options && (options = {}), !comp) {
             throw new Error("no composition");
         }
         var lib = comp.getLibrary();
         return new Promise((function(resolve, reject) {
-            0 === lib.properties.manifest.length && resolve({}), basepath && (basepath = (basepath + "/").replace(/([^\:])\/\//, "$1/"));
-            var loader = new createjs.LoadQueue(!1, basepath);
+            0 === lib.properties.manifest.length && resolve({}), basepath && (basepath = basepath.replace(/([^\/])$/, "$1/"));
+            var loader = new createjs.LoadQueue(!1);
             loader.installPlugin(createjs.Sound);
             var errors = [];
-            if (loader.addEventListener("fileload", (function(evt) {
+            loader.addEventListener("fileload", (function(evt) {
                 !function(evt, comp) {
                     var images = comp.getImages();
                     evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
@@ -1657,12 +1660,19 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
                 errors.length ? reject(errors) : resolve(evt);
             })), loader.addEventListener("error", (function(evt) {
                 errors.push(evt.data);
-            })), options.crossOrigin) {
-                for (var m = lib.properties.manifest, i = 0; i < m.length; i++) {
-                    m[i].crossOrigin = !0;
+            }));
+            for (var manifests = [], origin = lib.properties.manifest, i = 0; i < origin.length; i++) {
+                var o = origin[i], m = {
+                    src: resolvePath(o.src, basepath),
+                    id: o.id
+                };
+                for (var i$1 in o) {
+                    m[i$1] || (m[i$1] = o[i$1]);
                 }
+                options.crossOrigin && (m.crossOrigin = !0), 0 === o.src.indexOf("data:") && (m.type = "image"), 
+                manifests.push(m);
             }
-            loader.loadManifest(lib.properties.manifest);
+            loader.loadManifest(manifests);
         })).then((function(evt) {
             for (var ss = comp.getSpriteSheet(), queue = evt.target, ssMetadata = lib.ssMetadata, i = 0; i < ssMetadata.length; i++) {
                 ss[ssMetadata[i].name] = new createjs.SpriteSheet({
@@ -1794,17 +1804,22 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         ContentAnimateManifest.prototype = Object.create(ContentManifestBase && ContentManifestBase.prototype), 
         ContentAnimateManifest.prototype.constructor = ContentAnimateManifest, ContentAnimateManifest.prototype._loadAsync = function(basepath, version, useCache) {
             var this$1 = this, manifests = this._manifests, promises = [], loop = function(i) {
-                var src, manifest = manifests[i], contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
-                promises.push((src = url, new Promise((function(resolve, reject) {
-                    var script = document.createElement("script");
-                    script.src = src, script.addEventListener("load", (function() {
-                        document.body.removeChild(script), resolve();
-                    })), script.addEventListener("error", (function(e) {
-                        document.body.removeChild(script), reject(e);
-                    })), document.body.appendChild(script);
-                }))).catch((function(e) {
-                    throw "Animate: '" + i + "' cannot load.";
-                })));
+                var manifest = manifests[i];
+                if (manifest.data.filepath) {
+                    var src, contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
+                    promises.push((src = url, new Promise((function(resolve, reject) {
+                        var script = document.createElement("script");
+                        script.src = src, script.addEventListener("load", (function() {
+                            document.body.removeChild(script), resolve();
+                        })), script.addEventListener("error", (function(e) {
+                            document.body.removeChild(script), reject(e);
+                        })), document.body.appendChild(script);
+                    }))).catch((function(e) {
+                        throw "Animate: '" + i + "' cannot load.";
+                    })));
+                } else {
+                    promises.push(Promise.resolve());
+                }
             };
             for (var i in manifests) {
                 loop(i);

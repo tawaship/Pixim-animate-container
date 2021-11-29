@@ -32,32 +32,6 @@ export default (async () => {
 			input: 'src/index.ts',
 			output: [
 				{
-					banner,
-					file: 'dist/Pixim-animate-container.cjs.js',
-					format: 'cjs',
-					sourcemap: true
-				},
-				{
-					banner,
-					file: 'dist/Pixim-animate-container.esm.js',
-					format: 'esm',
-					sourcemap: true
-				}
-			],
-			external: ['pixi.js', '@tawaship/pixim.js', '@tawaship/createjs-module'],
-			watch: {
-				clearScreen: false
-			},
-			plugins: [
-				nodeResolve(),
-				commonjs(),
-				typescript()
-			]
-		},
-		{
-			input: 'src/index.ts',
-			output: [
-				{
 					banner: banner,
 					file: 'dist/Pixim-animate-container.js',
 					format: 'iife',
@@ -120,6 +94,32 @@ export default (async () => {
 						pure_funcs: ['console.log']
 					}
 				})
+			]
+		},
+		{
+			input: 'src/index.ts',
+			output: [
+				{
+					banner,
+					file: 'dist/Pixim-animate-container.cjs.js',
+					format: 'cjs',
+					sourcemap: true
+				},
+				{
+					banner,
+					file: 'dist/Pixim-animate-container.esm.js',
+					format: 'esm',
+					sourcemap: true
+				}
+			],
+			external: ['pixi.js', '@tawaship/pixim.js', '@tawaship/createjs-module'],
+			watch: {
+				clearScreen: false
+			},
+			plugins: [
+				nodeResolve(),
+				commonjs(),
+				typescript()
 			]
 		}
 	]

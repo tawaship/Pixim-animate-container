@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.5-a
+ * Pixim-animate-container - v1.1.6
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.2
@@ -1778,12 +1778,19 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
             this._pixiData.instance.texture = texture;
         }, CreatejsSprite;
     }(CreatejsSprite);
-    function loadAssetAsync$1(targets) {
-        Array.isArray(targets) || (targets = [ targets ]);
+    function loadAssetAsync$1(targets, queries) {
+        void 0 === queries && (queries = {}), Array.isArray(targets) || (targets = [ targets ]);
         for (var promises = [], i = 0; i < targets.length; i++) {
             var target = targets[i], comp = AdobeAn.getComposition(target.id);
             if (!comp) {
                 throw new Error("no composition: " + target.id);
+            }
+            var lib = comp.getLibrary();
+            for (var i$1 in queries) {
+                for (var origin = lib.properties.manifest, j = 0; j < origin.length; j++) {
+                    var o = origin[j];
+                    o.src = pixim_js.resolveQuery(o.src, queries);
+                }
             }
             promises.push(loadAssetAsync(comp, target.basepath, target.options).then((function(lib) {
                 for (var i in lib) {
@@ -1803,10 +1810,12 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         return ContentManifestBase && (ContentAnimateManifest.__proto__ = ContentManifestBase), 
         ContentAnimateManifest.prototype = Object.create(ContentManifestBase && ContentManifestBase.prototype), 
         ContentAnimateManifest.prototype.constructor = ContentAnimateManifest, ContentAnimateManifest.prototype._loadAsync = function(basepath, version, useCache) {
-            var this$1 = this, manifests = this._manifests, promises = [], loop = function(i) {
+            var this$1 = this, manifests = this._manifests, promises = [], queries = {
+                _fv: version
+            }, loop = function(i) {
                 var manifest = manifests[i];
                 if (manifest.data.filepath) {
-                    var src, contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? filepath + (filepath.match(/\?/) ? "&" : "?") + "_fv=" + version : filepath;
+                    var src, contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? this$1._resolveQuery(filepath, queries) : filepath;
                     promises.push((src = url, new Promise((function(resolve, reject) {
                         var script = document.createElement("script");
                         script.src = src, script.addEventListener("load", (function() {
@@ -1835,7 +1844,7 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
                         options: manifest.data.options
                     });
                 }
-                return loadAssetAsync$1(targets);
+                return loadAssetAsync$1(targets, queries);
             })).then((function(libs) {
                 Array.isArray(libs) || (libs = [ libs ]);
                 for (var i = 0; i < libs.length; i++) {

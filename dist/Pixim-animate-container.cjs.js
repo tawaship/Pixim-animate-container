@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.1.5-a
+ * Pixim-animate-container - v1.1.6
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.12.2
@@ -2080,7 +2080,7 @@ function loadJS(src) {
  * If you use multiple contents, each composition ID must be unique.
  * Please run "Pixim.animate.init" before running.
  */
-function loadAssetAsync$1(targets) {
+function loadAssetAsync$1(targets, queries = {}) {
     if (!Array.isArray(targets)) {
         targets = [targets];
     }
@@ -2090,6 +2090,14 @@ function loadAssetAsync$1(targets) {
         const comp = AdobeAn.getComposition(target.id);
         if (!comp) {
             throw new Error(`no composition: ${target.id}`);
+        }
+        const lib = comp.getLibrary();
+        for (let i in queries) {
+            const origin = lib.properties.manifest;
+            for (let j = 0; j < origin.length; j++) {
+                const o = origin[j];
+                o.src = pixim_js.resolveQuery(o.src, queries);
+            }
         }
         promises.push(loadAssetAsync(comp, target.basepath, target.options)
             .then((lib) => {
@@ -2118,6 +2126,7 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
     _loadAsync(basepath, version, useCache) {
         const manifests = this._manifests;
         const promises = [];
+        const queries = { _fv: version };
         for (let i in manifests) {
             const manifest = manifests[i];
             if (!manifest.data.filepath) {
@@ -2128,7 +2137,7 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
             const dirpath = this._resolvePath(contentPath, basepath);
             const filepath = this._resolvePath(manifest.data.filepath, dirpath);
             const url = version
-                ? `${filepath}${filepath.match(/\?/) ? '&' : '?'}_fv=${version}`
+                ? this._resolveQuery(filepath, queries)
                 : filepath;
             promises.push(loadJS(url)
                 .catch(e => {
@@ -2149,7 +2158,7 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
                     options: manifest.data.options
                 });
             }
-            return loadAssetAsync$1(targets);
+            return loadAssetAsync$1(targets, queries);
         })
             .then(libs => {
             if (!Array.isArray(libs)) {

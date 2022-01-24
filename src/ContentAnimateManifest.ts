@@ -30,7 +30,7 @@ export interface IPrepareTarget {
  * If you use multiple contents, each composition ID must be unique.
  * Please run "Pixim.animate.init" before running.
  */
-export function loadAssetAsync(targets: IPrepareTarget | IPrepareTarget[]) {
+export function loadAssetAsync(targets: IPrepareTarget | IPrepareTarget[], queries: { [name: string ]: string } = {}) {
 	if (!Array.isArray(targets)) {
 		targets = [targets];
 	}
@@ -43,6 +43,15 @@ export function loadAssetAsync(targets: IPrepareTarget | IPrepareTarget[]) {
 		const comp = AdobeAn.getComposition(target.id);
 		if (!comp) {
 			throw new Error(`no composition: ${target.id}`);
+		}
+		
+		const lib: IAnimateLibrary = comp.getLibrary();
+		for (let i in queries) {
+			const origin = lib.properties.manifest;
+			for (let j = 0; j < origin.length; j++) {
+				const o = origin[j];
+				o.src = resolveQuery(o.src, queries);
+			}
 		}
 		
 		promises.push(_loadAssetAsync(comp, target.basepath, target.options)
@@ -88,6 +97,7 @@ export class ContentAnimateManifest extends ContentManifestBase<IContentAnimateM
 		const manifests = this._manifests;
 		
 		const promises: Promise<void>[] = [];
+		const queries = { _fv: version };
 		
 		for (let i in manifests) {
 			const manifest = manifests[i];
@@ -103,7 +113,7 @@ export class ContentAnimateManifest extends ContentManifestBase<IContentAnimateM
 			
 			const url =
 				version
-				?`${filepath}${filepath.match(/\?/) ? '&' : '?'}_fv=${version}`
+				? this._resolveQuery(filepath, queries)
 				: filepath;
 			
 			promises.push(
@@ -131,7 +141,7 @@ export class ContentAnimateManifest extends ContentManifestBase<IContentAnimateM
 					});
 				}
 				
-				return loadAssetAsync(targets);
+				return loadAssetAsync(targets, queries);
 			})
 			.then(libs => {
 				if (!Array.isArray(libs)) {

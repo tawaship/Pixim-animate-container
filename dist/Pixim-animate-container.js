@@ -1810,12 +1810,12 @@ this.Pixim = this.Pixim || {}, function(exports, pixim_js, createjs, pixi_js) {
         return ContentManifestBase && (ContentAnimateManifest.__proto__ = ContentManifestBase), 
         ContentAnimateManifest.prototype = Object.create(ContentManifestBase && ContentManifestBase.prototype), 
         ContentAnimateManifest.prototype.constructor = ContentAnimateManifest, ContentAnimateManifest.prototype._loadAsync = function(basepath, version, useCache) {
-            var this$1 = this, manifests = this._manifests, promises = [], queries = {
+            var this$1 = this, manifests = this._manifests, promises = [], queries = version ? {
                 _fv: version
-            }, loop = function(i) {
+            } : {}, loop = function(i) {
                 var manifest = manifests[i];
                 if (manifest.data.filepath) {
-                    var src, contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = version ? this$1._resolveQuery(filepath, queries) : filepath;
+                    var src, contentPath = "." === manifest.data.basepath || "./" === manifest.data.basepath ? "" : manifest.data.basepath.replace(/([^/])$/, "$1/"), dirpath = this$1._resolvePath(contentPath, basepath), filepath = this$1._resolvePath(manifest.data.filepath, dirpath), url = this$1._resolveQuery(filepath, queries);
                     promises.push((src = url, new Promise((function(resolve, reject) {
                         var script = document.createElement("script");
                         script.src = src, script.addEventListener("load", (function() {

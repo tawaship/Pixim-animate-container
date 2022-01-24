@@ -2126,7 +2126,7 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
     _loadAsync(basepath, version, useCache) {
         const manifests = this._manifests;
         const promises = [];
-        const queries = { _fv: version };
+        const queries = version ? { _fv: version } : {};
         for (let i in manifests) {
             const manifest = manifests[i];
             if (!manifest.data.filepath) {
@@ -2136,9 +2136,7 @@ class ContentAnimateManifest extends pixim_js.ContentManifestBase {
             const contentPath = (manifest.data.basepath === '.' || manifest.data.basepath === './') ? '' : manifest.data.basepath.replace(/([^/])$/, '$1/');
             const dirpath = this._resolvePath(contentPath, basepath);
             const filepath = this._resolvePath(manifest.data.filepath, dirpath);
-            const url = version
-                ? this._resolveQuery(filepath, queries)
-                : filepath;
+            const url = this._resolveQuery(filepath, queries);
             promises.push(loadJS(url)
                 .catch(e => {
                 throw `Animate: '${i}' cannot load.`;

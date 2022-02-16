@@ -116,7 +116,6 @@ export class CreatejsMovieClip extends _CreatejsMovieClip {
 			
 			if (Array.isArray(target.state)) {
 				for (let j = 0; j < target.state.length; j++) {
-					console.log(target)
 					if (target.state[j].t === old) {
 						target.state[j].t = instance;
 					}

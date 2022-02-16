@@ -70,7 +70,7 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 		for (let i in targets) {
 			promises.push(
 				this.loadAsync(targets[i], options)
-					.then((resource: AnimateLoaderResource) => {
+					.then(resource => {
 						res[i] = resource;
 					})
 			);
@@ -83,23 +83,18 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 	}
 	
 	private _loadAsync(target: TAnimateLoaderTarget, options: IAnimateLoaderOption = {}) {
-		if (!AdobeAn) {
-			return Promise.reject('createjs is not loaded');
-		}
-		
 		const basepath = this._resolveBasepath(options.basepath);
-		const dirpath = Pixim.utils.resolvePath(target.basepath, basepath);
+		const version = this._resolveVersion(options.version);
 		
 		const p = !target.filepath
 			? Promise.resolve()
 			: (() => {
-				const filepath = Pixim.utils.resolvePath(target.filepath, dirpath);
-				
-				const url = this._resolveUrl(filepath, options)
+				const filepath = Pixim.utils.resolvePath(target.filepath, target.basepath);
+				const url = this._resolveUrl(filepath, options);
 				
 				return loadJS(url)
 					.catch(e => {
-						throw `Animate: '${url}' cannot load.`;
+						throw `Animate: '${filepath}' cannot load.`;
 					});
 			})();
 		
@@ -111,18 +106,20 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 			
 			const lib: IAnimateLibrary = comp.getLibrary();
 			const origin = lib.properties.manifest;
+			
 			for (let i = 0; i < origin.length; i++) {
 				const o = origin[i];
-				o.src = this._resolveUrl(o.src, options);
+				const filepath = Pixim.utils.resolvePath(o.src, target.basepath);
+				o.src = this._resolveUrl(filepath, options);
 			}
 			
 			if (target.options && !target.options.crossOrigin) {
 				target.options.crossOrigin = true;
 			}
 			
-			return loadAssetAsync(comp, dirpath, target.options);
+			return loadAssetAsync(comp, '', target.options);
 		})
-		.then((lib: IAnimateLibrary) => {
+		.then(lib => {
 			for (let i  in lib) {
 				if (lib[i].prototype instanceof CreatejsMovieClip) {
 					lib[i].prototype._framerateBase = lib.properties.fps;

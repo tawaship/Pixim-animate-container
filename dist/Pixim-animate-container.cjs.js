@@ -2,7 +2,7 @@
  * Pixim-animate-container - v1.1.6
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.12.2
+ * @require @tawaship/pixim.js v../Pixim.js
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -13,7 +13,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var pixim_js = require('@tawaship/pixim.js');
+var Pixim = require('@tawaship/pixim.js');
 var createjs = _interopDefault(require('@tawaship/createjs-module'));
 var pixi_js = require('pixi.js');
 
@@ -2001,7 +2001,6 @@ class CreatejsMovieClip$1 extends CreatejsMovieClip {
             const target = tweens[i].target;
             if (Array.isArray(target.state)) {
                 for (let j = 0; j < target.state.length; j++) {
-                    console.log(target);
                     if (target.state[j].t === old) {
                         target.state[j].t = instance;
                     }
@@ -2075,129 +2074,98 @@ function loadJS(src) {
     });
 }
 
-/**
- * Load the assets of createjs content published by Adobe Animate.
- * If you use multiple contents, each composition ID must be unique.
- * Please run "Pixim.animate.init" before running.
- */
-function loadAssetAsync$1(targets, queries = {}) {
-    if (!Array.isArray(targets)) {
-        targets = [targets];
+class AnimateLoaderResource extends Pixim.LoaderResource {
+    destroy() {
     }
-    const promises = [];
-    for (let i = 0; i < targets.length; i++) {
-        const target = targets[i];
-        const comp = AdobeAn.getComposition(target.id);
-        if (!comp) {
-            throw new Error(`no composition: ${target.id}`);
+}
+class AnimateLoader extends Pixim.LoaderBase {
+    loadAsync(target, options = {}) {
+        return this._loadAsync(target, options);
+    }
+    loadAllAsync(targets, options = {}) {
+        const res = {};
+        if (Object.keys(targets).length === 0) {
+            return Promise.resolve(res);
         }
-        const lib = comp.getLibrary();
-        for (let i in queries) {
-            const origin = lib.properties.manifest;
-            for (let j = 0; j < origin.length; j++) {
-                const o = origin[j];
-                o.src = pixim_js.resolveQuery(o.src, queries);
+        const promises = [];
+        for (let i in targets) {
+            promises.push(this.loadAsync(targets[i], options)
+                .then(resource => {
+                res[i] = resource;
+            }));
+        }
+        return Promise.all(promises)
+            .then(() => {
+            return res;
+        });
+    }
+    _loadAsync(target, options = {}) {
+        const basepath = this._resolveBasepath(options.basepath);
+        const version = this._resolveVersion(options.version);
+        const p = !target.filepath
+            ? Promise.resolve()
+            : (() => {
+                const filepath = Pixim.utils.resolvePath(target.filepath, target.basepath);
+                const url = this._resolveUrl(filepath, options);
+                return loadJS(url)
+                    .catch(e => {
+                    throw `Animate: '${filepath}' cannot load.`;
+                });
+            })();
+        return p.then(() => {
+            const comp = AdobeAn.getComposition(target.id);
+            if (!comp) {
+                throw new Error(`no composition: ${target.id}`);
             }
-        }
-        promises.push(loadAssetAsync(comp, target.basepath, target.options)
-            .then((lib) => {
+            const lib = comp.getLibrary();
+            const origin = lib.properties.manifest;
+            for (let i = 0; i < origin.length; i++) {
+                const o = origin[i];
+                const filepath = Pixim.utils.resolvePath(o.src, target.basepath);
+                o.src = this._resolveUrl(filepath, options);
+            }
+            if (target.options && !target.options.crossOrigin) {
+                target.options.crossOrigin = true;
+            }
+            return loadAssetAsync(comp, '', target.options);
+        })
+            .then(lib => {
             for (let i in lib) {
                 if (lib[i].prototype instanceof CreatejsMovieClip$1) {
                     lib[i].prototype._framerateBase = lib.properties.fps;
                 }
             }
-            return lib;
-        }));
-    }
-    return Promise.all(promises)
-        .then((resolvers) => {
-        if (resolvers.length === 1) {
-            return resolvers[0];
-        }
-        return resolvers;
-    });
-}
-class ContentAnimateManifest extends pixim_js.ContentManifestBase {
-    /**
-     * Load image resources.
-     *
-     * @override
-     */
-    _loadAsync(basepath, version, useCache) {
-        const manifests = this._manifests;
-        const promises = [];
-        const queries = version ? { _fv: version } : {};
-        for (let i in manifests) {
-            const manifest = manifests[i];
-            if (!manifest.data.filepath) {
-                promises.push(Promise.resolve());
-                continue;
-            }
-            const contentPath = (manifest.data.basepath === '.' || manifest.data.basepath === './') ? '' : manifest.data.basepath.replace(/([^/])$/, '$1/');
-            const dirpath = this._resolvePath(contentPath, basepath);
-            const filepath = this._resolvePath(manifest.data.filepath, dirpath);
-            const url = this._resolveQuery(filepath, queries);
-            promises.push(loadJS(url)
-                .catch(e => {
-                throw `Animate: '${i}' cannot load.`;
-            }));
-        }
-        const keys = [];
-        const res = {};
-        return Promise.all(promises)
-            .then(() => {
-            const targets = [];
-            for (let i in manifests) {
-                const manifest = manifests[i];
-                keys.push(i);
-                targets.push({
-                    id: manifest.data.id,
-                    basepath: this._resolvePath(manifest.data.basepath, basepath),
-                    options: manifest.data.options
-                });
-            }
-            return loadAssetAsync$1(targets, queries);
+            return new AnimateLoaderResource(lib, null);
         })
-            .then(libs => {
-            if (!Array.isArray(libs)) {
-                libs = [libs];
-            }
-            for (let i = 0; i < libs.length; i++) {
-                res[keys[i]] = {
-                    resource: libs[i],
-                    error: false
-                };
-            }
-            return res;
+            .catch((e) => {
+            return new AnimateLoaderResource({}, e);
         });
-    }
-    /**
-     * Destroy resources.
-     *
-     * @override
-     */
-    destroyResources(resources) {
     }
 }
 
-pixim_js.Content.registerManifest('animates', ContentAnimateManifest);
+class AnimateManifest extends Pixim.ManifestBase {
+    _loadAsync(targets, options = {}) {
+        const loader = new AnimateLoader(options);
+        return loader.loadAllAsync(targets);
+    }
+}
+
+Pixim.Content.registerManifest('animates', AnimateManifest);
 /**
  * Define animate assets for class.
  *
  * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] class.
- * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
  */
 function defineAnimatesTo(Content, data) {
-    Content.defineManifests('animates', data, {});
+    Content.defineTargets('animates', data, {});
 }
 /**
  * Define animate assets for instance.
  *
  * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] instance.
- * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
  */
 function addAnimatesTo(content, data) {
-    content.addManifests('animates', data, {});
+    content.addTargets('animates', data, {});
 }
 // overrides
 createjs.MovieClip = CreatejsMovieClip$1;
@@ -2207,13 +2175,13 @@ createjs.Sprite = CreatejsSprite$1;
 /**
  * [[https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container]]
  */
-class Container extends pixim_js.Container {
+class Container extends Pixim.Container {
     constructor(...args) {
         super(...args);
         this._createjsData = {
             id: 0,
             targets: {},
-            task: new pixim_js.Task([], this)
+            task: new Pixim.Task([], this)
         };
         const targets = this._createjsData.targets;
         this._createjsData.task.add((e) => {
@@ -2276,13 +2244,14 @@ class Container extends pixim_js.Container {
 
 exports.createjs = createjs;
 exports.AnimateEvent = AnimateEvent;
+exports.AnimateLoader = AnimateLoader;
+exports.AnimateLoaderResource = AnimateLoaderResource;
+exports.AnimateManifest = AnimateManifest;
 exports.Container = Container;
-exports.ContentAnimateManifest = ContentAnimateManifest;
 exports.CreatejsBitmap = CreatejsBitmap$1;
 exports.CreatejsMovieClip = CreatejsMovieClip$1;
 exports.CreatejsSprite = CreatejsSprite$1;
 exports.ReachLabelEvent = ReachLabelEvent;
 exports.addAnimatesTo = addAnimatesTo;
 exports.defineAnimatesTo = defineAnimatesTo;
-exports.loadAssetAsync = loadAssetAsync$1;
 //# sourceMappingURL=Pixim-animate-container.cjs.js.map

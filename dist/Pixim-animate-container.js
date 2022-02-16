@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.1.6
+ * Pixim-animate-container - v1.2.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v../Pixim.js
+ * @require @tawaship/pixim.js v1.13.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -1792,8 +1792,7 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
                     var o = origin[i], filepath = Pixim.utils.resolvePath(o.src, target.basepath);
                     o.src = this$1._resolveUrl(filepath, options);
                 }
-                return target.options && !target.options.crossOrigin && (target.options.crossOrigin = !0), 
-                function(comp, basepath, options) {
+                return function(comp, basepath, options) {
                     if (void 0 === options && (options = {}), !comp) {
                         throw new Error("no composition");
                     }

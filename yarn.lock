@@ -739,8 +739,10 @@
   resolved "https://registry.yarnpkg.com/@tawaship/pixi-animate-core/-/pixi-animate-core-3.0.5.tgz#1ddf33b17f2ad448d7467ce79e712620d2c76e77"
   integrity sha512-KPVfn1SklaHwTap3RnuU1YtsWYIRrLp5du7HIJ+QQh2IfstNWUW1BEUAyIuROgyelzOBytY4suPF6ymOUv3pbw==
 
-"@tawaship/pixim.js@../Pixim.js":
-  version "1.13.0-a"
+"@tawaship/pixim.js@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@tawaship/pixim.js/-/pixim.js-1.13.0.tgz#4e7fe96b9906c106cde6b9fae94e70b771bac68e"
+  integrity sha512-9JQ1MQkmd2FFFN9Nnlz97j0D4tMICrw4jRrhP9waZJ9OGzXEGaNYlbxA+wA5iVZVUdl4nLdJ+f59ER4Gu6Rg8g==
   dependencies:
     "@tawaship/emitter" "^3.1.1"
     "@tawaship/task" "^1.1.0"

@@ -29,42 +29,34 @@
 			Game.defineImages({
 				i: "s.png"
 			})
-			/*
-			new Pixim.animate.AnimateLoader()
-				.loadAsync({
+			
+			Pixim.animate.defineAnimatesTo(Game, {
+				test: {
 					basepath: '../class/game/',
 					filepath: 'game.js',
 					id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
 					options: {
-						crossOrigin: false
-					}
-				})
-				.then(lib => {
-				console.log(lib)
-				})
-			*/
-			/*
-			Pixim.animate.defineAnimatesTo(Game, {
-				test: {
-					basepath: 'class/game/',
-					filepath: 'game.js',
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
-					options: {
-						crossOrigin: false
+						crossOrigin: true
 					}
 				},
 				anim: {
-					basepath: 'animation/game/',
+					basepath: '../animation/game/',
 					filepath: 'game.js',
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1'
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
+					options: {
+						crossOrigin: true
+					}
 				},
 				a: {
-					basepath: 'replace/game/',
+					basepath: 'game/',
 					filepath: 'game.js',
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDFa'
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDFa',
+					options: {
+						crossOrigin: true
+					}
 				}
 			});
-			*/
+			//*/
 			class Root extends Pixim.Container {
 				constructor($) {
 					super();
@@ -72,7 +64,8 @@
 					this.x = 10;
 					this.y = 10;
 					this.scale.set(0.5);
-					
+							console.log(window.AdobeAn)
+
 					var lib = $.resources.animates.test;
 					
 					const container = this.addChild(new Pixim.animate.Container());
@@ -136,7 +129,7 @@
 			});
 			
 			const game = new Game({
-				basepath: "https://localhost/Pixim-animate-container/samples/20.5.1/replace/",
+				basepath: "./",
 				version: 2
 			});
 			

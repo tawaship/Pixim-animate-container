@@ -5,7 +5,6 @@ const PIXI = require('pixi.js-legacy');
 const Pixim = require('@tawaship/pixim.js');
 const PiximAnimate = require('../');
 const path = require('path');
-require('./game/game.js');
 
 describe('Pixim-animate-container', () => {
 	describe('manifest', () => {
@@ -98,10 +97,7 @@ describe('Pixim-animate-container', () => {
 				test: {
 					basepath: path.resolve(__dirname, 'game/'),
 					filepath: 'game.js',
-					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
-					options: {
-						crossOrigin: false
-					}
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1'
 				}
 			})
 			
@@ -117,11 +113,42 @@ describe('Pixim-animate-container', () => {
 					filepath: 'game.js',
 					id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
 					options: {
-						crossOrigin: false
+						crossOrigin: true
 					}
 				})
-				.then(lib => {
-					if (!lib.game) {
+				.then(resource => {
+					if (!resource.data) {
+						throw 'invalid lib'
+					}
+				})
+		});
+		
+		it('multi', () => {
+			return new PiximAnimate.AnimateLoader()
+				.loadAllAsync({
+					a: {
+						basepath: path.resolve(__dirname, 'game/'),
+						filepath: 'game.js',
+						id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
+						options: {
+							crossOrigin: true
+						}
+					},
+					b: {
+						basepath: path.resolve(__dirname, 'game/'),
+						filepath: 'game.js',
+						id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
+						options: {
+							crossOrigin: true
+						}
+					},
+				})
+				.then(resources => {
+					if (!resources.a.data) {
+						throw 'invalid lib'
+					}
+					
+					if (!resources.b.data) {
 						throw 'invalid lib'
 					}
 				})

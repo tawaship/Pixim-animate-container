@@ -113,10 +113,6 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				o.src = this._resolveUrl(filepath, options);
 			}
 			
-			if (target.options && !target.options.crossOrigin) {
-				target.options.crossOrigin = true;
-			}
-			
 			return loadAssetAsync(comp, '', target.options);
 		})
 		.then(lib => {

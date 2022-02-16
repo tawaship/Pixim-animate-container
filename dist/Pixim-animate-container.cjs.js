@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.1.6
+ * Pixim-animate-container - v1.2.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v../Pixim.js
+ * @require @tawaship/pixim.js v1.13.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -2123,9 +2123,6 @@ class AnimateLoader extends Pixim.LoaderBase {
                 const o = origin[i];
                 const filepath = Pixim.utils.resolvePath(o.src, target.basepath);
                 o.src = this._resolveUrl(filepath, options);
-            }
-            if (target.options && !target.options.crossOrigin) {
-                target.options.crossOrigin = true;
             }
             return loadAssetAsync(comp, '', target.options);
         })

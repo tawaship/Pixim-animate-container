@@ -1,31 +1,29 @@
-import { Content as PiximContent, IManifestDictionary } from '@tawaship/pixim.js';
+import { Content as PiximContent } from '@tawaship/pixim.js';
 import { CreatejsMovieClip } from './MovieClip';
 import { CreatejsBitmap } from './Bitmap';
 import { CreatejsSprite } from './Sprite';
-import { ContentAnimateManifest, IContentAnimateManifestData } from './ContentAnimateManifest';
+import { AnimateManifest, IAnimateManifestTargetDictionary } from './AnimateManifest';
 import { createjs } from '@tawaship/pixi-animate-core';
 export { createjs, ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-core';
 
-PiximContent.registerManifest('animates', ContentAnimateManifest);
+PiximContent.registerManifest('animates', AnimateManifest);
 
 /**
  * Define animate assets for class.
  * 
  * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] class.
- * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
  */
-export function defineAnimatesTo(Content: typeof PiximContent, data: IManifestDictionary<IContentAnimateManifestData>) {
-	Content.defineManifests('animates', data, {});
+export function defineAnimatesTo(Content: typeof PiximContent, data: IAnimateManifestTargetDictionary) {
+	Content.defineTargets('animates', data, {});
 }
 
 /**
  * Define animate assets for instance.
  * 
  * @param PiximContent Target [[https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content]] instance.
- * @param data see also [[https://tawaship.github.io/Pixim.js/interfaces/imanifestdictionary.html | Pixim.IManifestDictionary]].
  */
-export function addAnimatesTo(content: PiximContent, data: IManifestDictionary<IContentAnimateManifestData>) {
-	content.addManifests('animates', data, {});
+export function addAnimatesTo(content: PiximContent, data: IAnimateManifestTargetDictionary) {
+	content.addTargets('animates', data, {});
 }
 
 // overrides

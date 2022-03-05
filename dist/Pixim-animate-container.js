@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.2.0
+ * Pixim-animate-container - v1.2.1
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v1.13.0
@@ -9,7 +9,7 @@
 this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.0.5
+     * @tawaship/pixi-animate-core - v3.1.1
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -49,104 +49,55 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
     function createObject(proto) {
         return Object.create(proto);
     }
-    var DEG_TO_RAD = Math.PI / 180, _isDown = !1, EventManager = function(cjs) {
-        var this$1 = this;
-        this._events = {
-            pointerdown: [],
-            pointerover: [],
-            pointerout: [],
-            pointermove: [],
-            pointerup: [],
-            pointerupoutside: []
-        }, this._data = {
-            mousedown: {
-                types: [ "pointerdown" ],
-                factory: function(cb) {
-                    return this$1._mousedownFactory(cjs, cb);
-                }
-            },
-            rollover: {
-                types: [ "pointerover" ],
-                factory: function(cb) {
-                    return this$1._rolloverFactory(cjs, cb);
-                }
-            },
-            rollout: {
-                types: [ "pointerout" ],
-                factory: function(cb) {
-                    return this$1._rolloutFactory(cjs, cb);
-                }
-            },
-            pressmove: {
-                types: [ "pointermove" ],
-                factory: function(cb) {
-                    return console.log(cb), this$1._pressmoveFactory(cjs, cb);
-                }
-            },
-            pressup: {
-                types: [ "pointerup", "pointerupoutside" ],
-                factory: function(cb) {
-                    return this$1._pressupFactory(cjs, cb);
-                }
-            }
-        };
+    var DEG_TO_RAD = Math.PI / 180, createjsInteractionEvents = {
+        mousedown: !0,
+        pressmove: !0,
+        pressup: !0,
+        rollover: !0,
+        rollout: !0,
+        click: !0
+    }, EventManager = function(cjs) {
+        this._isDown = !1, this._cjs = cjs, this._emitter = new pixi_js.utils.EventEmitter, 
+        cjs.pixi.on("pointerdown", this._onPointerDown, this).on("pointermove", this._onPointerMove, this).on("pointerup", this._onPointerUp, this).on("pointerupoutside", this._onPointerUpOutside, this).on("pointertap", this._onPointerTap, this).on("pointerover", this._onPointerOver, this).on("pointerout", this._onPointerOut, this);
     };
-    EventManager.prototype.add = function(pixi, type, cb) {
-        for (var data = this._data[type], types = data.types, func = data.factory(cb), i = 0; i < types.length; i++) {
-            var t = types[i];
-            this._events[t].push({
-                func: func,
-                origin: cb
-            }), pixi.on(t, func);
+    EventManager.prototype._onPointerDown = function(e) {
+        e.currentTarget = e.currentTarget.createjs, e.target = e.target.createjs;
+        var ev = e.data;
+        e.rawX = ev.global.x, e.rawY = ev.global.y, this._isDown = !0, this._emitter.emit("mousedown", e);
+    }, EventManager.prototype._onPointerMove = function(e) {
+        if (this._isDown) {
+            e.currentTarget = this._cjs, e.target = e.target && e.target.createjs;
+            var ev = e.data;
+            e.rawX = ev.global.x, e.rawY = ev.global.y, this._emitter.emit("pressmove", e);
         }
-        pixi.interactive = !0;
-    }, EventManager.prototype.remove = function(pixi, type, cb) {
-        for (var types = this._data[type].types, i = 0; i < types.length; i++) {
-            var t = types[i], list = this._events[t];
-            if (list) {
-                for (var j = list.length - 1; j >= 0; j--) {
-                    if (list[j].origin === cb) {
-                        pixi.off(t, list[j].func), list.splice(j, 1);
-                        break;
-                    }
-                }
-                0 === list.length && (this._events[t] = []);
-            }
-        }
-    }, EventManager.prototype._mousedownFactory = function(cjs, cb) {
-        return function(e) {
-            e.currentTarget = e.currentTarget.createjs, e.target = e.target.createjs;
-            var ev = e.data;
-            e.rawX = ev.global.x, e.rawY = ev.global.y, _isDown = !0, cb(e);
-        };
-    }, EventManager.prototype._rolloverFactory = function(cjs, cb) {
-        return function(e) {
-            e.currentTarget = e.currentTarget.createjs, e.target = e.currentTarget.createjs;
-            var ev = e.data;
-            e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
-        };
-    }, EventManager.prototype._rolloutFactory = function(cjs, cb) {
-        return function(e) {
-            e.currentTarget = e.currentTarget.createjs, e.target = e.currentTarget.createjs;
-            var ev = e.data;
-            e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
-        };
-    }, EventManager.prototype._pressmoveFactory = function(cjs, cb) {
-        return function(e) {
-            if (_isDown) {
-                e.currentTarget = cjs, e.target = e.target && e.target.createjs;
-                var ev = e.data;
-                e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
-            }
-        };
-    }, EventManager.prototype._pressupFactory = function(cjs, cb) {
-        return function(e) {
-            if (_isDown) {
-                e.currentTarget = cjs, _isDown = !1, e.target = e.target && e.target.createjs;
-                var ev = e.data;
-                e.rawX = ev.global.x, e.rawY = ev.global.y, cb(e);
-            }
-        };
+    }, EventManager.prototype._onPointerUp = function(e) {
+        e.currentTarget = this._cjs, e.target = e.target && e.target.createjs;
+        var ev = e.data;
+        e.rawX = ev.global.x, e.rawY = ev.global.y, this._isDown = !1, this._emitter.emit("pressup", e);
+    }, EventManager.prototype._onPointerUpOutside = function(e) {
+        e.currentTarget = this._cjs, e.target = e.target && e.target.createjs;
+        var ev = e.data;
+        e.rawX = ev.global.x, e.rawY = ev.global.y, this._isDown = !1, this._emitter.emit("pressup", e);
+    }, EventManager.prototype._onPointerTap = function(e) {
+        e.currentTarget = this._cjs, e.target = e.target && e.target.createjs;
+        var ev = e.data;
+        e.rawX = ev.global.x, e.rawY = ev.global.y, this._emitter.emit("click", e);
+    }, EventManager.prototype._onPointerOver = function(e) {
+        e.currentTarget = e.currentTarget.createjs, e.target = e.currentTarget.createjs;
+        var ev = e.data;
+        e.rawX = ev.global.x, e.rawY = ev.global.y, this._emitter.emit("rollover", e);
+    }, EventManager.prototype._onPointerOut = function(e) {
+        e.currentTarget = e.currentTarget.createjs, e.target = e.currentTarget.createjs;
+        var ev = e.data;
+        e.rawX = ev.global.x, e.rawY = ev.global.y, this._emitter.emit("rollout", e);
+    }, EventManager.prototype.add = function(type, cb) {
+        type in createjsInteractionEvents && (this._emitter.off(type, cb), this._emitter.on(type, cb), 
+        this._emitter.eventNames().length > 0 && (this._cjs.pixi.interactive = !0));
+    }, EventManager.prototype.remove = function(type, cb) {
+        type in createjsInteractionEvents && (this._emitter.off(type, cb), 0 === this._emitter.eventNames().length && (this._cjs.pixi.interactive = !1));
+    }, EventManager.prototype.removeAll = function(type) {
+        type && !(type in createjsInteractionEvents) || (this._emitter.removeAllListeners(type), 
+        0 === this._emitter.eventNames().length && (this._cjs.pixi.interactive = !1));
     };
     var CreatejsButtonHelper = function(superclass) {
         function CreatejsButtonHelper() {
@@ -348,14 +299,19 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.add(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.add(type, cb), 
             superclass.prototype.addEventListener.apply(this, [ type, cb ].concat(args));
         }, CreatejsMovieClip.prototype.removeEventListener = function(type, cb) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.remove(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.remove(type, cb), 
             superclass.prototype.removeEventListener.apply(this, [ type, cb ].concat(args));
+        }, CreatejsMovieClip.prototype.removeAllEventListeners = function(type) {
+            for (var args = [], len = arguments.length - 1; len-- > 0; ) {
+                args[len] = arguments[len + 1];
+            }
+            return this._createjsEventManager.removeAll(type), superclass.prototype.removeAllEventListeners.apply(this, [ type ].concat(args));
         }, prototypeAccessors$1.mask.get = function() {
             return this._createjsParams.mask;
         }, prototypeAccessors$1.mask.set = function(value) {
@@ -601,14 +557,19 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.add(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.add(type, cb), 
             superclass.prototype.addEventListener.apply(this, [ type, cb ].concat(args));
         }, CreatejsSprite.prototype.removeEventListener = function(type, cb) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.remove(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.remove(type, cb), 
             superclass.prototype.removeEventListener.apply(this, [ type, cb ].concat(args));
+        }, CreatejsSprite.prototype.removeAllEventListeners = function(type) {
+            for (var args = [], len = arguments.length - 1; len-- > 0; ) {
+                args[len] = arguments[len + 1];
+            }
+            return this._createjsEventManager.removeAll(type), superclass.prototype.removeAllEventListeners.apply(this, [ type ].concat(args));
         }, prototypeAccessors$3.mask.get = function() {
             return this._createjsParams.mask;
         }, prototypeAccessors$3.mask.set = function(value) {
@@ -814,14 +775,19 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.add(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.add(type, cb), 
             superclass.prototype.addEventListener.apply(this, [ type, cb ].concat(args));
         }, CreatejsShape.prototype.removeEventListener = function(type, cb) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.remove(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.remove(type, cb), 
             superclass.prototype.removeEventListener.apply(this, [ type, cb ].concat(args));
+        }, CreatejsShape.prototype.removeAllEventListeners = function(type) {
+            for (var args = [], len = arguments.length - 1; len-- > 0; ) {
+                args[len] = arguments[len + 1];
+            }
+            return this._createjsEventManager.removeAll(type), superclass.prototype.removeAllEventListeners.apply(this, [ type ].concat(args));
         }, prototypeAccessors$5.mask.get = function() {
             return this._createjsParams.mask;
         }, prototypeAccessors$5.mask.set = function(value) {
@@ -1024,14 +990,19 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.add(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.add(type, cb), 
             superclass.prototype.addEventListener.apply(this, [ type, cb ].concat(args));
         }, CreatejsBitmap.prototype.removeEventListener = function(type, cb) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.remove(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.remove(type, cb), 
             superclass.prototype.removeEventListener.apply(this, [ type, cb ].concat(args));
+        }, CreatejsBitmap.prototype.removeAllEventListeners = function(type) {
+            for (var args = [], len = arguments.length - 1; len-- > 0; ) {
+                args[len] = arguments[len + 1];
+            }
+            return this._createjsEventManager.removeAll(type), superclass.prototype.removeAllEventListeners.apply(this, [ type ].concat(args));
         }, prototypeAccessors$7.mask.get = function() {
             return this._createjsParams.mask;
         }, prototypeAccessors$7.mask.set = function(value) {
@@ -1242,14 +1213,19 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.add(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.add(type, cb), 
             superclass.prototype.addEventListener.apply(this, [ type, cb ].concat(args));
         }, CreatejsGraphics.prototype.removeEventListener = function(type, cb) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.remove(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.remove(type, cb), 
             superclass.prototype.removeEventListener.apply(this, [ type, cb ].concat(args));
+        }, CreatejsGraphics.prototype.removeAllEventListeners = function(type) {
+            for (var args = [], len = arguments.length - 1; len-- > 0; ) {
+                args[len] = arguments[len + 1];
+            }
+            return this._createjsEventManager.removeAll(type), superclass.prototype.removeAllEventListeners.apply(this, [ type ].concat(args));
         }, prototypeAccessors$9.mask.get = function() {
             return this._createjsParams.mask;
         }, prototypeAccessors$9.mask.set = function(value) {
@@ -1582,14 +1558,19 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.add(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.add(type, cb), 
             superclass.prototype.addEventListener.apply(this, [ type, cb ].concat(args));
         }, CreatejsText.prototype.removeEventListener = function(type, cb) {
             for (var args = [], len = arguments.length - 2; len-- > 0; ) {
                 args[len] = arguments[len + 2];
             }
-            return cb instanceof CreatejsButtonHelper || "mousedown" !== type && "rollover" !== type && "rollout" !== type && "pressmove" !== type && "pressup" !== type || this._createjsEventManager.remove(this._pixiData.instance, type, cb), 
+            return cb instanceof CreatejsButtonHelper || this._createjsEventManager.remove(type, cb), 
             superclass.prototype.removeEventListener.apply(this, [ type, cb ].concat(args));
+        }, CreatejsText.prototype.removeAllEventListeners = function(type) {
+            for (var args = [], len = arguments.length - 1; len-- > 0; ) {
+                args[len] = arguments[len + 1];
+            }
+            return this._createjsEventManager.removeAll(type), superclass.prototype.removeAllEventListeners.apply(this, [ type ].concat(args));
         }, prototypeAccessors$11.mask.get = function() {
             return this._createjsParams.mask;
         }, prototypeAccessors$11.mask.set = function(value) {

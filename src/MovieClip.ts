@@ -74,7 +74,7 @@ export class CreatejsMovieClip extends _CreatejsMovieClip {
 		const currentFrame = this.currentFrame;
 		
 		// this.advance(e.delta * P);
-		this.advance(P);
+		this.advance(P * e.delta);
 		
 		if (currentFrame !== this.currentFrame) {
 			if (this.currentFrame === (this.totalFrames - 1)) {

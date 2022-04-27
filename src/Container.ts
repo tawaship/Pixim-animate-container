@@ -49,7 +49,7 @@ export class Container extends _Container {
 			return;
 		}
 		
-		task.done(e);
+		task.done({ delta: Math.min(e.delta, 1) });
 	}
 	
 	private _addCreatejs(cjs: TCreatejsObject) {

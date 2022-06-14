@@ -55,7 +55,14 @@ export interface IAnimateLoaderOption extends Pixim.ILoaderOption {
 
 export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnimateLoaderRawResource> {
 	loadAsync(target: TAnimateLoaderTarget, options: IAnimateLoaderOption = {}) {
-		return this._loadAsync(target, options);
+		return this._loadAsync(target, options)
+			.then((resource: AnimateLoaderResource) => {
+				if (!resource.error) {
+					this.emit(Pixim.EVENT_LOADER_ASSET_LOADED, { target, resource });
+				}
+				
+				return resource;
+			});
 	}
 	
 	loadAllAsync(targets: IAnimateLoaderTargetDictionary, options: IAnimateLoaderOption = {}) {

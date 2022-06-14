@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.3.0
+ * Pixim-animate-container - v1.3.1
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.13.0
+ * @require @tawaship/pixim.js v1.13.2
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -1463,7 +1463,13 @@ class AnimateLoaderResource extends Pixim.LoaderResource {
 }
 class AnimateLoader extends Pixim.LoaderBase {
     loadAsync(target, options = {}) {
-        return this._loadAsync(target, options);
+        return this._loadAsync(target, options)
+            .then((resource) => {
+            if (!resource.error) {
+                this.emit(Pixim.EVENT_LOADER_ASSET_LOADED, { target, resource });
+            }
+            return resource;
+        });
     }
     loadAllAsync(targets, options = {}) {
         const res = {};
@@ -1526,7 +1532,7 @@ class AnimateLoader extends Pixim.LoaderBase {
 class AnimateManifest extends Pixim.ManifestBase {
     _loadAsync(targets, options = {}) {
         const loader = new AnimateLoader(options);
-        return loader.loadAllAsync(targets);
+        return this._doneLoaderAsync(loader, targets);
     }
 }
 

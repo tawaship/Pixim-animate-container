@@ -1,5 +1,5 @@
 (function (cjs, an) {
-console.log(Object.keys(an))
+
 var p; // shortcut to reference prototypes
 var lib={};var ss={};var img={};
 lib.ssMetadata = [];

@@ -13,6 +13,6 @@ export class AnimateManifest extends Pixim.ManifestBase<AnimateLoader.TAnimateLo
 	protected _loadAsync(targets: IAnimateManifestTargetDictionary, options: AnimateLoader.IAnimateLoaderOption = {}) {
 		const loader = new AnimateLoader.AnimateLoader(options);
 		
-		return loader.loadAllAsync(targets);
+		return this._doneLoaderAsync(loader, targets);
 	}
 }

@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.3.0
+ * Pixim-animate-container - v1.3.1
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.13.0
+ * @require @tawaship/pixim.js v1.13.2
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -1114,7 +1114,13 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
         }
         return superclass && (AnimateLoader.__proto__ = superclass), AnimateLoader.prototype = Object.create(superclass && superclass.prototype), 
         AnimateLoader.prototype.constructor = AnimateLoader, AnimateLoader.prototype.loadAsync = function(target, options) {
-            return void 0 === options && (options = {}), this._loadAsync(target, options);
+            var this$1 = this;
+            return void 0 === options && (options = {}), this._loadAsync(target, options).then((function(resource) {
+                return resource.error || this$1.emit(Pixim.EVENT_LOADER_ASSET_LOADED, {
+                    target: target,
+                    resource: resource
+                }), resource;
+            }));
         }, AnimateLoader.prototype.loadAllAsync = function(targets, options) {
             var this$1 = this;
             void 0 === options && (options = {});
@@ -1214,7 +1220,9 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
         }
         return superclass && (AnimateManifest.__proto__ = superclass), AnimateManifest.prototype = Object.create(superclass && superclass.prototype), 
         AnimateManifest.prototype.constructor = AnimateManifest, AnimateManifest.prototype._loadAsync = function(targets, options) {
-            return void 0 === options && (options = {}), new AnimateLoader(options).loadAllAsync(targets);
+            void 0 === options && (options = {});
+            var loader = new AnimateLoader(options);
+            return this._doneLoaderAsync(loader, targets);
         }, AnimateManifest;
     }(Pixim.ManifestBase);
     Pixim.Content.registerManifest("animates", AnimateManifest), createjs.MovieClip = CreatejsMovieClip$1, 

@@ -54,7 +54,15 @@ describe('Pixim-animate-container', () => {
 			
 			const game = new Game();
 			
+			let c = 0;
+			game.on(Pixim.EVENT_LOADER_ASSET_LOADED, () => {
+				++c;
+			});
+			
 			return app.attachAsync(game)
+				.then(() => {
+					if (game.manifestAssetCount !== c) throw new Error();
+				})
 		});
 		
 		it('instance', () => {
@@ -101,13 +109,26 @@ describe('Pixim-animate-container', () => {
 				}
 			})
 			
+			let c = 0;
+			game.on(Pixim.EVENT_LOADER_ASSET_LOADED, () => {
+				++c;
+			});
+			
 			return app.attachAsync(game)
+				.then(() => {
+					if (game.manifestAssetCount !== c) throw new Error();
+				})
 		});
 	});
 	
 	describe('loader', () => {
 		it('single', () => {
+			let c = 0;
+			
 			return new PiximAnimate.AnimateLoader()
+				.on(Pixim.EVENT_LOADER_ASSET_LOADED, () => {
+					++c;
+				})
 				.loadAsync({
 					basepath: path.resolve(__dirname, 'game/'),
 					filepath: 'game.js',
@@ -120,11 +141,18 @@ describe('Pixim-animate-container', () => {
 					if (!resource.data) {
 						throw 'invalid lib'
 					}
+					
+					if (c !== 1) throw "invalid asset"
 				})
 		});
 		
 		it('multi', () => {
+			let c = 0;
+			
 			return new PiximAnimate.AnimateLoader()
+				.on(Pixim.EVENT_LOADER_ASSET_LOADED, () => {
+					++c;
+				})
 				.loadAllAsync({
 					a: {
 						basepath: path.resolve(__dirname, 'game/'),
@@ -151,6 +179,8 @@ describe('Pixim-animate-container', () => {
 					if (!resources.b.data) {
 						throw 'invalid lib'
 					}
+					
+					if (c !== 2) throw "invalid asset"
 				})
 		});
 	});

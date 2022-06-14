@@ -1,13 +1,13 @@
 /*!
- * Pixim-animate-container - v1.3.0
+ * Pixim-animate-container - v1.3.1
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.13.0
+ * @require @tawaship/pixim.js v1.13.2
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
 
-import { LoaderResource, LoaderBase, utils as utils$1, ManifestBase, Content, Container as Container$2, Task } from '@tawaship/pixim.js';
+import { LoaderResource, LoaderBase, EVENT_LOADER_ASSET_LOADED, utils as utils$1, ManifestBase, Content, Container as Container$2, Task } from '@tawaship/pixim.js';
 import createjs from '@tawaship/createjs-module';
 export { default as createjs } from '@tawaship/createjs-module';
 import { filters, Container as Container$1, BaseTexture, Texture, LINE_CAP, LINE_JOIN, utils, Text, Sprite, Graphics } from 'pixi.js';
@@ -1458,7 +1458,13 @@ class AnimateLoaderResource extends LoaderResource {
 }
 class AnimateLoader extends LoaderBase {
     loadAsync(target, options = {}) {
-        return this._loadAsync(target, options);
+        return this._loadAsync(target, options)
+            .then((resource) => {
+            if (!resource.error) {
+                this.emit(EVENT_LOADER_ASSET_LOADED, { target, resource });
+            }
+            return resource;
+        });
     }
     loadAllAsync(targets, options = {}) {
         const res = {};
@@ -1521,7 +1527,7 @@ class AnimateLoader extends LoaderBase {
 class AnimateManifest extends ManifestBase {
     _loadAsync(targets, options = {}) {
         const loader = new AnimateLoader(options);
-        return loader.loadAllAsync(targets);
+        return this._doneLoaderAsync(loader, targets);
     }
 }
 

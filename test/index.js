@@ -61,7 +61,7 @@ describe('Pixim-animate-container', () => {
 			
 			return app.attachAsync(game)
 				.then(() => {
-					if (game.manifestAssetCount !== c) throw new Error();
+					if (game.assetCount !== c) throw new Error();
 				})
 		});
 		
@@ -116,7 +116,7 @@ describe('Pixim-animate-container', () => {
 			
 			return app.attachAsync(game)
 				.then(() => {
-					if (game.manifestAssetCount !== c) throw new Error();
+					if (game.assetCount !== c) throw new Error();
 				})
 		});
 	});

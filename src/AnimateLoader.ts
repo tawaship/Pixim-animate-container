@@ -65,31 +65,7 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 			});
 	}
 	
-	loadAllAsync(targets: IAnimateLoaderTargetDictionary, options: IAnimateLoaderOption = {}) {
-		const res: Pixim.ILoaderResourceDictionary<TAnimateLoaderRawResource>  = {};
-		
-		if (Object.keys(targets).length === 0) {
-			return Promise.resolve(res);
-		}
-		
-		const promises = [];
-		
-		for (let i in targets) {
-			promises.push(
-				this.loadAsync(targets[i], options)
-					.then(resource => {
-						res[i] = resource;
-					})
-			);
-		}
-		
-		return Promise.all(promises)
-			.then(() => {
-				return res;
-			});
-	}
-	
-	private _loadAsync(target: TAnimateLoaderTarget, options: IAnimateLoaderOption = {}) {
+	protected _loadAsync(target: TAnimateLoaderTarget, options: IAnimateLoaderOption = {}) {
 		const basepath = this._resolveBasepath(options.basepath);
 		const version = this._resolveVersion(options.version);
 		

@@ -37,7 +37,7 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-typescript": "^5.0.2",
     "@tawaship/createjs-module": "^1.0.0",
-    "@tawaship/pixim.js": "1.13.3",
+    "@tawaship/pixim.js": "../Pixim.js",
     "del": "^5.1.0",
     "electron": "^11.1.1",
     "floss": "^3.0.1",

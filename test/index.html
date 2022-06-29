@@ -117,7 +117,7 @@
 								this.y = 10;
 								this.scale.set(0.7);
 								
-								const container = this.addChild(new PiximAnimate.Container());
+								const container = this.addChild(new Pixim.animate.Container());
 								
 								container.addChild(new PIXI.Text('Library game'));
 								const a = container.addCreatejs(new $.resources.animates.test.game());
@@ -127,17 +127,32 @@
 					});
 					
 					const game = new Game({
+						basepath: "https://localhost/Pixim-animate-container/test/",
+						xhr: {
+							requestOptions: {
+								headers: {
+									"X-A": "Bearer: hoge"
+								}
+							}
+						},
+						others: {
+							animates: {
+								crossOrigin: true
+							}
+						}
 					});
 					
 					Pixim.animate.addAnimatesTo(game, {
 						test: {
-							basepath: path.resolve(__dirname, 'game/'),
+							basepath: 'game/',
 							filepath: 'game.js',
 							id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1'
 						}
 					})
 					
-					return app.attachAsync(game)
+					return app.attachAsync(game).then(() => {
+						app.play()
+					})
 				});
 			});
 		</script>

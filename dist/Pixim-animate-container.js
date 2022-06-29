@@ -2,14 +2,14 @@
  * Pixim-animate-container - v1.3.3
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.13.3
+ * @require @tawaship/pixim.js v../Pixim.js
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
 this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.2.0
+     * @tawaship/pixi-animate-core - v3.3.0
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -1003,9 +1003,6 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             this._createjsParams.lineWidth = width;
         }, Object.defineProperties(CreatejsText.prototype, prototypeAccessors$8), CreatejsText;
     }(mixinCreatejsDisplayObject(createjs.Text));
-    function resolvePath(path, basepath) {
-        return pixi_js.utils.url.resolve(basepath, path);
-    }
     Object.defineProperties(CreatejsText.prototype, {
         _createjsParams: {
             value: createCreatejsTextParams("", "", ""),
@@ -1100,8 +1097,48 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
         CreatejsSprite.prototype.constructor = CreatejsSprite, CreatejsSprite.prototype.replaceTexture = function(texture) {
             this._pixiData.instance.texture = texture;
         }, CreatejsSprite;
-    }(CreatejsSprite);
-    var AnimateLoaderResource = function(superclass) {
+    }(CreatejsSprite), AnimateBlobLoaderResource = function(superclass) {
+        function AnimateBlobLoaderResource() {
+            superclass.apply(this, arguments);
+        }
+        return superclass && (AnimateBlobLoaderResource.__proto__ = superclass), AnimateBlobLoaderResource.prototype = Object.create(superclass && superclass.prototype), 
+        AnimateBlobLoaderResource.prototype.constructor = AnimateBlobLoaderResource, AnimateBlobLoaderResource.prototype.destroy = function() {
+            this._data.isObjectURL && (window.URL || window.webkitURL).revokeObjectURL(this._data.src), 
+            this._data.src = "";
+        }, AnimateBlobLoaderResource;
+    }(Pixim.LoaderResource), AnimateBlobLoader = function(superclass) {
+        function AnimateBlobLoader() {
+            superclass.apply(this, arguments);
+        }
+        return superclass && (AnimateBlobLoader.__proto__ = superclass), AnimateBlobLoader.prototype = Object.create(superclass && superclass.prototype), 
+        AnimateBlobLoader.prototype.constructor = AnimateBlobLoader, AnimateBlobLoader.prototype._loadAsync = function(target, options) {
+            var data, src, xhr;
+            return void 0 === options && (options = {}), (data = this._resolveParams(target, options), 
+            src = data.src, xhr = data.xhr, xhr ? fetch(src, xhr.requestOptions || {}).then((function(res) {
+                if (!res.ok) {
+                    throw res.statusText;
+                }
+                return res.blob();
+            })).then((function(blob) {
+                return (window.URL || window.webkitURL).createObjectURL(blob);
+            })).then((function(uri) {
+                return {
+                    isObjectURL: !0,
+                    src: uri
+                };
+            })) : Promise.resolve({
+                isObjectURL: !1,
+                src: src
+            })).then((function(data) {
+                return new AnimateBlobLoaderResource(data, null);
+            })).catch((function(e) {
+                return new AnimateBlobLoaderResource({
+                    isObjectURL: !1,
+                    src: ""
+                }, e);
+            }));
+        }, AnimateBlobLoader;
+    }(Pixim.LoaderBase), AnimateLoaderResource = function(superclass) {
         function AnimateLoaderResource() {
             superclass.apply(this, arguments);
         }
@@ -1113,98 +1150,53 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             superclass.apply(this, arguments);
         }
         return superclass && (AnimateLoader.__proto__ = superclass), AnimateLoader.prototype = Object.create(superclass && superclass.prototype), 
-        AnimateLoader.prototype.constructor = AnimateLoader, AnimateLoader.prototype.loadAsync = function(target, options) {
+        AnimateLoader.prototype.constructor = AnimateLoader, AnimateLoader.prototype._loadAsync = function(target, options) {
             var this$1 = this;
-            return void 0 === options && (options = {}), this._loadAsync(target, options).then((function(resource) {
-                return resource.error || this$1.emit(Pixim.EVENT_LOADER_ASSET_LOADED, {
-                    target: target,
-                    resource: resource
-                }), resource;
-            }));
-        }, AnimateLoader.prototype.loadAllAsync = function(targets, options) {
-            var this$1 = this;
-            void 0 === options && (options = {});
-            var res = {};
-            if (0 === Object.keys(targets).length) {
-                return Promise.resolve(res);
-            }
-            var promises = [], loop = function(i) {
-                promises.push(this$1.loadAsync(targets[i], options).then((function(resource) {
-                    res[i] = resource;
-                })));
-            };
-            for (var i in targets) {
-                loop(i);
-            }
-            return Promise.all(promises).then((function() {
-                return res;
-            }));
-        }, AnimateLoader.prototype._loadAsync = function(target, options) {
-            var this$1 = this;
-            void 0 === options && (options = {});
-            var src, filepath, url;
-            this._resolveBasepath(options.basepath), this._resolveVersion(options.version);
-            return (target.filepath ? (filepath = Pixim.utils.resolvePath(target.filepath, target.basepath), 
-            url = this$1._resolveUrl(filepath, options), (src = url, new Promise((function(resolve, reject) {
-                var script = document.createElement("script");
-                script.src = src, script.addEventListener("load", (function() {
-                    document.body.removeChild(script), resolve();
-                })), script.addEventListener("error", (function(e) {
-                    document.body.removeChild(script), reject(e);
-                })), document.body.appendChild(script);
-            }))).catch((function(e) {
-                throw "Animate: '" + filepath + "' cannot load.";
-            }))) : Promise.resolve()).then((function() {
+            return void 0 === options && (options = {}), this._loadJsAsync(target, options).then((function() {
                 var comp = AdobeAn.getComposition(target.id);
                 if (!comp) {
                     throw new Error("no composition: " + target.id);
                 }
-                for (var origin = comp.getLibrary().properties.manifest, i = 0; i < origin.length; i++) {
-                    var o = origin[i], filepath = Pixim.utils.resolvePath(o.src, target.basepath);
-                    o.src = this$1._resolveUrl(filepath, options);
+                for (var manifests = comp.getLibrary().properties.manifest, version = options.assetVersion || "", i = 0; i < manifests.length; i++) {
+                    var manifest = manifests[i];
+                    manifest.src = Pixim.utils.resolveUri(target.basepath, manifest.src, version);
                 }
-                return function(comp, basepath, options) {
-                    if (void 0 === options && (options = {}), !comp) {
-                        throw new Error("no composition");
+                return this$1._prepareImagesAsync(manifests, options).then((function() {
+                    for (var i = 0; i < manifests.length; i++) {
+                        var manifest = manifests[i];
+                        options.crossOrigin && (manifest.crossOrigin = !0), Pixim.utils.isUrl(manifest.src) || (manifest.type = "image");
                     }
-                    var lib = comp.getLibrary();
-                    return new Promise((function(resolve, reject) {
-                        0 === lib.properties.manifest.length && resolve({}), basepath && (basepath = basepath.replace(/([^\/])$/, "$1/"));
-                        var loader = new createjs.LoadQueue(!1);
-                        loader.installPlugin(createjs.Sound);
-                        var errors = [];
-                        loader.addEventListener("fileload", (function(evt) {
-                            !function(evt, comp) {
-                                var images = comp.getImages();
-                                evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
-                            }(evt, comp);
-                        })), loader.addEventListener("complete", (function(evt) {
-                            errors.length ? reject(errors) : resolve(evt);
-                        })), loader.addEventListener("error", (function(evt) {
-                            errors.push(evt.data);
-                        }));
-                        for (var manifests = [], origin = lib.properties.manifest, i = 0; i < origin.length; i++) {
-                            var o = origin[i], m = {
-                                src: resolvePath(o.src, basepath),
-                                id: o.id
-                            };
-                            for (var i$1 in o) {
-                                m[i$1] || (m[i$1] = o[i$1]);
+                    return function(comp) {
+                        if (!comp) {
+                            return Promise.reject(new Error("no composition"));
+                        }
+                        var lib = comp.getLibrary();
+                        return new Promise((function(resolve, reject) {
+                            0 === lib.properties.manifest.length && resolve({});
+                            var loader = new createjs.LoadQueue(!1);
+                            loader.installPlugin(createjs.Sound);
+                            var errors = [];
+                            loader.addEventListener("fileload", (function(evt) {
+                                !function(evt, comp) {
+                                    var images = comp.getImages();
+                                    evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
+                                }(evt, comp);
+                            })), loader.addEventListener("complete", (function(evt) {
+                                errors.length ? reject(errors) : resolve(evt);
+                            })), loader.addEventListener("error", (function(evt) {
+                                errors.push(evt.data);
+                            })), loader.loadManifest(lib.properties.manifest || []);
+                        })).then((function(evt) {
+                            for (var ss = comp.getSpriteSheet(), queue = evt.target, ssMetadata = lib.ssMetadata, i = 0; i < ssMetadata.length; i++) {
+                                ss[ssMetadata[i].name] = new createjs.SpriteSheet({
+                                    images: [ queue.getResult(ssMetadata[i].name) ],
+                                    frames: ssMetadata[i].frames
+                                });
                             }
-                            options.crossOrigin && (m.crossOrigin = !0), 0 === o.src.indexOf("data:") && (m.type = "image"), 
-                            manifests.push(m);
-                        }
-                        loader.loadManifest(manifests);
-                    })).then((function(evt) {
-                        for (var ss = comp.getSpriteSheet(), queue = evt.target, ssMetadata = lib.ssMetadata, i = 0; i < ssMetadata.length; i++) {
-                            ss[ssMetadata[i].name] = new createjs.SpriteSheet({
-                                images: [ queue.getResult(ssMetadata[i].name) ],
-                                frames: ssMetadata[i].frames
-                            });
-                        }
-                        return lib;
-                    }));
-                }(comp, "", target.options);
+                            return lib;
+                        }));
+                    }(comp);
+                }));
             })).then((function(lib) {
                 for (var i in lib) {
                     lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps);
@@ -1213,16 +1205,47 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             })).catch((function(e) {
                 return new AnimateLoaderResource({}, e);
             }));
+        }, AnimateLoader.prototype._loadJsAsync = function(target, options) {
+            if (!target.filepath) {
+                return Promise.resolve();
+            }
+            var filepath = Pixim.utils.resolveUri(target.basepath, target.filepath);
+            return (new Pixim.JsLoader).loadAsync(filepath, Object.assign({}, options, {
+                version: options.fileVersion || options.version
+            })).then((function(resource) {
+                if (resource.error) {
+                    throw resource.error;
+                }
+                resource.ref();
+            }));
+        }, AnimateLoader.prototype._prepareImagesAsync = function(manifests, options) {
+            for (var targets = {}, i = 0; i < manifests.length; i++) {
+                var manifest = manifests[i];
+                Pixim.utils.isUrl(manifest.src) && (targets[i] = manifest.src);
+            }
+            return 0 === Object.keys(targets).length ? Promise.resolve() : (new AnimateBlobLoader).loadAllAsync(targets, Object.assign({}, options, {
+                version: options.assetVersion || options.version
+            })).then((function(resources) {
+                for (var i in resources) {
+                    var resource = resources[i];
+                    if (resource.error) {
+                        throw resource.error;
+                    }
+                    if (!resource.data) {
+                        throw "invalid resource";
+                    }
+                    var _i = Number(i);
+                    manifests[_i] && (manifests[_i].src = resources[i].data.src);
+                }
+            }));
         }, AnimateLoader;
     }(Pixim.LoaderBase), AnimateManifest = function(superclass) {
         function AnimateManifest() {
             superclass.apply(this, arguments);
         }
         return superclass && (AnimateManifest.__proto__ = superclass), AnimateManifest.prototype = Object.create(superclass && superclass.prototype), 
-        AnimateManifest.prototype.constructor = AnimateManifest, AnimateManifest.prototype._loadAsync = function(targets, options) {
-            void 0 === options && (options = {});
-            var loader = new AnimateLoader(options);
-            return this._doneLoaderAsync(loader, targets);
+        AnimateManifest.prototype.constructor = AnimateManifest, AnimateManifest.prototype._createLoader = function() {
+            return new AnimateLoader;
         }, AnimateManifest;
     }(Pixim.ManifestBase);
     Pixim.Content.registerManifest("animates", AnimateManifest), createjs.MovieClip = CreatejsMovieClip$1, 

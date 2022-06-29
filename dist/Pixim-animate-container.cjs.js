@@ -2,7 +2,7 @@
  * Pixim-animate-container - v1.3.3
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v1.13.3
+ * @require @tawaship/pixim.js v../Pixim.js
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -18,7 +18,7 @@ var createjs = _interopDefault(require('@tawaship/createjs-module'));
 var pixi_js = require('pixi.js');
 
 /*!
- * @tawaship/pixi-animate-core - v3.2.0
+ * @tawaship/pixi-animate-core - v3.3.0
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -1208,27 +1208,19 @@ Object.defineProperties(CreatejsText.prototype, {
         writable: true
     }
 });
-
-function resolvePath(path, basepath) {
-    return pixi_js.utils.url.resolve(basepath, path);
-}
 /**
  * Load assets of createjs content published with Adobe Animate.
  *
  * @param comp Composition obtained from `AdobeAn.getComposition`.
- * @param basepath Directory path of Animate content.
  */
-function loadAssetAsync(comp, basepath, options = {}) {
+function loadAssetAsync(comp) {
     if (!comp) {
-        throw new Error('no composition');
+        return Promise.reject(new Error('no composition'));
     }
     const lib = comp.getLibrary();
     return new Promise((resolve, reject) => {
         if (lib.properties.manifest.length === 0) {
             resolve({});
-        }
-        if (basepath) {
-            basepath = basepath.replace(/([^\/])$/, "$1/");
         }
         const loader = new createjs.LoadQueue(false);
         loader.installPlugin(createjs.Sound);
@@ -1246,28 +1238,7 @@ function loadAssetAsync(comp, basepath, options = {}) {
         loader.addEventListener('error', (evt) => {
             errors.push(evt.data);
         });
-        const manifests = [];
-        const origin = lib.properties.manifest;
-        for (let i = 0; i < origin.length; i++) {
-            const o = origin[i];
-            const m = {
-                src: resolvePath(o.src, basepath),
-                id: o.id
-            };
-            for (let i in o) {
-                if (!m[i]) {
-                    m[i] = o[i];
-                }
-            }
-            if (options.crossOrigin) {
-                m.crossOrigin = true;
-            }
-            if (o.src.indexOf('data:') === 0) {
-                m.type = 'image';
-            }
-            manifests.push(m);
-        }
-        loader.loadManifest(manifests);
+        loader.loadManifest(lib.properties.manifest || []);
     })
         .then((evt) => {
         const ss = comp.getSpriteSheet();
@@ -1441,20 +1412,40 @@ class CreatejsSprite$1 extends CreatejsSprite {
     }
 }
 
-function loadJS(src) {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.addEventListener('load', () => {
-            document.body.removeChild(script);
-            resolve();
-        });
-        script.addEventListener('error', (e) => {
-            document.body.removeChild(script);
-            reject(e);
-        });
-        document.body.appendChild(script);
-    });
+class AnimateBlobLoaderResource extends Pixim.LoaderResource {
+    destroy() {
+        if (this._data.isObjectURL) {
+            (window.URL || window.webkitURL).revokeObjectURL(this._data.src);
+        }
+        this._data.src = '';
+    }
+}
+class AnimateBlobLoader extends Pixim.LoaderBase {
+    _loadAsync(target, options = {}) {
+        return (() => {
+            const data = this._resolveParams(target, options);
+            const src = data.src;
+            const xhr = data.xhr;
+            if (!xhr) {
+                return Promise.resolve({ isObjectURL: false, src });
+            }
+            return fetch(src, xhr.requestOptions || {})
+                .then(res => {
+                if (!res.ok) {
+                    throw res.statusText;
+                }
+                return res.blob();
+            })
+                .then(blob => {
+                return (window.URL || window.webkitURL).createObjectURL(blob);
+            })
+                .then(uri => {
+                return { isObjectURL: true, src: uri };
+            });
+        })()
+            .then(data => new AnimateBlobLoaderResource(data, null))
+            .catch((e) => new AnimateBlobLoaderResource({ isObjectURL: false, src: '' }, e));
+    }
 }
 
 class AnimateLoaderResource extends Pixim.LoaderResource {
@@ -1462,58 +1453,33 @@ class AnimateLoaderResource extends Pixim.LoaderResource {
     }
 }
 class AnimateLoader extends Pixim.LoaderBase {
-    loadAsync(target, options = {}) {
-        return this._loadAsync(target, options)
-            .then((resource) => {
-            if (!resource.error) {
-                this.emit(Pixim.EVENT_LOADER_ASSET_LOADED, { target, resource });
-            }
-            return resource;
-        });
-    }
-    loadAllAsync(targets, options = {}) {
-        const res = {};
-        if (Object.keys(targets).length === 0) {
-            return Promise.resolve(res);
-        }
-        const promises = [];
-        for (let i in targets) {
-            promises.push(this.loadAsync(targets[i], options)
-                .then(resource => {
-                res[i] = resource;
-            }));
-        }
-        return Promise.all(promises)
-            .then(() => {
-            return res;
-        });
-    }
     _loadAsync(target, options = {}) {
-        const basepath = this._resolveBasepath(options.basepath);
-        const version = this._resolveVersion(options.version);
-        const p = !target.filepath
-            ? Promise.resolve()
-            : (() => {
-                const filepath = Pixim.utils.resolvePath(target.filepath, target.basepath);
-                const url = this._resolveUrl(filepath, options);
-                return loadJS(url)
-                    .catch(e => {
-                    throw `Animate: '${filepath}' cannot load.`;
-                });
-            })();
-        return p.then(() => {
+        return this._loadJsAsync(target, options)
+            .then(() => {
             const comp = AdobeAn.getComposition(target.id);
             if (!comp) {
                 throw new Error(`no composition: ${target.id}`);
             }
             const lib = comp.getLibrary();
-            const origin = lib.properties.manifest;
-            for (let i = 0; i < origin.length; i++) {
-                const o = origin[i];
-                const filepath = Pixim.utils.resolvePath(o.src, target.basepath);
-                o.src = this._resolveUrl(filepath, options);
+            const manifests = lib.properties.manifest;
+            const version = options.assetVersion || '';
+            for (let i = 0; i < manifests.length; i++) {
+                const manifest = manifests[i];
+                manifest.src = Pixim.utils.resolveUri(target.basepath, manifest.src, version);
             }
-            return loadAssetAsync(comp, '', target.options);
+            return this._prepareImagesAsync(manifests, options)
+                .then(() => {
+                for (let i = 0; i < manifests.length; i++) {
+                    const manifest = manifests[i];
+                    if (options.crossOrigin) {
+                        manifest.crossOrigin = true;
+                    }
+                    if (!Pixim.utils.isUrl(manifest.src)) {
+                        manifest.type = 'image';
+                    }
+                }
+                return loadAssetAsync(comp);
+            });
         })
             .then(lib => {
             for (let i in lib) {
@@ -1523,16 +1489,58 @@ class AnimateLoader extends Pixim.LoaderBase {
             }
             return new AnimateLoaderResource(lib, null);
         })
-            .catch((e) => {
-            return new AnimateLoaderResource({}, e);
+            .catch(e => new AnimateLoaderResource({}, e));
+    }
+    _loadJsAsync(target, options) {
+        if (!target.filepath) {
+            return Promise.resolve();
+        }
+        const filepath = Pixim.utils.resolveUri(target.basepath, target.filepath);
+        const loader = new Pixim.JsLoader();
+        return loader.loadAsync(filepath, Object.assign({}, options, { version: options.fileVersion || options.version }))
+            .then(resource => {
+            if (resource.error) {
+                throw resource.error;
+            }
+            resource.ref();
+        });
+    }
+    _prepareImagesAsync(manifests, options) {
+        const targets = {};
+        for (let i = 0; i < manifests.length; i++) {
+            const manifest = manifests[i];
+            if (!Pixim.utils.isUrl(manifest.src)) {
+                continue;
+            }
+            targets[i] = manifest.src;
+        }
+        if (Object.keys(targets).length === 0) {
+            return Promise.resolve();
+        }
+        const loader = new AnimateBlobLoader();
+        return loader.loadAllAsync(targets, Object.assign({}, options, { version: options.assetVersion || options.version }))
+            .then(resources => {
+            for (let i in resources) {
+                const resource = resources[i];
+                if (resource.error) {
+                    throw resource.error;
+                }
+                if (!resource.data) {
+                    throw 'invalid resource';
+                }
+                const _i = Number(i);
+                if (!manifests[_i]) {
+                    continue;
+                }
+                manifests[_i].src = resources[i].data.src;
+            }
         });
     }
 }
 
 class AnimateManifest extends Pixim.ManifestBase {
-    _loadAsync(targets, options = {}) {
-        const loader = new AnimateLoader(options);
-        return this._doneLoaderAsync(loader, targets);
+    _createLoader() {
+        return new AnimateLoader();
     }
 }
 

@@ -496,4 +496,5 @@ an.makeResponsive = function(isResp, respDim, isScale, scaleType, domContainers)
 }
 
 
-})(window.createjs, window.AdobeAn);
+})(createjs = createjs||{}, AdobeAn = AdobeAn||{});
+var createjs, AdobeAn;

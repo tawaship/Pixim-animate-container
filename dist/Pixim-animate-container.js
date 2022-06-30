@@ -1162,9 +1162,9 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
                     manifest.src = Pixim.utils.resolveUri(target.basepath, manifest.src, version);
                 }
                 return this$1._prepareImagesAsync(manifests, options).then((function() {
-                    for (var i = 0; i < manifests.length; i++) {
+                    for (var crossOrigin = "boolean" != typeof options.crossOrigin || options.crossOrigin, i = 0; i < manifests.length; i++) {
                         var manifest = manifests[i];
-                        options.crossOrigin && (manifest.crossOrigin = !0), Pixim.utils.isUrl(manifest.src) || (manifest.type = "image");
+                        crossOrigin && (manifest.crossOrigin = !0), Pixim.utils.isUrl(manifest.src) || (manifest.type = "image");
                     }
                     return function(comp) {
                         if (!comp) {

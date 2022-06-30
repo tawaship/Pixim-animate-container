@@ -1464,9 +1464,10 @@ class AnimateLoader extends LoaderBase {
             }
             return this._prepareImagesAsync(manifests, options)
                 .then(() => {
+                const crossOrigin = typeof (options.crossOrigin) === 'boolean' ? options.crossOrigin : true;
                 for (let i = 0; i < manifests.length; i++) {
                     const manifest = manifests[i];
-                    if (options.crossOrigin) {
+                    if (crossOrigin) {
                         manifest.crossOrigin = true;
                     }
                     if (!utils$1.isUrl(manifest.src)) {

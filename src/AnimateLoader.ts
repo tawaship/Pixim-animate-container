@@ -44,8 +44,21 @@ export interface IAnimateLoaderResourceDictionary extends Pixim.ILoaderResourceD
 }
 
 export interface IAnimateLoaderOption extends Pixim.ILoaderOption {
+	/**
+	 * Animate javascript file version.
+	 */
 	fileVersion?: string | number;
+	
+	/**
+	 * Animate assets version.
+	 */
 	assetVersion?: string | number;
+	
+	/**
+	 * Whether use cross-origin flag.<br />
+	 * Default is `true`.
+	 * 
+	 */
 	crossOrigin?: boolean;
 }
 
@@ -78,10 +91,12 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				
 				return this._prepareImagesAsync(manifests, options)
 					.then(() => {
+						const crossOrigin = typeof(options.crossOrigin) === 'boolean' ? options.crossOrigin : true;
+						
 						for (let i = 0; i < manifests.length; i++) {
 							const manifest = manifests[i];
 							
-							if (options.crossOrigin) {
+							if (crossOrigin) {
 								manifest.crossOrigin = true;
 							}
 							

@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v1.3.3
+ * Pixim-animate-container - v1.4.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v../Pixim.js
+ * @require @tawaship/pixim.js v^1.14.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */

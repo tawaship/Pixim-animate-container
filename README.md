@@ -14,9 +14,9 @@
 
 - A complete set of content created with Adobe Animate version 20.02 | 20.5.1
 - pixi.js 5.3.x
-- Pixim.js 1.13.3
+- Pixim.js 1.14.0
 
-I have not confirmed the operation on other versions.
+It may work with other versions as well.
 
 ## Setup
 

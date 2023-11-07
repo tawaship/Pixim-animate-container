@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.4.0
+ * Pixim-animate-container - v1.5.0-rc
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.14.0
@@ -9,7 +9,7 @@
 this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.3.0
+     * @tawaship/pixi-animate-core - v3.4.0-rc
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -328,40 +328,14 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
         }, prototypeAccessors$1.filters.get = function() {
             return this._createjsParams.filters;
         }, prototypeAccessors$1.filters.set = function(value) {
-            if (value) {
-                for (var list = [], i = 0; i < value.length; i++) {
+            var list = [];
+            if (value && value.length > 0) {
+                for (var i = 0; i < value.length; i++) {
                     var f = value[i];
-                    if (!(f instanceof createjs.ColorMatrixFilter)) {
-                        var m = new pixi_js.filters.ColorMatrixFilter;
-                        m.matrix = [ f.redMultiplier, 0, 0, 0, f.redOffset / 255, 0, f.greenMultiplier, 0, 0, f.greenOffset / 255, 0, 0, f.blueMultiplier, 0, f.blueOffset / 255, 0, 0, 0, f.alphaMultiplier, f.alphaOffset / 255, 0, 0, 0, 0, 1 ], 
-                        list.push(m);
-                    }
-                }
-                for (var o = this._pixiData.instance, c = o.children, n = new pixi_js.Container, nc = this._pixiData.subInstance = n.addChild(new pixi_js.Container); c.length; ) {
-                    nc.addChild(c[0]);
-                }
-                o.addChild(n), o.filterContainer = nc, nc.updateTransform(), nc.calculateBounds();
-                var b = nc.getLocalBounds(), x = b.x, y = b.y;
-                for (i = 0; i < nc.children.length; i++) {
-                    var child = nc.children[i];
-                    if (child.x -= x, child.y -= y, child instanceof PixiMovieClip) {
-                        var fc = child.filterContainer;
-                        fc && (fc.cacheAsBitmap = !1);
-                    }
-                }
-                n.x = x, n.y = y, nc.filters = list, nc.cacheAsBitmap = !0;
-            } else {
-                var o$1 = this._pixiData.instance;
-                if (o$1.filterContainer) {
-                    var nc$1 = this._pixiData.subInstance, n$1 = nc$1.parent, c$1 = nc$1.children;
-                    for (o$1.removeChildren(), o$1.filterContainer = null; c$1.length; ) {
-                        var v = o$1.addChild(c$1[0]);
-                        v.x += n$1.x, v.y += n$1.y;
-                    }
-                    nc$1.filters = [], nc$1.cacheAsBitmap = !1, this._pixiData.subInstance = o$1;
+                    f instanceof createjs.ColorFilter && list.push(f.pixi);
                 }
             }
-            this._createjsParams.filters = value;
+            this._pixiData.instance.filters = list, this._createjsParams.filters = value;
         }, CreatejsMovieClip.prototype.addChild = function(child) {
             return this._pixiData.subInstance.addChild(child.pixi), superclass.prototype.addChild.call(this, child);
         }, CreatejsMovieClip.prototype.addChildAt = function(child, index) {
@@ -1012,10 +986,161 @@ this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
             value: createPixiTextData(createObject(CreatejsText.prototype), new PixiText("")),
             writable: !0
         }
+    });
+    var PixiColorMatrixFilter = function(superclass) {
+        function PixiColorMatrixFilter(cjs) {
+            superclass.call(this), this._createjs = cjs;
+        }
+        superclass && (PixiColorMatrixFilter.__proto__ = superclass), PixiColorMatrixFilter.prototype = Object.create(superclass && superclass.prototype), 
+        PixiColorMatrixFilter.prototype.constructor = PixiColorMatrixFilter;
+        var prototypeAccessors$9 = {
+            createjs: {
+                configurable: !0
+            }
+        };
+        return prototypeAccessors$9.createjs.get = function() {
+            return this._createjs;
+        }, Object.defineProperties(PixiColorMatrixFilter.prototype, prototypeAccessors$9), 
+        PixiColorMatrixFilter;
+    }(pixi_js.filters.ColorMatrixFilter);
+    function createPixiColorMatrixFilterData(cjs) {
+        return {
+            instance: new PixiColorMatrixFilter(cjs)
+        };
+    }
+    function createCreatejsColorFilterParams() {
+        return Object.assign({
+            x: 0,
+            y: 0,
+            scaleX: 0,
+            scaleY: 0,
+            regX: 0,
+            regY: 0,
+            skewX: 0,
+            skewY: 0,
+            rotation: 0,
+            visible: !0,
+            alpha: 1,
+            _off: !1,
+            mask: null
+        }, {
+            redMultiplier: 1,
+            greenMultiplier: 1,
+            blueMultiplier: 1,
+            alphaMultiplier: 1,
+            redOffset: 0,
+            greenOffset: 0,
+            blueOffset: 0,
+            alphaOffset: 0
+        });
+    }
+    var P$6 = createjs.ColorFilter, CreatejsColorFilter = function(superclass) {
+        function CreatejsColorFilter() {
+            for (var args = [], len = arguments.length; len--; ) {
+                args[len] = arguments[len];
+            }
+            superclass.call(this, args);
+            var pixiData = this._pixiData = createPixiColorMatrixFilterData(this), createjsParams = this._createjsParams = createCreatejsColorFilterParams();
+            Object.defineProperties(this, {
+                _pixiData: {
+                    enumerable: !1,
+                    value: pixiData
+                },
+                _createjsParams: {
+                    enumerable: !1,
+                    value: createjsParams
+                },
+                redMultiplier: {
+                    get: function() {
+                        return this._createjsParams.redMultiplier;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[0] = value, this._createjsParams.redMultiplier = value;
+                    }
+                },
+                greenMultiplier: {
+                    get: function() {
+                        return this._createjsParams.greenMultiplier;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[6] = value, this._createjsParams.greenMultiplier = value;
+                    }
+                },
+                blueMultiplier: {
+                    get: function() {
+                        return this._createjsParams.blueMultiplier;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[12] = value, this._createjsParams.blueMultiplier = value;
+                    }
+                },
+                alphaMultiplier: {
+                    get: function() {
+                        return this._createjsParams.alphaMultiplier;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[18] = value, this._createjsParams.alphaMultiplier = value;
+                    }
+                },
+                redOffset: {
+                    get: function() {
+                        return this._createjsParams.redOffset;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[4] = value / 255, this._createjsParams.redOffset = value;
+                    }
+                },
+                greenOffset: {
+                    get: function() {
+                        return this._createjsParams.greenOffset;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[9] = value / 255, this._createjsParams.greenOffset = value;
+                    }
+                },
+                blueOffset: {
+                    get: function() {
+                        return this._createjsParams.blueOffset;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[14] = value / 255, this._createjsParams.blueOffset = value;
+                    }
+                },
+                alphaOffset: {
+                    get: function() {
+                        return this._createjsParams.alphaOffset;
+                    },
+                    set: function(value) {
+                        this._pixiData.instance.matrix[19] = value / 255, this._createjsParams.alphaOffset = value;
+                    }
+                }
+            }), P$6.apply(this, args);
+        }
+        superclass && (CreatejsColorFilter.__proto__ = superclass), CreatejsColorFilter.prototype = Object.create(superclass && superclass.prototype), 
+        CreatejsColorFilter.prototype.constructor = CreatejsColorFilter;
+        var prototypeAccessors$10 = {
+            pixi: {
+                configurable: !0
+            }
+        };
+        return prototypeAccessors$10.pixi.get = function() {
+            return this._pixiData.instance;
+        }, Object.defineProperties(CreatejsColorFilter.prototype, prototypeAccessors$10), 
+        CreatejsColorFilter;
+    }(createjs.ColorFilter);
+    Object.defineProperties(CreatejsColorFilter.prototype, {
+        _createjsParams: {
+            value: createCreatejsColorFilterParams(),
+            writable: !0
+        },
+        _pixiData: {
+            value: createPixiColorMatrixFilterData(createObject(CreatejsColorFilter.prototype)),
+            writable: !0
+        }
     }), createjs.Stage = CreatejsStage, createjs.StageGL = CreatejsStageGL, createjs.MovieClip = CreatejsMovieClip, 
     createjs.Sprite = CreatejsSprite, createjs.Shape = CreatejsShape, createjs.Bitmap = CreatejsBitmap, 
     createjs.Graphics = CreatejsGraphics, createjs.Text = CreatejsText, createjs.ButtonHelper = CreatejsButtonHelper, 
-    createjs.MotionGuidePlugin.install();
+    createjs.ColorFilter = CreatejsColorFilter, createjs.MotionGuidePlugin.install();
     var AnimateEvent = function(superclass) {
         function AnimateEvent(type) {
             superclass.call(this, type);

@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v1.5.0-rc
+ * Pixim-animate-container - v1.5.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.14.0
@@ -9,7 +9,7 @@
 this.Pixim = this.Pixim || {}, function(exports, Pixim, createjs, pixi_js) {
     "use strict";
     /*!
-     * @tawaship/pixi-animate-core - v3.4.0-rc
+     * @tawaship/pixi-animate-core - v3.4.0
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)

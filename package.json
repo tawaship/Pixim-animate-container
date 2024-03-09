@@ -1,10 +1,10 @@
 {
   "name": "@tawaship/pixim-animate-container",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "",
   "main": "dist/Pixim-animate-container.cjs.js",
   "module": "dist/Pixim-animate-container.esm.js",
-  "types": "types/index.d.ts",
+  "types": "types/module.d.ts",
   "directories": {
     "doc": "docs",
     "lib": "lib"
@@ -52,7 +52,7 @@
     "typescript": "4.2.4"
   },
   "dependencies": {
-    "@tawaship/pixi-animate-core": "^3.4.0"
+    "@tawaship/pixi-animate-container": "file:../pixi-animate-container"
   },
   "peerDependencies": {
     "@tawaship/createjs-module": "^1.0.0",

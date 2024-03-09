@@ -1,8 +1,8 @@
 import { Texture } from 'pixi.js';
-import { CreatejsSprite as _CreatejsSprite } from '@tawaship/pixi-animate-core';
+import { CreatejsSprite as _CreatejsSprite } from '@tawaship/pixi-animate-container';
 
 /**
- * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjssprite.html | CreatejsSprite]]
+ * \@tawaship/pixi-animate-container [[https://tawaship.github.io/pixi-animate-container/classes/createjssprite.html | CreatejsSprite]]
  */
 export class CreatejsSprite extends _CreatejsSprite {
 	/**

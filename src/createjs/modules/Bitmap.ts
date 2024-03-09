@@ -1,8 +1,8 @@
 import { Texture } from 'pixi.js';
-import { CreatejsBitmap as _CreatejsBitmap } from '@tawaship/pixi-animate-core';
+import { CreatejsBitmap as _CreatejsBitmap } from '@tawaship/pixi-animate-container';
 
 /**
- * \@tawaship/pixi-animate-core [[https://tawaship.github.io/pixi-animate-core/classes/createjsbitmap.html | CreatejsBitmap]]
+ * \@tawaship/pixi-animate-container [[https://tawaship.github.io/pixi-animate-container/classes/createjsbitmap.html | CreatejsBitmap]]
  */
 export class CreatejsBitmap extends _CreatejsBitmap {
 	/**

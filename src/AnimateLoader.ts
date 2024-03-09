@@ -1,6 +1,6 @@
 import * as Pixim from '@tawaship/pixim.js';
-import { loadAssetAsync, IAnimateLibrary } from '@tawaship/pixi-animate-core';
-import { CreatejsMovieClip } from './MovieClip';
+import { loadAssetAsync, IAnimateLibrary, ILoadAssetOption, IAnimateManifest, IPrepareTarget } from '@tawaship/pixi-animate-container';
+import { CreatejsMovieClip } from './createjs';
 import { AnimateBlobLoader, TAnimateBlobLoaderTarget, IAnimateBlobLoaderOption } from './AnimateBlobLoader';
 
 /**
@@ -16,17 +16,7 @@ export class AnimateLoaderResource extends Pixim.LoaderResource<TAnimateLoaderRa
 	}
 }
 
-export interface IAnimateLoaderTarget {
-	/**
-	 * "lib.properties.id" in Animate content.
-	 */
-	id: string;
-	
-	/**
-	 * Directory path of Animate content.
-	 */
-	basepath: string;
-	
+export interface IAnimateLoaderTarget extends IPrepareTarget {
 	/**
 	 * Javascript file path of Animate content.
 	 */
@@ -43,7 +33,7 @@ export interface IAnimateLoaderResourceDictionary extends Pixim.ILoaderResourceD
 
 }
 
-export interface IAnimateLoaderOption extends Pixim.ILoaderOption {
+export interface IAnimateLoaderOption extends Pixim.ILoaderOption, ILoadAssetOption {
 	/**
 	 * Animate javascript file version.
 	 */
@@ -53,21 +43,6 @@ export interface IAnimateLoaderOption extends Pixim.ILoaderOption {
 	 * Animate assets version.
 	 */
 	assetVersion?: string | number;
-	
-	/**
-	 * Whether use cross-origin flag.<br />
-	 * Default is `true`.
-	 * 
-	 */
-	crossOrigin?: boolean;
-}
-
-export interface IAnimateManifest {
-	src: string;
-	id: string;
-	type?: string;
-	crossOrigin?: boolean;
-	[key: string]: any;
 }
 
 export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnimateLoaderRawResource, AnimateLoaderResource> {
@@ -81,40 +56,20 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				
 				const lib: IAnimateLibrary = comp.getLibrary();
 				const manifests: IAnimateManifest[] = lib.properties.manifest;
-				const version = options.assetVersion || '';
 				
-				for (let i = 0; i < manifests.length; i++) {
-					const manifest = manifests[i];
-					
-					manifest.src = Pixim.utils.resolveUri(target.basepath, manifest.src, version);
-				}
 				
-				return this._prepareImagesAsync(manifests, options)
+				return this._prepareAssetsAsync(manifests, options)
 					.then(() => {
-						const crossOrigin = typeof(options.crossOrigin) === 'boolean' ? options.crossOrigin : true;
-						
+						const version = options.assetVersion || options.version || '';
 						for (let i = 0; i < manifests.length; i++) {
 							const manifest = manifests[i];
-							
-							if (crossOrigin) {
-								manifest.crossOrigin = true;
-							}
-							
-							if (!Pixim.utils.isUrl(manifest.src)) {
-								manifest.type = 'image';
-							}
+							manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
 						}
-						
+
 						return loadAssetAsync(comp);
 					});
 			})
 			.then(lib => {
-				for (let i  in lib) {
-					if (lib[i].prototype instanceof CreatejsMovieClip) {
-						lib[i].prototype._framerateBase = lib.properties.fps;
-					}
-				}
-				
 				return new AnimateLoaderResource(lib, null);
 			})
 			.catch(e => new AnimateLoaderResource({}, e));
@@ -139,9 +94,13 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 			});
 	}
 	
-	private _prepareImagesAsync(manifests: IAnimateManifest[], options: IAnimateLoaderOption) {
+	private _prepareAssetsAsync(manifests: IAnimateManifest[], options: IAnimateLoaderOption) {
 		const targets: Pixim.ILoaderTargetDictionary<TAnimateBlobLoaderTarget> = {};
 		
+		if (!options.xhr)  {
+			return Promise.resolve();
+		}
+
 		for (let i = 0; i < manifests.length; i++) {
 			const manifest = manifests[i];
 			
@@ -177,7 +136,7 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 						continue;
 					}
 					
-					manifests[_i].src = resources[i].data.src;
+					manifests[_i].src = resources[i].data;
 				}
 			});
 	}

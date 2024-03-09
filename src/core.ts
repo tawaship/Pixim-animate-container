@@ -1,10 +1,6 @@
 import { Content as PiximContent } from '@tawaship/pixim.js';
-import { CreatejsMovieClip } from './MovieClip';
-import { CreatejsBitmap } from './Bitmap';
-import { CreatejsSprite } from './Sprite';
 import { AnimateManifest, IAnimateManifestTargetDictionary } from './AnimateManifest';
-import { createjs } from '@tawaship/pixi-animate-core';
-export { createjs, ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-core';
+export { ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-container';
 
 PiximContent.registerManifest('animates', AnimateManifest);
 
@@ -25,8 +21,3 @@ export function defineAnimatesTo(Content: typeof PiximContent, data: IAnimateMan
 export function addAnimatesTo(content: PiximContent, data: IAnimateManifestTargetDictionary) {
 	content.addTargets('animates', data, {});
 }
-
-// overrides
-createjs.MovieClip = CreatejsMovieClip;
-createjs.Bitmap = CreatejsBitmap;
-createjs.Sprite = CreatejsSprite;

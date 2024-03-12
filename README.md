@@ -103,8 +103,8 @@ See [here](interfaces/IAnimateManifestTargetDictionary.html) for complete option
 
 	|name|class|
 	|:--|:--|
-	|createjs.MovieClip|[CreatejsMovieClip](https://tawaship.github.io/Pixim-animate-container/docs/classes/createjsmovieclip.html)|
+	|createjs.MovieClip|[CreatejsMovieClip](https://tawaship.github.io/Pixim-animate-container/docs/classes/CreatejsMovieClip.html)|
 
 ### 2.0.0
 
-- Compatible with @tawaship/pixi-animate-container@2.0.0
+- Compatible with (@tawaship/pixi-animate-container@2.0.0)[https://github.com/tawaship/Pixim-animate-container]

@@ -2,17 +2,16 @@
 
 "Pixim-animate-container" is a plugin for using content created by Adobe Animate with "[Pixim.js](https://github.com/tawaship/Pixim.js)".
 
-[![Build Status](https://travis-ci.com/tawaship/Pixim-animate-container.svg?branch=master)](https://app.travis-ci.com/tawaship/Pixim-animate-container)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 ---
 
 ## Core module
-[@tawaship/pixi-animate-core](https://tawaship.github.io/pixi-animate-core/)
+[@tawaship/pixi-animate-container](https://tawaship.github.io/pixi-animate-container/)
 
 ## Supported version
 
-- A complete set of content created with Adobe Animate version 20.02 | 20.5.1
+- A complete set of content created with Adobe Animate version 24.0.1
 - pixi.js 5.3.x
 - Pixim.js 1.14.0
 
@@ -65,9 +64,9 @@ Game.setConfig({
 
 Pixim.animate.defineAnimatesTo(Game, {
 	test: {
+		id: "[conposition id]", // "lib.properties.id" in Animate content.
 		basepath: "[content directory path]", // Directory path of Animate content.
 		filepath: "[content js file path], // Javascript file path from basepath.
-		id: "[conposition id]", // "lib.properties.id" in Animate content.
 		options: {
 			crossOrigin: true
 		}
@@ -94,6 +93,8 @@ app
 	});
 ```
 
+See [here](interfaces/ianimatemanifesttargetdirectory.html) for complete options for `Pixim.animate.defineAnimatesTo` and `Pixim.animate.addAnimatesTo`.
+
 ## Change log
 
 ### 1.0.0
@@ -103,3 +104,7 @@ app
 	|name|class|
 	|:--|:--|
 	|createjs.MovieClip|[CreatejsMovieClip](https://tawaship.github.io/Pixim-animate-container/docs/classes/createjsmovieclip.html)|
+
+### 2.0.0
+
+- Compatible with @tawaship/pixi-animate-container@2.0.0

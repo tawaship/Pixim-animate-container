@@ -375,8 +375,8 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             this.framerate = this._framerateBase;
         }, CreatejsMovieClip.prototype.updateForPixi = function(e) {
             var currentFrame = this.currentFrame;
-            if (this.advance(16.666666666666668 * e.delta), this._useFrameEvent && currentFrame !== this.currentFrame && (this._useFrameEvent.endAnimation && this.currentFrame === this.totalFrames - 1 && this.dispatchEvent(new AnimateEvent("endAnimation")), 
-            this._useFrameEvent.reachLabel)) {
+            if (this.advance(16.666666666666668 * e.delta), this._listenFrameEvents && currentFrame !== this.currentFrame && (this._listenFrameEvents.endAnimation && this.currentFrame === this.totalFrames - 1 && this.dispatchEvent(new AnimateEvent("endAnimation")), 
+            this._listenFrameEvents.reachLabel)) {
                 for (var i = 0; i < this.labels.length; i++) {
                     var label = this.labels[i];
                     if (this.currentFrame === label.position) {
@@ -1197,6 +1197,20 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             offset: offset
         });
     }
+    function dataURLToBlobURL(dataURL) {
+        for (var bin = atob(dataURL.replace(/^.*,/, "")), buffer = new Uint8Array(bin.length), i = 0; i < bin.length; i++) {
+            buffer[i] = bin.charCodeAt(i);
+        }
+        var p = dataURL.slice(5);
+        try {
+            var blob = new Blob([ buffer.buffer ], {
+                type: p.slice(0, p.indexOf(";"))
+            });
+            return console.log(p.slice(0, p.indexOf(";"))), (URL || webkitURL).createObjectURL(blob);
+        } catch (e) {
+            throw e;
+        }
+    }
     Object.defineProperties(CreatejsColorFilter.prototype, {
         _createjsParams: {
             value: createCreatejsColorFilterParams(),
@@ -1297,7 +1311,8 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return LoaderResource && (AnimateBlobLoaderResource.__proto__ = LoaderResource), 
         AnimateBlobLoaderResource.prototype = Object.create(LoaderResource && LoaderResource.prototype), 
         AnimateBlobLoaderResource.prototype.constructor = AnimateBlobLoaderResource, AnimateBlobLoaderResource.prototype.destroy = function() {
-            this._data && (window.URL || window.webkitURL).revokeObjectURL(this._data), this._data = "";
+            this._data && (window.URL || window.webkitURL).revokeObjectURL(this._data.src), 
+            this._data = null;
         }, AnimateBlobLoaderResource;
     }(Pixim.LoaderResource), AnimateBlobLoader = function(LoaderBase) {
         function AnimateBlobLoader() {
@@ -1305,12 +1320,22 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         }
         return LoaderBase && (AnimateBlobLoader.__proto__ = LoaderBase), AnimateBlobLoader.prototype = Object.create(LoaderBase && LoaderBase.prototype), 
         AnimateBlobLoader.prototype.constructor = AnimateBlobLoader, AnimateBlobLoader.prototype._loadAsync = function(target, options) {
-            return void 0 === options && (options = {}), (new Pixim.BlobLoader).loadAsync(target, options).then((function(resource) {
-                return resource.data;
-            })).then((function(src) {
-                return new AnimateBlobLoaderResource(src, null);
+            var data, src, xhr;
+            return void 0 === options && (options = {}), (data = this._resolveParams(target, options), 
+            src = data.src, xhr = data.xhr, xhr ? fetch(src, xhr.requestOptions || {}) : fetch(src)).then((function(res) {
+                if (!res.ok) {
+                    throw res.statusText;
+                }
+                return res.blob();
+            })).then((function(blob) {
+                return {
+                    src: (window.URL || window.webkitURL).createObjectURL(blob),
+                    type: blob.type
+                };
+            })).then((function(data) {
+                return new AnimateBlobLoaderResource(data, null);
             })).catch((function(e) {
-                return new AnimateBlobLoaderResource("", e);
+                return new AnimateBlobLoaderResource(null, e);
             }));
         }, AnimateBlobLoader;
     }(Pixim.LoaderBase), AnimateLoaderResource = function(superclass) {
@@ -1350,12 +1375,17 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                             if (!comp) {
                                 throw new Error("no composition: " + target.id);
                             }
-                            for (var lib = comp.getLibrary(), manifests = lib.properties.manifest, crossOrigin = "boolean" != typeof (null === (_b = target.options) || void 0 === _b ? void 0 : _b.crossOrigin) || target.options.crossOrigin, i$1 = 0; i$1 < manifests.length; i$1++) {
+                            for (var lib = comp.getLibrary(), manifests = lib.properties.manifest.map((function(v) {
+                                return JSON.parse(JSON.stringify(v));
+                            })), crossOrigin = "boolean" != typeof (null === (_b = target.options) || void 0 === _b ? void 0 : _b.crossOrigin) || target.options.crossOrigin, i$1 = 0; i$1 < manifests.length; i$1++) {
                                 var manifest = manifests[i$1];
-                                if (manifest.src = pixi_js.utils.url.resolve(target.basepath, manifest.src), 0 === manifest.src.indexOf("data:image")) {
-                                    manifest.type = createjs.Types.IMAGE;
-                                } else if (0 === manifest.src.indexOf("data:audio")) {
-                                    throw new Error("data URL formatted sound is not supported.");
+                                if (0 === manifest.src.indexOf("data:image")) {
+                                    manifest.src = dataURLToBlobURL(manifest.src), manifest.type = createjs.Types.IMAGE;
+                                } else {
+                                    if (0 === manifest.src.indexOf("data:audio")) {
+                                        throw new Error("data URL formatted sound is not supported.");
+                                    }
+                                    0 === manifest.src.indexOf("blob:") || 0 === manifest.src.indexOf("file:") || (manifest.src = pixi_js.utils.url.resolve(target.basepath, manifest.src));
                                 }
                             }
                             if (crossOrigin) {
@@ -1392,7 +1422,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                                 var _a;
                                 for (var i in lib) {
                                     lib[i].prototype instanceof CreatejsMovieClip && (lib[i].prototype._framerateBase = lib.properties.fps, 
-                                    lib[i].prototype._useFrameEvent = null === (_a = target.options) || void 0 === _a ? void 0 : _a.useFrameEvent);
+                                    lib[i].prototype._listenFrameEvents = null === (_a = target.options) || void 0 === _a ? void 0 : _a.listenFrameEvents);
                                 }
                                 return lib;
                             })));
@@ -1443,7 +1473,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                         throw "invalid resource";
                     }
                     var _i = Number(i);
-                    manifests[_i] && (manifests[_i].src = resources[i].data);
+                    manifests[_i] && (manifests[_i].src = resource.data.src, manifests[_i].type = resource.data.type.split("/")[0]);
                 }
             }));
         }, AnimateLoader;

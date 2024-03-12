@@ -136,7 +136,8 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 						continue;
 					}
 					
-					manifests[_i].src = resources[i].data;
+					manifests[_i].src = resource.data.src;
+					manifests[_i].type = resource.data.type.split("/")[0];
 				}
 			});
 	}

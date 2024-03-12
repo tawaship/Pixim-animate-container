@@ -1,14 +1,14 @@
 import { BlobLoader, ILoaderOption, ILoaderResourceDictionary, ILoaderTargetDictionary, LoaderBase, LoaderResource } from "@tawaship/pixim.js";
 
-export type TAnimateBlobLoaderRawResource = string;
+export type TAnimateBlobLoaderRawResource = { src: string; type: string; } | null;
 
 export class AnimateBlobLoaderResource extends LoaderResource<TAnimateBlobLoaderRawResource> {
 	destroy() {
 		if (this._data) {
-			(window.URL || window.webkitURL).revokeObjectURL(this._data);
+			(window.URL || window.webkitURL).revokeObjectURL(this._data.src);
 		}
 		
-		this._data = '';
+		this._data = null;
 	}
 }
 
@@ -28,12 +28,28 @@ export interface IAnimateBlobLoaderOption extends ILoaderOption {
 
 export class AnimateBlobLoader extends LoaderBase<TAnimateBlobLoaderTarget, TAnimateBlobLoaderRawResource, AnimateBlobLoaderResource> {
 	protected _loadAsync(target: TAnimateBlobLoaderTarget, options: IAnimateBlobLoaderOption = {}) {
-		return new BlobLoader()
-			.loadAsync(target, options)
-			.then(resource => {
-				return resource.data;
-			})
-			.then(src => new AnimateBlobLoaderResource(src, null))
-			.catch((e: any) => new AnimateBlobLoaderResource('', e));
+		return (() => {
+			const data = this._resolveParams(target, options);
+			const src = data.src;
+			const xhr = data.xhr;
+			
+			if (!xhr) {
+				return fetch(src);
+			}
+			
+			return fetch(src, xhr.requestOptions || {});
+		})()
+		.then(res => {
+			if (!res.ok) {
+				throw res.statusText;
+			}
+			
+			return res.blob();
+		})
+		.then(blob => {
+			return { src: (window.URL || window.webkitURL).createObjectURL(blob), type: blob.type };
+		})
+		.then(data => new AnimateBlobLoaderResource(data, null))
+		.catch((e: any) => new AnimateBlobLoaderResource(null, e));
 	}
 }

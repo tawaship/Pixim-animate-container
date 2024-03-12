@@ -5,6 +5,22 @@ var lib={};var ss={};var img={};
 lib.ssMetadata = [];
 
 
+(lib.AnMovieClip = function(){
+	this.actionFrames = [];
+	this.ignorePause = false;
+	this.gotoAndPlay = function(positionOrLabel){
+		cjs.MovieClip.prototype.gotoAndPlay.call(this,positionOrLabel);
+	}
+	this.play = function(){
+		cjs.MovieClip.prototype.play.call(this);
+	}
+	this.gotoAndStop = function(positionOrLabel){
+		cjs.MovieClip.prototype.gotoAndStop.call(this,positionOrLabel);
+	}
+	this.stop = function(){
+		cjs.MovieClip.prototype.stop.call(this);
+	}
+}).prototype = p = new cjs.MovieClip();
 // symbols:
 
 
@@ -15,8 +31,28 @@ lib.ssMetadata = [];
 p.nominalBounds = new cjs.Rectangle(0,0,32,32);
 
 
-(lib.gra = function(mode,startPosition,loop) {
-	this.initialize(mode,startPosition,loop,{});
+(lib.bitmap2 = function() {
+	this.initialize(img.bitmap2);
+}).prototype = p = new cjs.Bitmap();
+p.nominalBounds = new cjs.Rectangle(0,0,32,32);
+
+
+(lib.bitmap3 = function() {
+	this.initialize(img.bitmap3);
+}).prototype = p = new cjs.Bitmap();
+p.nominalBounds = new cjs.Rectangle(0,0,32,32);
+
+
+(lib.gra = function(mode,startPosition,loop,reversed) {
+if (loop == null) { loop = true; }
+if (reversed == null) { reversed = false; }
+	var props = new Object();
+	props.mode = mode;
+	props.startPosition = startPosition;
+	props.labels = {};
+	props.loop = loop;
+	props.reversed = reversed;
+	cjs.MovieClip.apply(this,[props]);
 
 	// レイヤー_1
 	this.instance = new lib.bitmap1();
@@ -30,8 +66,16 @@ p.nominalBounds = new cjs.Rectangle(0,0,32,32);
 p.nominalBounds = new cjs.Rectangle(-16,-16,32,32);
 
 
-(lib.anim = function(mode,startPosition,loop) {
-	this.initialize(mode,startPosition,loop,{});
+(lib.anim = function(mode,startPosition,loop,reversed) {
+if (loop == null) { loop = true; }
+if (reversed == null) { reversed = false; }
+	var props = new Object();
+	props.mode = mode;
+	props.startPosition = startPosition;
+	props.labels = {};
+	props.loop = loop;
+	props.reversed = reversed;
+	cjs.MovieClip.apply(this,[props]);
 
 	// レイヤー_1
 	this.instance = new lib.gra("synched",0);
@@ -45,8 +89,16 @@ p.nominalBounds = new cjs.Rectangle(-16,-18.2,517,79.4);
 
 
 // stage content:
-(lib.game = function(mode,startPosition,loop) {
-	this.initialize(mode,startPosition,loop,{});
+(lib.game = function(mode,startPosition,loop,reversed) {
+if (loop == null) { loop = true; }
+if (reversed == null) { reversed = false; }
+	var props = new Object();
+	props.mode = mode;
+	props.startPosition = startPosition;
+	props.labels = {point:33};
+	props.loop = loop;
+	props.reversed = reversed;
+	cjs.MovieClip.apply(this,[props]);
 
 	// レイヤー_5
 	this.shape = new cjs.Shape();
@@ -382,25 +434,33 @@ p.nominalBounds = new cjs.Rectangle(-16,-18.2,517,79.4);
 	this.timeline.addTween(cjs.Tween.get(this.instance_2).wait(87));
 
 	// レイヤー_2
-	this.instance_3 = new lib.anim();
-	this.instance_3.setTransform(31.75,30.8);
+	this.instance_3 = new lib.bitmap3();
+	this.instance_3.setTransform(489,15);
 
-	this.timeline.addTween(cjs.Tween.get(this.instance_3).wait(87));
+	this.instance_4 = new lib.bitmap2();
+	this.instance_4.setTransform(440,15);
+
+	this.instance_5 = new lib.anim();
+	this.instance_5.setTransform(31.75,30.8);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_5},{t:this.instance_4},{t:this.instance_3}]}).wait(87));
 
 	this._renderFirstFrame();
 
-}).prototype = p = new cjs.MovieClip();
+}).prototype = p = new lib.AnMovieClip();
 p.nominalBounds = new cjs.Rectangle(290.8,206.9,262.2,154.1);
 // library properties:
 lib.properties = {
-	id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
+	id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
 	width: 550,
 	height: 400,
 	fps: 60,
 	color: "#FFFFFF",
 	opacity: 1.00,
 	manifest: [
-		{src:"images/bitmap1.png?1598936650286", id:"bitmap1"}
+		{src:"images/bitmap1.png?1710228758099", id:"bitmap1"},
+		{src:"images/bitmap2.png?1710228758099", id:"bitmap2"},
+		{src:"images/bitmap3.png?1710228758099", id:"bitmap3"}
 	],
 	preloads: []
 };
@@ -411,7 +471,7 @@ lib.properties = {
 
 (lib.Stage = function(canvas) {
 	createjs.Stage.call(this, canvas);
-}).prototype = p = new createjs.StageGL();
+}).prototype = p = new createjs.Stage();
 
 p.setAutoPlay = function(autoPlay) {
 	this.tickEnabled = autoPlay;
@@ -438,7 +498,7 @@ an.bootstrapCallback=function(fnCallback) {
 };
 
 an.compositions = an.compositions || {};
-an.compositions['2FA8E0C7230941478CE2CA3DB82DBEDF_1'] = {
+an.compositions['2FA8E0C7230941478CE2CA3DB82DBEDF'] = {
 	getStage: function() { return exportRoot.stage; },
 	getLibrary: function() { return lib; },
 	getSpriteSheet: function() { return ss; },
@@ -479,19 +539,42 @@ an.makeResponsive = function(isResp, respDim, isScale, scaleType, domContainers)
 			else if(scaleType==2) {					
 				sRatio = Math.max(xRatio, yRatio);				
 			}			
-		}			
+		}
 		domContainers[0].width = w * pRatio * sRatio;			
-		domContainers[0].height = h * pRatio * sRatio;			
+		domContainers[0].height = h * pRatio * sRatio;
 		domContainers.forEach(function(container) {				
 			container.style.width = w * sRatio + 'px';				
 			container.style.height = h * sRatio + 'px';			
-		});			
+		});
 		stage.scaleX = pRatio*sRatio;			
-		stage.scaleY = pRatio*sRatio;			
+		stage.scaleY = pRatio*sRatio;
 		lastW = iw; lastH = ih; lastS = sRatio;            
 		stage.tickOnUpdate = false;            
 		stage.update();            
 		stage.tickOnUpdate = true;		
+	}
+}
+an.handleSoundStreamOnTick = function(event) {
+	if(!event.paused){
+		var stageChild = stage.getChildAt(0);
+		if(!stageChild.paused || stageChild.ignorePause){
+			stageChild.syncStreamSounds();
+		}
+	}
+}
+an.handleFilterCache = function(event) {
+	if(!event.paused){
+		var target = event.target;
+		if(target){
+			if(target.filterCacheList){
+				for(var index = 0; index < target.filterCacheList.length ; index++){
+					var cacheInst = target.filterCacheList[index];
+					if((cacheInst.startFrame <= target.currentFrame) && (target.currentFrame <= cacheInst.endFrame)){
+						cacheInst.instance.cache(cacheInst.x, cacheInst.y, cacheInst.w, cacheInst.h);
+					}
+				}
+			}
+		}
 	}
 }
 

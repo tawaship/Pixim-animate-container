@@ -1423,7 +1423,11 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 resource.ref();
             }));
         }, AnimateLoader.prototype._prepareAssetsAsync = function(basepath, manifests, options) {
-            for (var targets = {}, i = 0; i < manifests.length; i++) {
+            var targets = {};
+            if (!options.xhr) {
+                return Promise.resolve();
+            }
+            for (var i = 0; i < manifests.length; i++) {
                 var manifest = manifests[i];
                 Pixim.utils.isUrl(manifest.src) && (targets[i] = Pixim.utils.resolveUri(basepath, manifest.src));
             }

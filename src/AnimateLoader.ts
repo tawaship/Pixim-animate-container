@@ -96,11 +96,11 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 	
 	private _prepareAssetsAsync(basepath: string, manifests: IAnimateManifest[], options: IAnimateLoaderOption) {
 		const targets: Pixim.ILoaderTargetDictionary<TAnimateBlobLoaderTarget> = {};
-		/*
+		
 		if (!options.xhr)  {
 			return Promise.resolve();
 		}
-*/
+		
 		for (let i = 0; i < manifests.length; i++) {
 			const manifest = manifests[i];
 			

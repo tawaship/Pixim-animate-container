@@ -92,7 +92,7 @@
 						console.log(e)
 					});
 				});
-				return
+				
 				it('instance', () => {
 					const app = new Pixim.Application({
 						width: 450,
@@ -127,7 +127,7 @@
 					});
 					
 					const game = new Game({
-						basepath: "",
+						basepath: "https://localhost/Pixim-animate-container/test/",
 						xhr: {
 							requestOptions: {
 								headers: {
@@ -149,7 +149,7 @@
 							filepath: 'game.js',
 							id: '2FA8E0C7230941478CE2CA3DB82DBEDF_1',
 							options: {
-								crossOrigin: false
+								crossOrigin: true
 							}
 						}
 					})

@@ -1796,11 +1796,9 @@ class AnimateLoader extends Pixim.LoaderBase {
     }
     _prepareAssetsAsync(basepath, manifests, options) {
         const targets = {};
-        /*
-        if (!options.xhr)  {
+        if (!options.xhr) {
             return Promise.resolve();
         }
-*/
         for (let i = 0; i < manifests.length; i++) {
             const manifest = manifests[i];
             if (!Pixim.utils.isUrl(manifest.src)) {

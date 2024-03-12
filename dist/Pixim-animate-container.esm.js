@@ -1790,11 +1790,9 @@ class AnimateLoader extends LoaderBase {
     }
     _prepareAssetsAsync(basepath, manifests, options) {
         const targets = {};
-        /*
-        if (!options.xhr)  {
+        if (!options.xhr) {
             return Promise.resolve();
         }
-*/
         for (let i = 0; i < manifests.length; i++) {
             const manifest = manifests[i];
             if (!utils$1.isUrl(manifest.src)) {

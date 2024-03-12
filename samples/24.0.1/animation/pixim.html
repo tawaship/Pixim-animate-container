@@ -32,6 +32,12 @@
 					basepath: 'game/',
 					filepath: 'game.js',
 					id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
+					options: {
+						listenFrameEvents: {
+							reachLabel: true,
+							endAnimation: true
+						}
+					}
 				}
 			});
 			
@@ -48,6 +54,13 @@
 						
 						container.addChild(new PIXI.Text('Library game'));
 						const a = container.addCreatejs(new $.resources.animates.test.game());
+						a.addEventListener("reachLabel", e => {
+							console.log(e);
+						});
+
+						a.addEventListener("endAnimation", e => {
+							console.log(e);
+						});
 						a.y = 50;
 					}
 				}

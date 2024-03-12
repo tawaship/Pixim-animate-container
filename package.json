@@ -52,7 +52,7 @@
     "typescript": "4.2.4"
   },
   "dependencies": {
-    "@tawaship/pixi-animate-container": "file:../pixi-animate-container"
+    "@tawaship/pixi-animate-container": "^2.0.0"
   },
   "peerDependencies": {
     "@tawaship/createjs-module": "^1.0.0",

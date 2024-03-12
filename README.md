@@ -107,4 +107,4 @@ See [here](interfaces/IAnimateManifestTargetDictionary.html) for complete option
 
 ### 2.0.0
 
-- Compatible with (@tawaship/pixi-animate-container@2.0.0)[https://github.com/tawaship/Pixim-animate-container]
+- Compatible with [@tawaship/pixi-animate-container@2.0.0](https://github.com/tawaship/Pixim-animate-container)

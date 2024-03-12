@@ -1,4 +1,4 @@
-import { CreatejsMovieClip as _CreatejsMovieClip, ITickerData } from '@tawaship/pixi-animate-container';
+import { CreatejsMovieClip as _CreatejsMovieClip } from '@tawaship/pixi-animate-container';
 
 /**
  * \@tawaship/pixi-animate-container [[https://tawaship.github.io/pixi-animate-container/classes/createjsmovieclip.html | CreatejsMovieClip]]

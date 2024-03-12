@@ -1,45 +1,29 @@
-import { Container as _Container, Task, ITickerData } from '@tawaship/pixim.js';
-import { Container as _PixiAnimateContainer, TCreatejsObject } from '@tawaship/pixi-animate-container';
-import { CreatejsMovieClip } from './createjs';
-
-export interface ICreatejsMovieClipDictionary {
-	[id: number]: CreatejsMovieClip;
-}
-
-export interface ICreatejsData {
-	id: number;
-	targets: ICreatejsMovieClipDictionary;
-	task: Task;
-	container: _PixiAnimateContainer;
-}
+import { Container as PiximContainer, Task, ITickerData } from '@tawaship/pixim.js';
+import { Container as _PixiAnimateContainer, CreatejsController, IAnimateContainer, TCreatejsObject } from '@tawaship/pixi-animate-container';
 
 /**
  * [[https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container]]
  */
-export class Container extends _Container {
-	private _createjsData: ICreatejsData;
+export class Container extends PiximContainer implements IAnimateContainer {
+	private _createjsData: {
+		controller: CreatejsController;
+		task: Task;
+	};
 	
-	constructor(...args: any[]) {
-		super(...args);
+	constructor() {
+		super();
 		
 		this._createjsData = {
-			id: 0,
-			targets: {},
+			controller: new CreatejsController(this),
 			task: new Task([], this),
-			container: new _PixiAnimateContainer()
 		};
-		
-		const targets = this._createjsData.targets;
-		
+
 		this._createjsData.task.add((e: ITickerData) => {
-			this._createjsData.container.handleTick.call(this, e.delta);
+			this.handleTick(e.delta);
 		});
 		this._createjsData.task.first();
 	}
-	
-	/**
-	 * @override
-	 */
+
 	updateTask(e: ITickerData) {
 		super.updateTask(e);
 		
@@ -51,16 +35,20 @@ export class Container extends _Container {
 		
 		task.done(e);
 	}
+
+	handleTick(delta: number) {
+		return this._createjsData.controller.handleTick(delta);
+	}
 	
 	addCreatejs(cjs: TCreatejsObject) {
-		return this._createjsData.container.addCreatejs.call(this, cjs);
+		return this._createjsData.controller.addCreatejs(cjs);
 	}
 	
 	addCreatejsAt(cjs: TCreatejsObject, index: number) {
-		return this._createjsData.container.addCreatejsAt.call(this, cjs, index);
+		return this._createjsData.controller.addCreatejsAt(cjs, index);
 	}
 	
 	removeCreatejs(cjs: TCreatejsObject) {
-		return this._createjsData.container.removeCreatejs.call(this, cjs);
+		return this._createjsData.controller.removeCreatejs(cjs);
 	}
 }

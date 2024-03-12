@@ -56,9 +56,9 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				
 				const lib: IAnimateLibrary = comp.getLibrary();
 				const manifests: IAnimateManifest[] = lib.properties.manifest;
+				const _target = Object.assign({}, target, { basepath: Pixim.utils.resolvePath(options.basepath || "", target.basepath) });
 				
-				
-				return this._prepareAssetsAsync(manifests, options)
+				return this._prepareAssetsAsync(_target.basepath || "", manifests, options)
 					.then(() => {
 						const version = options.assetVersion || options.version || '';
 						for (let i = 0; i < manifests.length; i++) {
@@ -66,7 +66,7 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 							manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
 						}
 
-						return loadAssetAsync(comp);
+						return loadAssetAsync(_target);
 					});
 			})
 			.then(lib => {
@@ -94,13 +94,13 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 			});
 	}
 	
-	private _prepareAssetsAsync(manifests: IAnimateManifest[], options: IAnimateLoaderOption) {
+	private _prepareAssetsAsync(basepath: string, manifests: IAnimateManifest[], options: IAnimateLoaderOption) {
 		const targets: Pixim.ILoaderTargetDictionary<TAnimateBlobLoaderTarget> = {};
-		
+		/*
 		if (!options.xhr)  {
 			return Promise.resolve();
 		}
-
+*/
 		for (let i = 0; i < manifests.length; i++) {
 			const manifest = manifests[i];
 			
@@ -108,7 +108,7 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				continue;
 			}
 			
-			targets[i] = manifest.src;
+			targets[i] = Pixim.utils.resolveUri(basepath, manifest.src);
 		}
 		
 		if (Object.keys(targets).length === 0) {

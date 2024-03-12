@@ -7,7 +7,7 @@
 ---
 
 ## Core module
-[@tawaship/pixi-animate-container](https://tawaship.github.io/pixi-animate-container/)
+[@tawaship/pixi-animate-container](https://github.com/tawaship/pixi-animate-container/)
 
 ## Supported version
 
@@ -93,7 +93,7 @@ app
 	});
 ```
 
-See [here](interfaces/ianimatemanifesttargetdirectory.html) for complete options for `Pixim.animate.defineAnimatesTo` and `Pixim.animate.addAnimatesTo`.
+See [here](interfaces/IAnimateManifestTargetDictionary.html) for complete options for `Pixim.animate.defineAnimatesTo` and `Pixim.animate.addAnimatesTo`.
 
 ## Change log
 

@@ -1,7 +1,6 @@
 import * as Pixim from '@tawaship/pixim.js';
-import { loadAssetAsync, IAnimateLibrary, ILoadAssetOption, IAnimateManifest, IPrepareTarget } from '@tawaship/pixi-animate-container';
-import { CreatejsMovieClip } from './createjs';
-import { AnimateBlobLoader, TAnimateBlobLoaderTarget, IAnimateBlobLoaderOption } from './AnimateBlobLoader';
+import { loadAssetAsync, IAnimateLibrary, IAnimateLoadAssetOption, IAnimateManifest, IAnimatePrepareTarget } from '@tawaship/pixi-animate-container';
+import { AnimateBlobLoader, TAnimateBlobLoaderTarget } from './AnimateBlobLoader';
 
 /**
  * @ignore
@@ -16,11 +15,20 @@ export class AnimateLoaderResource extends Pixim.LoaderResource<TAnimateLoaderRa
 	}
 }
 
-export interface IAnimateLoaderTarget extends IPrepareTarget {
+export interface IAnimateLoaderTarget extends IAnimatePrepareTarget {
 	/**
 	 * Javascript file path of Animate content.
 	 */
 	filepath?: string;
+
+	options?: IAnimateLoadAssetOption & {
+		/**
+		 * Additional processing handlers for lib.properties.manifest.
+		 * 
+		 * Changes made by this process are temporary and will only be reflected in the current load process.
+		 */
+		handleManifest?: (manifests: IAnimateManifest[]) => Promise<void>;
+	};
 };
 
 export type TAnimateLoaderTarget = IAnimateLoaderTarget;
@@ -33,7 +41,7 @@ export interface IAnimateLoaderResourceDictionary extends Pixim.ILoaderResourceD
 
 }
 
-export interface IAnimateLoaderOption extends Pixim.ILoaderOption, ILoadAssetOption {
+export interface IAnimateLoaderOption extends Pixim.ILoaderOption, IAnimateLoadAssetOption {
 	/**
 	 * Animate javascript file version.
 	 */
@@ -55,19 +63,31 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				}
 				
 				const lib: IAnimateLibrary = comp.getLibrary();
-				const manifests: IAnimateManifest[] = lib.properties.manifest;
-				const _target = Object.assign({}, target, { basepath: Pixim.utils.resolvePath(options.basepath || "", target.basepath) });
-				
-				return this._prepareAssetsAsync(_target.basepath || "", manifests, options)
-					.then(() => {
-						const version = options.assetVersion || options.version || '';
-						for (let i = 0; i < manifests.length; i++) {
-							const manifest = manifests[i];
-							manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
-						}
+				const originalManifests: IAnimateManifest[] = lib.properties.manifest;
+				const manifests = lib.properties.manifest = originalManifests.map<IAnimateManifest>((v: any) => {
+					return JSON.parse(JSON.stringify(v));
+				});
 
-						return loadAssetAsync(_target);
-					});
+				return (target.options?.handleManifest ? target.options.handleManifest(manifests) : Promise.resolve())
+					.then(() => {
+						const _target = Object.assign({}, target);
+						_target.basepath = Pixim.utils.resolvePath(options.basepath || "", target.basepath);
+
+						return this._prepareAssetsAsync(_target.basepath || "", manifests, options)
+							.then(() => {
+								const version = options.assetVersion || options.version || '';
+								for (let i = 0; i < manifests.length; i++) {
+									const manifest = manifests[i];
+									manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
+								}
+
+								return loadAssetAsync(_target);
+							})
+							.then((_lib: IAnimateLibrary) => {
+								lib.properties.manifest = originalManifests;
+								return _lib;
+							});
+					})
 			})
 			.then(lib => {
 				return new AnimateLoaderResource(lib, null);

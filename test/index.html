@@ -10,155 +10,117 @@
 	</head>
 	<body>
 		<script>
-			const describe = (name, func) => {
-				try {
-					func();
-					console.log('success.');
-				} catch (e) {
-					console.error(`Failed test '${name} - ${e}'`);
-				}
-			};
+			const pRatio = window.devicePixelRatio || 1;
 			
-			const it = (tag, func) => {
-				try {
-					func();
-				} catch (e) {
-					throw tag;
-				}
-			};
-			
-			const assert = {
-				equal(a, b) {
-					if (a !== b) {
-						throw new Error();
-					}
-				},
-				ok(a) {
-					if (!a) {
-						throw new Error();
-					}
-				}
-			};
-		</script>
-		<script>
-			describe('manifest', () => {
-				it('class', () => {
-					const app = new Pixim.Application({
-						width: 450,
-						height: 800,
-						antialias: true,
-						backgroundColor: 0xFFFFFF
-					});
-					
-					const Game = Pixim.Content.create();
-					
-					Game.setConfig({
-						width: 450,
-						height: 800
-					});
-					
-					Pixim.animate.defineAnimatesTo(Game, {
-						test: {
-							basepath: 'game/',
-							filepath: 'game.js',
-							id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
-							options: {
-								crossOrigin: true
-							}
-						}
-					})
-					
-					Game.defineLibraries({
-						root: class Root extends PIXI.Container {
-							constructor($) {
-								super();
-								
-								this.x = 10;
-								this.y = 10;
-								this.scale.set(0.7);
-								
-								const container = this.addChild(new Pixim.animate.Container());
-								
-								container.addChild(new PIXI.Text('Library game'));
-								const a = container.addCreatejs(new $.resources.animates.test.game());
-								a.y = 50;
-							}
-						}
-					});
-					
-					const game = new Game();
-					
-					return app.attachAsync(game).catch(e => {
-						console.log(e)
-					});
-				});
-				
-				it('instance', () => {
-					const app = new Pixim.Application({
-						width: 450,
-						height: 800,
-						antialias: true,
-						backgroundColor: 0xFFFFFF
-					});
-					
-					const Game = Pixim.Content.create();
-					
-					Game.setConfig({
-						width: 450,
-						height: 800
-					});
-					
-					Game.defineLibraries({
-						root: class Root extends PIXI.Container {
-							constructor($) {
-								super();
-								
-								this.x = 10;
-								this.y = 10;
-								this.scale.set(0.7);
-								
-								const container = this.addChild(new Pixim.animate.Container());
-								
-								container.addChild(new PIXI.Text('Library game'));
-								const a = container.addCreatejs(new $.resources.animates.test.game());
-								a.y = 50;
-							}
-						}
-					});
-					
-					const game = new Game({
-						basepath: "https://localhost/Pixim-animate-container/test/",
-						xhr: {
-							requestOptions: {
-								headers: {
-									"X-A": "Bearer: hoge"
-								}
-							}
-						},
-						typeOptions: {
-							animates: {
-								fileVersion: 222,
-								assetVersion: 345
-							}
-						}
-					});
-					
-					Pixim.animate.addAnimatesTo(game, {
-						test: {
-							basepath: 'game/',
-							filepath: 'game.js',
-							id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
-							options: {
-								crossOrigin: true
-							}
-						}
-					})
-					
-					return app.attachAsync(game).then(() => {
-						app.play()
-					})
-				});
+			const app = new Pixim.Application({
+				width: 450,
+				height: 800,
+				antialias: true,
+				resolution: pRatio,
+				backgroundColor: 0xFFFFFF
 			});
+			
+			const Game = Pixim.Content.create();
+			
+			Game.setConfig({
+				width: 450,
+				height: 800
+			});
+			
+			Pixim.animate.defineAnimatesTo(Game, {
+				test: {
+					basepath: 'game/',
+					filepath: 'game.js',
+					id: '2FA8E0C7230941478CE2CA3DB82DBEDF',
+					options: {
+						listenFrameEvents: {
+							reachLabel: true,
+							endAnimation: true
+						},
+						handleManifest(manifests) {
+							return Promise.all(manifests.map((manifest, i) => {
+								const { id, src } = manifest;
+
+								return (() => {
+									manifest.type = "image";
+
+									if (i % 3 === 0) {
+										return Promise.resolve(src);
+									}
+									
+									if (i % 3 === 1) {
+										return new Promise(resolve => {
+											const img = new Image();
+											img.addEventListener("load", () => {
+												const canvas = document.createElement('canvas');
+												const ctx = canvas.getContext('2d');
+												canvas.width  = img.width;
+												canvas.height = img.height;
+												ctx.drawImage(img, 0, 0);
+												resolve(canvas.toDataURL());
+											});
+											img.src = "game/" + src;
+										});
+									}
+									
+									return fetch("game/" + src)
+										.then(res => res.blob())
+										.then(blob => {
+											return URL.createObjectURL(blob);
+										});
+								})()
+								.then(src => {
+									console.log(src)
+									manifest.src = src;
+								});
+							}))
+						}
+					}
+				}
+			});
+			
+			Game.defineLibraries({
+				root: class Root extends PIXI.Container {
+					constructor($) {
+						super();
+						
+						this.x = 10;
+						this.y = 10;
+						this.scale.set(0.7);
+						
+						const container = this.addChild(new Pixim.animate.Container());
+						
+						container.addChild(new PIXI.Text('Library game'));
+						const a = container.addCreatejs(new $.resources.animates.test.game());
+						a.addEventListener("reachLabel", e => {
+							window.reachLabel = true;
+						});
+
+						a.addEventListener("endAnimation", e => {
+							window.endAnimation = true;
+						});
+						a.y = 50;
+					}
+				}
+			});
+			
+			const game = new Game({
+				basepath: "",
+				version: 2,
+				typeOptions: {
+					animates: {
+						fileVersion: 4,
+						assetVersion: 5
+					}
+				}
+			});
+			
+			app
+				.fullScreen()
+				.attachAsync(game)
+				.then(function() {
+					app.play();
+				});
 		</script>
 	</div>
 	</body>

@@ -1,6 +1,6 @@
 import { CreatejsMovieClip as _CreatejsMovieClip } from '@tawaship/pixi-animate-container';
 /**
- * \@tawaship/pixi-animate-container [[https://tawaship.github.io/pixi-animate-container/classes/createjsmovieclip.html | CreatejsMovieClip]]
+ * inherited {@link https://tawaship.github.io/pixi-animate-container/docs/classes/CreatejsMovieClip.html | CreatejsMovieClip}
  */
 export declare class CreatejsMovieClip extends _CreatejsMovieClip {
     /**

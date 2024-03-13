@@ -1,6 +1,5 @@
 import { Content as PiximContent } from '@tawaship/pixim.js';
 import { AnimateManifest, IAnimateManifestTargetDictionary } from './AnimateManifest';
-export { ILoadAssetOption, IAnimateLibrary } from '@tawaship/pixi-animate-container';
 
 PiximContent.registerManifest('animates', AnimateManifest);
 

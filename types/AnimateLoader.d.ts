@@ -1,21 +1,29 @@
 import * as Pixim from '@tawaship/pixim.js';
-import { IAnimateLibrary, ILoadAssetOption, IPrepareTarget } from '@tawaship/pixi-animate-container';
+import { IAnimateLibrary, IAnimateLoadAssetOption, IAnimateManifest, IAnimatePrepareTarget } from '@tawaship/pixi-animate-container';
 export type TAnimateLoaderRawResource = IAnimateLibrary;
 export declare class AnimateLoaderResource extends Pixim.LoaderResource<TAnimateLoaderRawResource> {
     destroy(): void;
 }
-export interface IAnimateLoaderTarget extends IPrepareTarget {
+export interface IAnimateLoaderTarget extends IAnimatePrepareTarget {
     /**
      * Javascript file path of Animate content.
      */
     filepath?: string;
+    options?: IAnimateLoadAssetOption & {
+        /**
+         * Additional processing handlers for lib.properties.manifest.
+         *
+         * Changes made by this process are temporary and will only be reflected in the current load process.
+         */
+        handleManifest?: (manifests: IAnimateManifest[]) => Promise<void>;
+    };
 }
 export type TAnimateLoaderTarget = IAnimateLoaderTarget;
 export interface IAnimateLoaderTargetDictionary extends Pixim.ILoaderTargetDictionary<TAnimateLoaderTarget> {
 }
 export interface IAnimateLoaderResourceDictionary extends Pixim.ILoaderResourceDictionary<TAnimateLoaderRawResource> {
 }
-export interface IAnimateLoaderOption extends Pixim.ILoaderOption, ILoadAssetOption {
+export interface IAnimateLoaderOption extends Pixim.ILoaderOption, IAnimateLoadAssetOption {
     /**
      * Animate javascript file version.
      */

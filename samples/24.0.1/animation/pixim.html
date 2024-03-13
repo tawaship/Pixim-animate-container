@@ -36,6 +36,44 @@
 						listenFrameEvents: {
 							reachLabel: true,
 							endAnimation: true
+						},
+						handleManifest(manifests) {
+							return Promise.all(manifests.map((manifest, i) => {
+								const { id, src } = manifest;
+
+								return (() => {
+									manifest.type = "image";
+
+									if (i % 3 === 0) {
+										return Promise.resolve(src);
+									}
+									
+									if (i % 3 === 1) {
+										return new Promise(resolve => {
+											const img = new Image();
+											img.addEventListener("load", () => {
+												const canvas = document.createElement('canvas');
+												const ctx = canvas.getContext('2d');
+												canvas.width  = img.width;
+												canvas.height = img.height;
+												ctx.drawImage(img, 0, 0);
+												resolve(canvas.toDataURL());
+											});
+											img.src = "game/" + src;
+										});
+									}
+									
+									return fetch("game/" + src)
+										.then(res => res.blob())
+										.then(blob => {
+											return URL.createObjectURL(blob);
+										});
+								})()
+								.then(src => {
+									console.log(src)
+									manifest.src = src;
+								});
+							}))
 						}
 					}
 				}

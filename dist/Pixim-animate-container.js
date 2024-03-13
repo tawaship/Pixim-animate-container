@@ -1,21 +1,28 @@
 /*!
- * Pixim-animate-container - v2.0.0
+ * Pixim-animate-container - v2.0.1
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.14.0
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
-this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
+this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI, Pixim) {
     "use strict";
-    /*!
-     * pixi-animate-container - v2.0.0
-     * 
-     * @require pixi.js v^5.3.2
-     * @author tawaship (makazu.mori@gmail.com)
-     * @license MIT
-     */
-    var CreatejsButtonHelper = function(superclass) {
+    function _interopNamespaceDefault(e) {
+        var n = Object.create(null);
+        return e && Object.keys(e).forEach((function(k) {
+            if ("default" !== k) {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: !0,
+                    get: function() {
+                        return e[k];
+                    }
+                });
+            }
+        })), n.default = e, Object.freeze(n);
+    }
+    var PIXI__namespace = _interopNamespaceDefault(PIXI), Pixim__namespace = _interopNamespaceDefault(Pixim), CreatejsButtonHelper = function(superclass) {
         function CreatejsButtonHelper() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -40,7 +47,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         }
         return superclass && (CreatejsButtonHelper.__proto__ = superclass), CreatejsButtonHelper.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsButtonHelper.prototype.constructor = CreatejsButtonHelper, CreatejsButtonHelper;
-    }((createjs = createjs && Object.prototype.hasOwnProperty.call(createjs, "default") ? createjs.default : createjs).ButtonHelper);
+    }(createjs.ButtonHelper);
     function createObject(proto) {
         return Object.create(proto);
     }
@@ -49,6 +56,23 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return {
             regObj: regObj,
             instance: pixi
+        };
+    }
+    function createCreatejsParams() {
+        return {
+            x: 0,
+            y: 0,
+            scaleX: 0,
+            scaleY: 0,
+            regX: 0,
+            regY: 0,
+            skewX: 0,
+            skewY: 0,
+            rotation: 0,
+            visible: !0,
+            alpha: 1,
+            _off: !1,
+            mask: null
         };
     }
     function updateDisplayObjectChildren(cjs, e) {
@@ -181,10 +205,10 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             }, prototypeAccessors.mask.get = function() {
                 return this._createjsParams.mask;
             }, prototypeAccessors.mask.set = function(value) {
-                var this$1 = this;
+                var this$1$1 = this;
                 value ? (value.masked.push(this._pixiData.instance), this._pixiData.instance.mask = value.pixi, 
                 this._pixiData.instance.once("added", (function() {
-                    this$1._pixiData.instance.parent.addChild(value.pixi);
+                    this$1$1._pixiData.instance.parent.addChild(value.pixi);
                 }))) : this._pixiData.instance.mask = null, this._createjsParams.mask = value;
             }, Object.defineProperties(C.prototype, prototypeAccessors), C;
         }(superClass);
@@ -214,11 +238,11 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         createjsInteractionEvents.pressup = "pressup", createjsInteractionEvents.rollover = "rollover", 
         createjsInteractionEvents.rollout = "rollout", createjsInteractionEvents.click = "click";
     }(createjsInteractionEvents || (createjsInteractionEvents = {}));
-    var EventManager = function(cjs) {
-        this._downTarget = null, this._cjs = cjs, this._emitter = new pixi_js.utils.EventEmitter, 
+    var CreatejsEventManager = function(cjs) {
+        this._downTarget = null, this._cjs = cjs, this._emitter = new PIXI.utils.EventEmitter, 
         cjs.pixi.on("pointerdown", this._onPointerDown, this).on("pointermove", this._onPointerMove, this).on("pointerup", this._onPointerUp, this).on("pointerupoutside", this._onPointerUpOutside, this).on("pointertap", this._onPointerTap, this).on("pointerover", this._onPointerOver, this).on("pointerout", this._onPointerOut, this);
     };
-    EventManager.prototype._onPointerDown = function(e) {
+    CreatejsEventManager.prototype._onPointerDown = function(e) {
         var ev = {
             type: createjsInteractionEvents.mousedown,
             currentTarget: e.currentTarget.createjs,
@@ -227,7 +251,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             rawY: e.data.global.y
         };
         this._downTarget = e.target.createjs, this._emitter.emit("mousedown", ev);
-    }, EventManager.prototype._onPointerMove = function(e) {
+    }, CreatejsEventManager.prototype._onPointerMove = function(e) {
         if (this._downTarget) {
             var ev = {
                 type: createjsInteractionEvents.pressmove,
@@ -238,7 +262,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             };
             this._emitter.emit("pressmove", ev);
         }
-    }, EventManager.prototype._onPointerUp = function(e) {
+    }, CreatejsEventManager.prototype._onPointerUp = function(e) {
         var ev = {
             type: createjsInteractionEvents.pressup,
             currentTarget: e.currentTarget.createjs,
@@ -247,7 +271,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             rawY: e.data.global.y
         };
         this._downTarget = null, this._emitter.emit("pressup", ev);
-    }, EventManager.prototype._onPointerUpOutside = function(e) {
+    }, CreatejsEventManager.prototype._onPointerUpOutside = function(e) {
         var ev = {
             type: createjsInteractionEvents.pressup,
             currentTarget: e.currentTarget.createjs,
@@ -256,7 +280,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             rawY: e.data.global.y
         };
         this._downTarget = null, this._emitter.emit("pressup", ev);
-    }, EventManager.prototype._onPointerTap = function(e) {
+    }, CreatejsEventManager.prototype._onPointerTap = function(e) {
         var ev = {
             type: createjsInteractionEvents.click,
             currentTarget: e.currentTarget.createjs,
@@ -265,7 +289,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             rawY: e.data.global.y
         };
         this._emitter.emit("click", ev);
-    }, EventManager.prototype._onPointerOver = function(e) {
+    }, CreatejsEventManager.prototype._onPointerOver = function(e) {
         var ev = {
             type: createjsInteractionEvents.rollover,
             currentTarget: e.currentTarget.createjs,
@@ -274,7 +298,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             rawY: e.data.global.y
         };
         this._emitter.emit("rollover", ev);
-    }, EventManager.prototype._onPointerOut = function(e) {
+    }, CreatejsEventManager.prototype._onPointerOut = function(e) {
         var ev = {
             type: createjsInteractionEvents.rollout,
             currentTarget: e.currentTarget.createjs,
@@ -283,11 +307,11 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             rawY: e.data.global.y
         };
         this._emitter.emit("rollout", ev);
-    }, EventManager.prototype.add = function(type, cb) {
+    }, CreatejsEventManager.prototype.add = function(type, cb) {
         type in createjsInteractionEvents && (this._emitter.on(type, cb), this._emitter.eventNames().length > 0 && (this._cjs.pixi.interactive = !0));
-    }, EventManager.prototype.remove = function(type, cb) {
+    }, CreatejsEventManager.prototype.remove = function(type, cb) {
         type in createjsInteractionEvents && (this._emitter.off(type, cb), 0 === this._emitter.eventNames().length && (this._cjs.pixi.interactive = !1));
-    }, EventManager.prototype.removeAll = function(type) {
+    }, CreatejsEventManager.prototype.removeAll = function(type) {
         type && !(type in createjsInteractionEvents) || (this._emitter.removeAllListeners(type), 
         0 === this._emitter.eventNames().length && (this._cjs.pixi.interactive = !1));
     };
@@ -312,7 +336,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         }, prototypeAccessors.createjs.get = function() {
             return this._createjs;
         }, Object.defineProperties(PixiMovieClip.prototype, prototypeAccessors), PixiMovieClip;
-    }(pixi_js.Container);
+    }(PIXI.Container);
     function createCreatejsMovieClipParams() {
         return Object.assign({
             x: 0,
@@ -344,19 +368,20 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         }
         return superclass && (AnimateEvent.__proto__ = superclass), AnimateEvent.prototype = Object.create(superclass && superclass.prototype), 
         AnimateEvent.prototype.constructor = AnimateEvent, AnimateEvent;
-    }(createjs.Event), ReachLabelEvent = function(AnimateEvent) {
-        function ReachLabelEvent(type, label) {
+    }(createjs.Event), AnimateReachLabelEvent = function(AnimateEvent) {
+        function AnimateReachLabelEvent(type, label) {
             AnimateEvent.call(this, type), this.data = label;
         }
-        return AnimateEvent && (ReachLabelEvent.__proto__ = AnimateEvent), ReachLabelEvent.prototype = Object.create(AnimateEvent && AnimateEvent.prototype), 
-        ReachLabelEvent.prototype.constructor = ReachLabelEvent, ReachLabelEvent;
-    }(AnimateEvent), P = createjs.MovieClip, CreatejsMovieClip = function(superclass) {
+        return AnimateEvent && (AnimateReachLabelEvent.__proto__ = AnimateEvent), AnimateReachLabelEvent.prototype = Object.create(AnimateEvent && AnimateEvent.prototype), 
+        AnimateReachLabelEvent.prototype.constructor = AnimateReachLabelEvent, AnimateReachLabelEvent;
+    }(AnimateEvent), P$6 = createjs.MovieClip, CreatejsMovieClip$1 = function(superclass) {
         function CreatejsMovieClip() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
             }
             superclass.call(this), this._pixiData = createPixiMovieClipData(this), this._createjsParams = createCreatejsMovieClipParams(), 
-            this._createjsEventManager = new EventManager(this), P.apply(this, args), this.framerate = this._framerateBase;
+            this._createjsEventManager = new CreatejsEventManager(this), P$6.apply(this, args), 
+            this.framerate = this._framerateBase;
         }
         superclass && (CreatejsMovieClip.__proto__ = superclass), CreatejsMovieClip.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsMovieClip.prototype.constructor = CreatejsMovieClip;
@@ -371,7 +396,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 args[len] = arguments[len];
             }
             this._pixiData = createPixiMovieClipData(this), this._createjsParams = createCreatejsMovieClipParams(), 
-            this._createjsEventManager = new EventManager(this), superclass.prototype.initialize.apply(this, args), 
+            this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args), 
             this.framerate = this._framerateBase;
         }, CreatejsMovieClip.prototype.updateForPixi = function(e) {
             var currentFrame = this.currentFrame;
@@ -380,7 +405,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 for (var i = 0; i < this.labels.length; i++) {
                     var label = this.labels[i];
                     if (this.currentFrame === label.position) {
-                        this.dispatchEvent(new ReachLabelEvent("reachLabel", label));
+                        this.dispatchEvent(new AnimateReachLabelEvent("reachLabel", label));
                         break;
                     }
                 }
@@ -409,14 +434,14 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             return this._pixiData.subInstance.removeChildren(), superclass.prototype.removeAllChldren.call(this);
         }, Object.defineProperties(CreatejsMovieClip.prototype, prototypeAccessors$1), CreatejsMovieClip;
     }(mixinCreatejsDisplayObject(createjs.MovieClip));
-    delete CreatejsMovieClip.prototype.endAnimation, delete CreatejsMovieClip.prototype.reachLabel, 
-    Object.defineProperties(CreatejsMovieClip.prototype, {
+    delete CreatejsMovieClip$1.prototype.endAnimation, delete CreatejsMovieClip$1.prototype.reachLabel, 
+    Object.defineProperties(CreatejsMovieClip$1.prototype, {
         _createjsParams: {
             value: createCreatejsMovieClipParams(),
             writable: !0
         },
         _pixiData: {
-            value: createPixiMovieClipData(createObject(CreatejsMovieClip.prototype)),
+            value: createPixiMovieClipData(createObject(CreatejsMovieClip$1.prototype)),
             writable: !0
         }
     });
@@ -434,12 +459,12 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return prototypeAccessors$2.createjs.get = function() {
             return this._createjs;
         }, Object.defineProperties(PixiSprite.prototype, prototypeAccessors$2), PixiSprite;
-    }(pixi_js.Sprite);
+    }(PIXI.Sprite);
     function createPixiSpriteData(cjs) {
         var pixi = new PixiSprite(cjs);
         return createPixiData(pixi, pixi.anchor);
     }
-    var P$1 = createjs.Sprite, CreatejsSprite = function(superclass) {
+    var P$5 = createjs.Sprite, CreatejsSprite$1 = function(superclass) {
         function CreatejsSprite() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -458,7 +483,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 alpha: 1,
                 _off: !1,
                 mask: null
-            }, this._createjsEventManager = new EventManager(this), P$1.apply(this, args);
+            }, this._createjsEventManager = new CreatejsEventManager(this), P$5.apply(this, args);
         }
         return superclass && (CreatejsSprite.__proto__ = superclass), CreatejsSprite.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsSprite.prototype.constructor = CreatejsSprite, CreatejsSprite.prototype.initialize = function() {
@@ -479,7 +504,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 alpha: 1,
                 _off: !1,
                 mask: null
-            }, this._createjsEventManager = new EventManager(this), superclass.prototype.initialize.apply(this, args);
+            }, this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args);
         }, CreatejsSprite.prototype.updateForPixi = function(e) {
             return !0;
         }, CreatejsSprite.prototype.gotoAndStop = function() {
@@ -487,11 +512,11 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 args[len] = arguments[len];
             }
             superclass.prototype.gotoAndStop.apply(this, args);
-            var frame = this.spriteSheet.getFrame(this.currentFrame), baseTexture = pixi_js.BaseTexture.from(frame.image), texture = new pixi_js.Texture(baseTexture, frame.rect);
+            var frame = this.spriteSheet.getFrame(this.currentFrame), baseTexture = PIXI.BaseTexture.from(frame.image), texture = new PIXI.Texture(baseTexture, frame.rect);
             this._pixiData.instance.texture = texture;
         }, CreatejsSprite;
     }(mixinCreatejsDisplayObject(createjs.Sprite));
-    Object.defineProperties(CreatejsSprite.prototype, {
+    Object.defineProperties(CreatejsSprite$1.prototype, {
         _createjsParams: {
             value: {
                 x: 0,
@@ -511,7 +536,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             writable: !0
         },
         _pixiData: {
-            value: createPixiSpriteData(createObject(CreatejsSprite.prototype)),
+            value: createPixiSpriteData(createObject(CreatejsSprite$1.prototype)),
             writable: !0
         }
     });
@@ -529,7 +554,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return prototypeAccessors$3.createjs.get = function() {
             return this._createjs;
         }, Object.defineProperties(PixiShape.prototype, prototypeAccessors$3), PixiShape;
-    }(pixi_js.Container);
+    }(PIXI.Container);
     function createCreatejsShapeParams(graphics) {
         return Object.assign({
             x: 0,
@@ -555,13 +580,13 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             masked: []
         });
     }
-    var P$2 = createjs.Shape, CreatejsShape = function(superclass) {
+    var P$4 = createjs.Shape, CreatejsShape = function(superclass) {
         function CreatejsShape() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
             }
             superclass.apply(this, args), this._pixiData = createPixiShapeData(this), this._createjsParams = createCreatejsShapeParams(null), 
-            this._createjsEventManager = new EventManager(this), P$2.apply(this, args);
+            this._createjsEventManager = new CreatejsEventManager(this), P$4.apply(this, args);
         }
         superclass && (CreatejsShape.__proto__ = superclass), CreatejsShape.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsShape.prototype.constructor = CreatejsShape;
@@ -578,7 +603,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 args[len] = arguments[len];
             }
             return this._pixiData = createPixiShapeData(this), this._createjsParams = createCreatejsShapeParams(null), 
-            this._createjsEventManager = new EventManager(this), superclass.prototype.initialize.apply(this, args);
+            this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args);
         }, CreatejsShape.prototype.updateForPixi = function(e) {
             return !0;
         }, prototypeAccessors$4.graphics.get = function() {
@@ -624,12 +649,12 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return prototypeAccessors$5.createjs.get = function() {
             return this._createjs;
         }, Object.defineProperties(PixiBitmap.prototype, prototypeAccessors$5), PixiBitmap;
-    }(pixi_js.Sprite);
+    }(PIXI.Sprite);
     function createPixiBitmapData(cjs) {
         var pixi = new PixiBitmap(cjs);
         return createPixiData(pixi, pixi.anchor);
     }
-    var P$3 = createjs.Bitmap, CreatejsBitmap = function(superclass) {
+    var P$3 = createjs.Bitmap, CreatejsBitmap$1 = function(superclass) {
         function CreatejsBitmap() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -648,7 +673,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 alpha: 1,
                 _off: !1,
                 mask: null
-            }, this._createjsEventManager = new EventManager(this), P$3.apply(this, args);
+            }, this._createjsEventManager = new CreatejsEventManager(this), P$3.apply(this, args);
         }
         return superclass && (CreatejsBitmap.__proto__ = superclass), CreatejsBitmap.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsBitmap.prototype.constructor = CreatejsBitmap, CreatejsBitmap.prototype.initialize = function() {
@@ -669,14 +694,14 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 alpha: 1,
                 _off: !1,
                 mask: null
-            }, this._createjsEventManager = new EventManager(this);
-            var res = superclass.prototype.initialize.apply(this, args), texture = pixi_js.Texture.from(this.image);
+            }, this._createjsEventManager = new CreatejsEventManager(this);
+            var res = superclass.prototype.initialize.apply(this, args), texture = PIXI.Texture.from(this.image);
             return this._pixiData.instance.texture = texture, res;
         }, CreatejsBitmap.prototype.updateForPixi = function(e) {
             return !0;
         }, CreatejsBitmap;
     }(mixinCreatejsDisplayObject(createjs.Bitmap));
-    Object.defineProperties(CreatejsBitmap.prototype, {
+    Object.defineProperties(CreatejsBitmap$1.prototype, {
         _createjsParams: {
             value: {
                 x: 0,
@@ -696,7 +721,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             writable: !0
         },
         _pixiData: {
-            value: createPixiBitmapData(createObject(CreatejsBitmap.prototype)),
+            value: createPixiBitmapData(createObject(CreatejsBitmap$1.prototype)),
             writable: !0
         }
     });
@@ -714,7 +739,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return prototypeAccessors$6.createjs.get = function() {
             return this._createjs;
         }, Object.defineProperties(PixiGraphics.prototype, prototypeAccessors$6), PixiGraphics;
-    }(pixi_js.Graphics);
+    }(PIXI.Graphics);
     function createPixiGraphicsData(cjs) {
         var pixi = new PixiGraphics(cjs);
         return Object.assign(createPixiData(pixi, pixi.pivot), {
@@ -723,14 +748,14 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         });
     }
     var LineCap = {
-        0: pixi_js.LINE_CAP.BUTT,
-        1: pixi_js.LINE_CAP.ROUND,
-        2: pixi_js.LINE_CAP.SQUARE
+        0: PIXI.LINE_CAP.BUTT,
+        1: PIXI.LINE_CAP.ROUND,
+        2: PIXI.LINE_CAP.SQUARE
     }, LineJoin = {
-        0: pixi_js.LINE_JOIN.MITER,
-        1: pixi_js.LINE_JOIN.ROUND,
-        2: pixi_js.LINE_JOIN.BEVEL
-    }, P$4 = createjs.Graphics, CreatejsGraphics = function(superclass) {
+        0: PIXI.LINE_JOIN.MITER,
+        1: PIXI.LINE_JOIN.ROUND,
+        2: PIXI.LINE_JOIN.BEVEL
+    }, P$2 = createjs.Graphics, CreatejsGraphics = function(superclass) {
         function CreatejsGraphics() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -749,8 +774,8 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 alpha: 1,
                 _off: !1,
                 mask: null
-            }, this._createjsEventManager = new EventManager(this), P$4.apply(this, args), this._pixiData.instance.beginFill(16772846, 1), 
-            this._pixiData.strokeFill = 0, this._pixiData.strokeAlpha = 1;
+            }, this._createjsEventManager = new CreatejsEventManager(this), P$2.apply(this, args), 
+            this._pixiData.instance.beginFill(16772846, 1), this._pixiData.strokeFill = 0, this._pixiData.strokeAlpha = 1;
         }
         return superclass && (CreatejsGraphics.__proto__ = superclass), CreatejsGraphics.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsGraphics.prototype.constructor = CreatejsGraphics, CreatejsGraphics.prototype.initialize = function() {
@@ -771,7 +796,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 alpha: 1,
                 _off: !1,
                 mask: null
-            }, this._createjsEventManager = new EventManager(this), superclass.prototype.initialize.apply(this, args);
+            }, this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args);
         }, CreatejsGraphics.prototype.updateForPixi = function(e) {
             return !0;
         }, CreatejsGraphics.prototype.moveTo = function(x, y) {
@@ -910,7 +935,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         }
         return Text && (PixiText.__proto__ = Text), PixiText.prototype = Object.create(Text && Text.prototype), 
         PixiText.prototype.constructor = PixiText, PixiText;
-    }(pixi_js.Text), PixiTextContainer = function(Container$1) {
+    }(PIXI.Text), PixiTextContainer = function(Container$1) {
         function PixiTextContainer(cjs, text) {
             Container$1.call(this), this._createjs = cjs, this._text = text;
         }
@@ -929,7 +954,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         }, prototypeAccessors$7.text.get = function() {
             return this._text;
         }, Object.defineProperties(PixiTextContainer.prototype, prototypeAccessors$7), PixiTextContainer;
-    }(pixi_js.Container);
+    }(PIXI.Container);
     function createCreatejsTextParams(text, font, color) {
         return Object.assign({
             x: 0,
@@ -958,7 +983,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         var pixi = new PixiTextContainer(cjs, text);
         return createPixiData(pixi, pixi.pivot);
     }
-    var P$5 = createjs.Text, CreatejsText = function(superclass) {
+    var P$1 = createjs.Text, CreatejsText = function(superclass) {
         function CreatejsText(text, font, color) {
             void 0 === color && (color = "#000000");
             for (var args = [], len = arguments.length - 3; len-- > 0; ) {
@@ -973,7 +998,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 wordWrap: !0
             });
             this._pixiData = createPixiTextData(this, t), this._pixiData.instance.addChild(t), 
-            this._createjsEventManager = new EventManager(this), P$5.call.apply(P$5, [ this, text, font, color ].concat(args));
+            this._createjsEventManager = new CreatejsEventManager(this), P$1.call.apply(P$1, [ this, text, font, color ].concat(args));
         }
         superclass && (CreatejsText.__proto__ = superclass), CreatejsText.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsText.prototype.constructor = CreatejsText;
@@ -1064,7 +1089,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             return this._createjs;
         }, Object.defineProperties(PixiColorMatrixFilter.prototype, prototypeAccessors$9), 
         PixiColorMatrixFilter;
-    }(pixi_js.filters.ColorMatrixFilter);
+    }(PIXI.filters.ColorMatrixFilter);
     function createPixiColorMatrixFilterData(cjs) {
         return {
             instance: new PixiColorMatrixFilter(cjs)
@@ -1096,7 +1121,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             alphaOffset: 0
         });
     }
-    var P$6 = createjs.ColorFilter, CreatejsColorFilter = function(superclass) {
+    var P = createjs.ColorFilter, CreatejsColorFilter = function(superclass) {
         function CreatejsColorFilter() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -1176,7 +1201,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                         this._pixiData.instance.matrix[19] = value / 255, this._createjsParams.alphaOffset = value;
                     }
                 }
-            }), P$6.apply(this, args);
+            }), P.apply(this, args);
         }
         superclass && (CreatejsColorFilter.__proto__ = superclass), CreatejsColorFilter.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsColorFilter.prototype.constructor = CreatejsColorFilter;
@@ -1197,19 +1222,73 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             offset: offset
         });
     }
-    function dataURLToBlobURL(dataURL) {
-        for (var bin = atob(dataURL.replace(/^.*,/, "")), buffer = new Uint8Array(bin.length), i = 0; i < bin.length; i++) {
-            buffer[i] = bin.charCodeAt(i);
+    function loadAssetAsync(targets) {
+        var _a, _b;
+        Array.isArray(targets) || (targets = [ targets ]);
+        for (var promises = [], loop = function(i) {
+            var target = targets[i];
+            (null === (_a = target.options) || void 0 === _a ? void 0 : _a.useSound) && (window.playSound = playSound);
+            var comp = AdobeAn.getComposition(target.id);
+            if (!comp) {
+                throw new Error("no composition: " + target.id);
+            }
+            for (var lib = comp.getLibrary(), manifests = lib.properties.manifest.map((function(v) {
+                return JSON.parse(JSON.stringify(v));
+            })), crossOrigin = "boolean" != typeof (null === (_b = target.options) || void 0 === _b ? void 0 : _b.crossOrigin) || target.options.crossOrigin, i$1 = 0; i$1 < manifests.length; i$1++) {
+                var manifest = manifests[i$1];
+                if (0 === manifest.src.indexOf("data:image")) {
+                    manifest.type = createjs.Types.IMAGE;
+                } else {
+                    if (0 === manifest.src.indexOf("data:audio")) {
+                        throw new Error("data URL formatted sound is not supported.");
+                    }
+                    0 === manifest.src.indexOf("blob:") || 0 === manifest.src.indexOf("file:") || (manifest.src = PIXI__namespace.utils.url.resolve(target.basepath, manifest.src));
+                }
+            }
+            if (crossOrigin) {
+                for (var i$2 = 0; i$2 < manifests.length; i$2++) {
+                    manifests[i$2].crossOrigin = !0;
+                }
+            }
+            var loadPromise = new Promise((function(resolve, reject) {
+                var _a;
+                0 === manifests.length && resolve({});
+                var loader = new createjs.LoadQueue(!1);
+                (null === (_a = target.options) || void 0 === _a ? void 0 : _a.useSound) && loader.installPlugin(createjs.Sound);
+                var errors = [];
+                loader.addEventListener("fileload", (function(evt) {
+                    !function(evt, comp) {
+                        var images = comp.getImages();
+                        evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
+                    }(evt, comp);
+                })), loader.addEventListener("complete", (function(evt) {
+                    errors.length ? reject(errors) : resolve(evt);
+                })), loader.addEventListener("error", (function(evt) {
+                    errors.push(evt.data);
+                })), loader.loadManifest(manifests || []);
+            })).then((function(evt) {
+                for (var ss = comp.getSpriteSheet(), queue = evt.target, ssMetadata = lib.ssMetadata, i = 0; i < ssMetadata.length; i++) {
+                    ss[ssMetadata[i].name] = new createjs.SpriteSheet({
+                        images: [ queue.getResult(ssMetadata[i].name) ],
+                        frames: ssMetadata[i].frames
+                    });
+                }
+                return lib;
+            }));
+            promises.push(loadPromise.then((function(lib) {
+                var _a;
+                for (var i in lib) {
+                    lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps, 
+                    lib[i].prototype._listenFrameEvents = null === (_a = target.options) || void 0 === _a ? void 0 : _a.listenFrameEvents);
+                }
+                return lib;
+            })));
+        }, i = 0; i < targets.length; i++) {
+            loop(i);
         }
-        var p = dataURL.slice(5);
-        try {
-            var blob = new Blob([ buffer.buffer ], {
-                type: p.slice(0, p.indexOf(";"))
-            });
-            return console.log(p.slice(0, p.indexOf(";"))), (URL || webkitURL).createObjectURL(blob);
-        } catch (e) {
-            throw e;
-        }
+        return Promise.all(promises).then((function(resolvers) {
+            return 1 === resolvers.length ? resolvers[0] : resolvers;
+        }));
     }
     Object.defineProperties(CreatejsColorFilter.prototype, {
         _createjsParams: {
@@ -1236,14 +1315,14 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             targets[i].updateForPixi(e);
         }
     }, CreatejsController.prototype._addCreatejs = function(cjs) {
-        var this$1 = this;
-        if (cjs instanceof CreatejsMovieClip) {
+        var this$1$1 = this;
+        if (cjs instanceof CreatejsMovieClip$1) {
             var p = cjs.pixi.parent;
             cjs.pixi.once("added", (function() {
                 cjs.pixi.parent !== p && cjs.gotoAndPlay(0);
-                var id = this$1._createjsData.id++;
-                this$1._createjsData.targets[id] = cjs, cjs.pixi.once("removed", (function() {
-                    delete this$1._createjsData.targets[id];
+                var id = this$1$1._createjsData.id++;
+                this$1$1._createjsData.targets[id] = cjs, cjs.pixi.once("removed", (function() {
+                    delete this$1$1._createjsData.targets[id];
                 }));
             }));
         }
@@ -1255,11 +1334,62 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         cjs;
     }, CreatejsController.prototype.removeCreatejs = function(cjs) {
         return this._createjsData.container.removeChild(cjs.pixi), cjs;
-    }, createjs.Stage = CreatejsStage, createjs.StageGL = CreatejsStageGL, createjs.MovieClip = CreatejsMovieClip, 
-    createjs.Sprite = CreatejsSprite, createjs.Shape = CreatejsShape, createjs.Bitmap = CreatejsBitmap, 
+    };
+    var Container$1 = function(Container$1) {
+        function Container() {
+            Container$1.call(this), this._createjsData = {
+                controller: new CreatejsController(this)
+            };
+        }
+        return Container$1 && (Container.__proto__ = Container$1), Container.prototype = Object.create(Container$1 && Container$1.prototype), 
+        Container.prototype.constructor = Container, Container.prototype.handleTick = function(delta) {
+            return this._createjsData.controller.handleTick(delta);
+        }, Container.prototype.addCreatejs = function(cjs) {
+            return this._createjsData.controller.addCreatejs(cjs);
+        }, Container.prototype.addCreatejsAt = function(cjs, index) {
+            return this._createjsData.controller.addCreatejsAt(cjs, index);
+        }, Container.prototype.removeCreatejs = function(cjs) {
+            return this._createjsData.controller.removeCreatejs(cjs);
+        }, Container;
+    }(PIXI.Container);
+    createjs.Stage = CreatejsStage, createjs.StageGL = CreatejsStageGL, createjs.MovieClip = CreatejsMovieClip$1, 
+    createjs.Sprite = CreatejsSprite$1, createjs.Shape = CreatejsShape, createjs.Bitmap = CreatejsBitmap$1, 
     createjs.Graphics = CreatejsGraphics, createjs.Text = CreatejsText, createjs.ButtonHelper = CreatejsButtonHelper, 
     createjs.ColorFilter = CreatejsColorFilter, createjs.MotionGuidePlugin.install();
-    var CreatejsMovieClip$1 = function(_CreatejsMovieClip) {
+    var pixiAnimateContainer_esm = Object.freeze({
+        __proto__: null,
+        AnimateEvent: AnimateEvent,
+        AnimateReachLabelEvent: AnimateReachLabelEvent,
+        Container: Container$1,
+        CreatejsBitmap: CreatejsBitmap$1,
+        CreatejsButtonHelper: CreatejsButtonHelper,
+        CreatejsColorFilter: CreatejsColorFilter,
+        CreatejsController: CreatejsController,
+        CreatejsEventManager: CreatejsEventManager,
+        CreatejsGraphics: CreatejsGraphics,
+        CreatejsMovieClip: CreatejsMovieClip$1,
+        CreatejsShape: CreatejsShape,
+        CreatejsSprite: CreatejsSprite$1,
+        CreatejsStage: CreatejsStage,
+        CreatejsStageGL: CreatejsStageGL,
+        CreatejsText: CreatejsText,
+        PixiBitmap: PixiBitmap,
+        PixiColorMatrixFilter: PixiColorMatrixFilter,
+        PixiGraphics: PixiGraphics,
+        PixiMovieClip: PixiMovieClip,
+        PixiShape: PixiShape,
+        PixiSprite: PixiSprite,
+        PixiText: PixiText,
+        PixiTextContainer: PixiTextContainer,
+        createCreatejsParams: createCreatejsParams,
+        createPixiData: createPixiData,
+        get createjsInteractionEvents() {
+            return createjsInteractionEvents;
+        },
+        loadAssetAsync: loadAssetAsync,
+        mixinCreatejsDisplayObject: mixinCreatejsDisplayObject,
+        updateDisplayObjectChildren: updateDisplayObjectChildren
+    }), CreatejsMovieClip = function(_CreatejsMovieClip) {
         function CreatejsMovieClip() {
             _CreatejsMovieClip.apply(this, arguments);
         }
@@ -1288,7 +1418,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             }
             return this.removeChild(old), instance;
         }, CreatejsMovieClip;
-    }(CreatejsMovieClip), CreatejsSprite$1 = function(_CreatejsSprite) {
+    }(CreatejsMovieClip$1), CreatejsSprite = function(_CreatejsSprite) {
         function CreatejsSprite() {
             _CreatejsSprite.apply(this, arguments);
         }
@@ -1296,7 +1426,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         CreatejsSprite.prototype.constructor = CreatejsSprite, CreatejsSprite.prototype.replaceTexture = function(texture) {
             this._pixiData.instance.texture = texture;
         }, CreatejsSprite;
-    }(CreatejsSprite), CreatejsBitmap$1 = function(_CreatejsBitmap) {
+    }(CreatejsSprite$1), CreatejsBitmap = function(_CreatejsBitmap) {
         function CreatejsBitmap() {
             _CreatejsBitmap.apply(this, arguments);
         }
@@ -1304,7 +1434,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         CreatejsBitmap.prototype.constructor = CreatejsBitmap, CreatejsBitmap.prototype.replaceTexture = function(texture) {
             this._pixiData.instance.texture = texture;
         }, CreatejsBitmap;
-    }(CreatejsBitmap), AnimateBlobLoaderResource = function(LoaderResource) {
+    }(CreatejsBitmap$1), AnimateBlobLoaderResource = function(LoaderResource) {
         function AnimateBlobLoaderResource() {
             LoaderResource.apply(this, arguments);
         }
@@ -1345,94 +1475,33 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         return superclass && (AnimateLoaderResource.__proto__ = superclass), AnimateLoaderResource.prototype = Object.create(superclass && superclass.prototype), 
         AnimateLoaderResource.prototype.constructor = AnimateLoaderResource, AnimateLoaderResource.prototype.destroy = function() {}, 
         AnimateLoaderResource;
-    }(Pixim.LoaderResource), AnimateLoader = function(superclass) {
+    }(Pixim__namespace.LoaderResource), AnimateLoader = function(superclass) {
         function AnimateLoader() {
             superclass.apply(this, arguments);
         }
         return superclass && (AnimateLoader.__proto__ = superclass), AnimateLoader.prototype = Object.create(superclass && superclass.prototype), 
         AnimateLoader.prototype.constructor = AnimateLoader, AnimateLoader.prototype._loadAsync = function(target, options) {
-            var this$1 = this;
+            var this$1$1 = this;
             return void 0 === options && (options = {}), this._loadJsAsync(target, options).then((function() {
-                var comp = AdobeAn.getComposition(target.id);
+                var _a, comp = AdobeAn.getComposition(target.id);
                 if (!comp) {
                     throw new Error("no composition: " + target.id);
                 }
-                var manifests = comp.getLibrary().properties.manifest, _target = Object.assign({}, target, {
-                    basepath: Pixim.utils.resolvePath(options.basepath || "", target.basepath)
-                });
-                return this$1._prepareAssetsAsync(_target.basepath || "", manifests, options).then((function() {
-                    for (var version = options.assetVersion || options.version || "", i = 0; i < manifests.length; i++) {
-                        var manifest = manifests[i];
-                        manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
-                    }
-                    return function(targets) {
-                        var _a, _b;
-                        Array.isArray(targets) || (targets = [ targets ]);
-                        for (var promises = [], loop = function(i) {
-                            var target = targets[i];
-                            (null === (_a = target.options) || void 0 === _a ? void 0 : _a.useSound) && (window.playSound = playSound);
-                            var comp = AdobeAn.getComposition(target.id);
-                            if (!comp) {
-                                throw new Error("no composition: " + target.id);
-                            }
-                            for (var lib = comp.getLibrary(), manifests = lib.properties.manifest.map((function(v) {
-                                return JSON.parse(JSON.stringify(v));
-                            })), crossOrigin = "boolean" != typeof (null === (_b = target.options) || void 0 === _b ? void 0 : _b.crossOrigin) || target.options.crossOrigin, i$1 = 0; i$1 < manifests.length; i$1++) {
-                                var manifest = manifests[i$1];
-                                if (0 === manifest.src.indexOf("data:image")) {
-                                    manifest.src = dataURLToBlobURL(manifest.src), manifest.type = createjs.Types.IMAGE;
-                                } else {
-                                    if (0 === manifest.src.indexOf("data:audio")) {
-                                        throw new Error("data URL formatted sound is not supported.");
-                                    }
-                                    0 === manifest.src.indexOf("blob:") || 0 === manifest.src.indexOf("file:") || (manifest.src = pixi_js.utils.url.resolve(target.basepath, manifest.src));
-                                }
-                            }
-                            if (crossOrigin) {
-                                for (var i$2 = 0; i$2 < manifests.length; i$2++) {
-                                    manifests[i$2].crossOrigin = !0;
-                                }
-                            }
-                            var loadPromise = new Promise((function(resolve, reject) {
-                                var _a;
-                                0 === manifests.length && resolve({});
-                                var loader = new createjs.LoadQueue(!1);
-                                (null === (_a = target.options) || void 0 === _a ? void 0 : _a.useSound) && loader.installPlugin(createjs.Sound);
-                                var errors = [];
-                                loader.addEventListener("fileload", (function(evt) {
-                                    !function(evt, comp) {
-                                        var images = comp.getImages();
-                                        evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
-                                    }(evt, comp);
-                                })), loader.addEventListener("complete", (function(evt) {
-                                    errors.length ? reject(errors) : resolve(evt);
-                                })), loader.addEventListener("error", (function(evt) {
-                                    errors.push(evt.data);
-                                })), loader.loadManifest(manifests || []);
-                            })).then((function(evt) {
-                                for (var ss = comp.getSpriteSheet(), queue = evt.target, ssMetadata = lib.ssMetadata, i = 0; i < ssMetadata.length; i++) {
-                                    ss[ssMetadata[i].name] = new createjs.SpriteSheet({
-                                        images: [ queue.getResult(ssMetadata[i].name) ],
-                                        frames: ssMetadata[i].frames
-                                    });
-                                }
-                                return lib;
-                            }));
-                            promises.push(loadPromise.then((function(lib) {
-                                var _a;
-                                for (var i in lib) {
-                                    lib[i].prototype instanceof CreatejsMovieClip && (lib[i].prototype._framerateBase = lib.properties.fps, 
-                                    lib[i].prototype._listenFrameEvents = null === (_a = target.options) || void 0 === _a ? void 0 : _a.listenFrameEvents);
-                                }
-                                return lib;
-                            })));
-                        }, i = 0; i < targets.length; i++) {
-                            loop(i);
+                var lib = comp.getLibrary(), originalManifests = lib.properties.manifest, manifests = lib.properties.manifest = originalManifests.map((function(v) {
+                    return JSON.parse(JSON.stringify(v));
+                }));
+                return ((null === (_a = target.options) || void 0 === _a ? void 0 : _a.handleManifest) ? target.options.handleManifest(manifests) : Promise.resolve()).then((function() {
+                    var _target = Object.assign({}, target);
+                    return _target.basepath = Pixim__namespace.utils.resolvePath(options.basepath || "", target.basepath), 
+                    this$1$1._prepareAssetsAsync(_target.basepath || "", manifests, options).then((function() {
+                        for (var version = options.assetVersion || options.version || "", i = 0; i < manifests.length; i++) {
+                            var manifest = manifests[i];
+                            manifest.src = Pixim__namespace.utils.resolveUri("", manifest.src, version);
                         }
-                        return Promise.all(promises).then((function(resolvers) {
-                            return 1 === resolvers.length ? resolvers[0] : resolvers;
-                        }));
-                    }(_target);
+                        return loadAssetAsync(_target);
+                    })).then((function(_lib) {
+                        return lib.properties.manifest = originalManifests, _lib;
+                    }));
                 }));
             })).then((function(lib) {
                 return new AnimateLoaderResource(lib, null);
@@ -1443,8 +1512,8 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             if (!target.filepath) {
                 return Promise.resolve();
             }
-            var filepath = Pixim.utils.resolveUri(target.basepath, target.filepath);
-            return (new Pixim.JsLoader).loadAsync(filepath, Object.assign({}, options, {
+            var filepath = Pixim__namespace.utils.resolveUri(target.basepath, target.filepath);
+            return (new Pixim__namespace.JsLoader).loadAsync(filepath, Object.assign({}, options, {
                 version: options.fileVersion || options.version
             })).then((function(resource) {
                 if (resource.error) {
@@ -1459,7 +1528,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             }
             for (var i = 0; i < manifests.length; i++) {
                 var manifest = manifests[i];
-                Pixim.utils.isUrl(manifest.src) && (targets[i] = Pixim.utils.resolveUri(basepath, manifest.src));
+                Pixim__namespace.utils.isUrl(manifest.src) && (targets[i] = Pixim__namespace.utils.resolveUri(basepath, manifest.src));
             }
             return 0 === Object.keys(targets).length ? Promise.resolve() : (new AnimateBlobLoader).loadAllAsync(targets, Object.assign({}, options, {
                 version: options.assetVersion || options.version
@@ -1477,7 +1546,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
                 }
             }));
         }, AnimateLoader;
-    }(Pixim.LoaderBase), AnimateManifest = function(superclass) {
+    }(Pixim__namespace.LoaderBase), AnimateManifest = function(superclass) {
         function AnimateManifest() {
             superclass.apply(this, arguments);
         }
@@ -1485,16 +1554,16 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
         AnimateManifest.prototype.constructor = AnimateManifest, AnimateManifest.prototype._createLoader = function() {
             return new AnimateLoader;
         }, AnimateManifest;
-    }(Pixim.ManifestBase);
+    }(Pixim__namespace.ManifestBase);
     Pixim.Content.registerManifest("animates", AnimateManifest);
     var Container = function(PiximContainer) {
         function Container() {
-            var this$1 = this;
+            var this$1$1 = this;
             PiximContainer.call(this), this._createjsData = {
                 controller: new CreatejsController(this),
                 task: new Pixim.Task([], this)
             }, this._createjsData.task.add((function(e) {
-                this$1.handleTick(e.delta);
+                this$1$1.handleTick(e.delta);
             })), this._createjsData.task.first();
         }
         return PiximContainer && (Container.__proto__ = PiximContainer), Container.prototype = Object.create(PiximContainer && PiximContainer.prototype), 
@@ -1512,12 +1581,14 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, pixi_js, Pixim) {
             return this._createjsData.controller.removeCreatejs(cjs);
         }, Container;
     }(Pixim.Container);
-    createjs.MovieClip = CreatejsMovieClip$1, createjs.Bitmap = CreatejsBitmap$1, createjs.Sprite = CreatejsSprite$1, 
+    createjs.MovieClip = CreatejsMovieClip, createjs.Bitmap = CreatejsBitmap, createjs.Sprite = CreatejsSprite, 
     exports.AnimateBlobLoader = AnimateBlobLoader, exports.AnimateBlobLoaderResource = AnimateBlobLoaderResource, 
     exports.AnimateLoader = AnimateLoader, exports.AnimateLoaderResource = AnimateLoaderResource, 
-    exports.AnimateManifest = AnimateManifest, exports.Container = Container, exports.addAnimatesTo = function(content, data) {
+    exports.AnimateManifest = AnimateManifest, exports.Container = Container, exports.CreatejsBitmap = CreatejsBitmap, 
+    exports.CreatejsMovieClip = CreatejsMovieClip, exports.CreatejsSprite = CreatejsSprite, 
+    exports.addAnimatesTo = function(content, data) {
         content.addTargets("animates", data, {});
-    }, exports.defineAnimatesTo = function(Content, data) {
+    }, exports.core = pixiAnimateContainer_esm, exports.defineAnimatesTo = function(Content, data) {
         Content.defineTargets("animates", data, {});
     };
 }(this.Pixim.animate = this.Pixim.animate || {}, createjs, PIXI, Pixim);

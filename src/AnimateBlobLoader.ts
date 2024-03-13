@@ -1,4 +1,4 @@
-import { BlobLoader, ILoaderOption, ILoaderResourceDictionary, ILoaderTargetDictionary, LoaderBase, LoaderResource } from "@tawaship/pixim.js";
+import { ILoaderOption, ILoaderResourceDictionary, ILoaderTargetDictionary, LoaderBase, LoaderResource } from "@tawaship/pixim.js";
 
 export type TAnimateBlobLoaderRawResource = { src: string; type: string; } | null;
 

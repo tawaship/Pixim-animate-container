@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.0.1
+ * Pixim-animate-container - v2.0.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.14.0
@@ -447,7 +447,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI, Pixim) {
     });
     var PixiSprite = function(Sprite) {
         function PixiSprite(cjs) {
-            Sprite.call(this), this._createjs = cjs, this.interactive = !0;
+            Sprite.call(this), this._createjs = cjs;
         }
         Sprite && (PixiSprite.__proto__ = Sprite), PixiSprite.prototype = Object.create(Sprite && Sprite.prototype), 
         PixiSprite.prototype.constructor = PixiSprite;
@@ -542,7 +542,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI, Pixim) {
     });
     var PixiShape = function(Container$1) {
         function PixiShape(cjs) {
-            Container$1.call(this), this._createjs = cjs, this.interactive = !0;
+            Container$1.call(this), this._createjs = cjs;
         }
         Container$1 && (PixiShape.__proto__ = Container$1), PixiShape.prototype = Object.create(Container$1 && Container$1.prototype), 
         PixiShape.prototype.constructor = PixiShape;
@@ -637,7 +637,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI, Pixim) {
     });
     var PixiBitmap = function(Sprite) {
         function PixiBitmap(cjs) {
-            Sprite.call(this), this._createjs = cjs, this.interactive = !0;
+            Sprite.call(this), this._createjs = cjs;
         }
         Sprite && (PixiBitmap.__proto__ = Sprite), PixiBitmap.prototype = Object.create(Sprite && Sprite.prototype), 
         PixiBitmap.prototype.constructor = PixiBitmap;

@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.0.1
+ * Pixim-animate-container - v2.0.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.14.0
@@ -34,7 +34,7 @@ var PIXI__namespace = /*#__PURE__*/_interopNamespaceDefault(PIXI);
 var Pixim__namespace = /*#__PURE__*/_interopNamespaceDefault(Pixim);
 
 /*!
- * pixi-animate-container - v2.0.1
+ * pixi-animate-container - v2.0.2
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -689,7 +689,6 @@ class PixiSprite extends PIXI.Sprite {
     constructor(cjs) {
         super();
         this._createjs = cjs;
-        this.interactive = true;
     }
     get createjs() {
         return this._createjs;
@@ -759,7 +758,6 @@ class PixiShape extends PIXI.Container {
     constructor(cjs) {
         super();
         this._createjs = cjs;
-        this.interactive = true;
     }
     get createjs() {
         return this._createjs;
@@ -851,7 +849,6 @@ class PixiBitmap extends PIXI.Sprite {
     constructor(cjs) {
         super();
         this._createjs = cjs;
-        this.interactive = true;
     }
     get createjs() {
         return this._createjs;

@@ -83,7 +83,11 @@
 				root: class Root extends PIXI.Container {
 					constructor($) {
 						super();
-						
+
+						const b = this.addChild(new PIXI.Graphics());
+						b.beginFill(0x999999).drawRect(0, 0, 550, 800);
+						b.on("pointerdown", e => console.log(e));
+						b.interactive = true;
 						this.x = 10;
 						this.y = 10;
 						this.scale.set(0.7);
@@ -100,6 +104,8 @@
 							console.log(e);
 						});
 						a.y = 50;
+
+						a.addEventListener("click", e => console.log(e))
 					}
 				}
 			});

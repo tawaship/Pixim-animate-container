@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.0.2
+ * Pixim-animate-container - v2.1.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js v^1.14.0
@@ -10,7 +10,7 @@
 'use strict';
 
 var createjs = require('@tawaship/createjs-module');
-var PIXI = require('pixi.js');
+var PIXI$1 = require('pixi.js');
 var Pixim = require('@tawaship/pixim.js');
 
 function _interopNamespaceDefault(e) {
@@ -30,11 +30,11 @@ function _interopNamespaceDefault(e) {
     return Object.freeze(n);
 }
 
-var PIXI__namespace = /*#__PURE__*/_interopNamespaceDefault(PIXI);
+var PIXI$1__namespace = /*#__PURE__*/_interopNamespaceDefault(PIXI$1);
 var Pixim__namespace = /*#__PURE__*/_interopNamespaceDefault(Pixim);
 
 /*!
- * pixi-animate-container - v2.0.2
+ * pixi-animate-container - v2.1.0
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -116,7 +116,8 @@ const DEG_TO_RAD = Math.PI / 180;
 function createPixiData(pixi, regObj) {
     return {
         regObj,
-        instance: pixi
+        instance: pixi,
+        reservedBlendMode: PIXI.BLEND_MODES.NORMAL
     };
 }
 function createCreatejsParams() {
@@ -144,6 +145,7 @@ function updateDisplayObjectChildren(cjs, e) {
     }
     return true;
 }
+// export type TMixinedCreatejsDisplayObjectClass = abstract new (...args: any[]) => IMixinedCreatejsDisplayObject;
 function mixinCreatejsDisplayObject(superClass) {
     class C extends superClass {
         get pixi() {
@@ -286,6 +288,8 @@ class CreatejsStage extends createjs.Stage {
         this.dispatchEvent("drawend");
         return true;
     }
+    updateBlendModeForPixi(mode) {
+    }
 }
 
 /**
@@ -300,6 +304,8 @@ class CreatejsStageGL extends createjs.StageGL {
         updateDisplayObjectChildren(this, props);
         this.dispatchEvent("drawend");
         return true;
+    }
+    updateBlendModeForPixi(mode) {
     }
 }
 
@@ -316,7 +322,7 @@ class CreatejsEventManager {
     constructor(cjs) {
         this._downTarget = null;
         this._cjs = cjs;
-        this._emitter = new PIXI.utils.EventEmitter();
+        this._emitter = new PIXI$1.utils.EventEmitter();
         const pixi = cjs.pixi;
         pixi
             .on('pointerdown', this._onPointerDown, this)
@@ -435,7 +441,7 @@ class CreatejsEventManager {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Container.html | PIXI.Container}
  */
-class PixiMovieClip extends PIXI.Container {
+class PixiMovieClip extends PIXI$1.Container {
     constructor(cjs) {
         super();
         this._filterContainer = null;
@@ -456,7 +462,8 @@ class PixiMovieClip extends PIXI.Container {
  */
 function createCreatejsMovieClipParams() {
     return Object.assign(createCreatejsParams(), {
-        filters: null
+        filters: null,
+        compositeOperation: null
     });
 }
 /**
@@ -479,7 +486,30 @@ class AnimateReachLabelEvent extends AnimateEvent {
         this.data = label;
     }
 }
+/**
+ * @ignore
+ */
 const P$6 = createjs.MovieClip;
+/**
+ * @ignore
+ */
+var CompositeOpeations;
+(function (CompositeOpeations) {
+    CompositeOpeations["Lighter"] = "lighter";
+    CompositeOpeations["Multiply"] = "multiply";
+    CompositeOpeations["Screen"] = "screen";
+})(CompositeOpeations || (CompositeOpeations = {}));
+/**
+ * @ignore
+ */
+const blendModes = {
+    [CompositeOpeations.Lighter]: PIXI.BLEND_MODES.ADD,
+    [CompositeOpeations.Multiply]: PIXI.BLEND_MODES.MULTIPLY,
+    [CompositeOpeations.Screen]: PIXI.BLEND_MODES.SCREEN,
+};
+/**
+ * @ignore
+ */
 const T = 1000 / 60;
 /**
  * inherited {@link https://createjs.com/docs/easeljs/classes/MovieClip.html | createjs.MovieClip}
@@ -514,23 +544,44 @@ let CreatejsMovieClip$1 = class CreatejsMovieClip extends mixinCreatejsDisplayOb
     }
     updateForPixi(e) {
         const currentFrame = this.currentFrame;
-        this.advance(T * e.delta);
-        if (this._listenFrameEvents && currentFrame !== this.currentFrame) {
-            if (this._listenFrameEvents.endAnimation && this.currentFrame === (this.totalFrames - 1)) {
-                this.dispatchEvent(new AnimateEvent('endAnimation'));
-            }
-            if (this._listenFrameEvents.reachLabel) {
-                for (let i = 0; i < this.labels.length; i++) {
-                    const label = this.labels[i];
-                    if (this.currentFrame === label.position) {
-                        this.dispatchEvent(new AnimateReachLabelEvent('reachLabel', label));
-                        break;
+        // challenge
+        if (!this.paused) {
+            this.advance(T * e.delta);
+            if (this._listenFrameEvents && currentFrame !== this.currentFrame) {
+                if (this._listenFrameEvents.endAnimation && this.currentFrame === (this.totalFrames - 1)) {
+                    this.dispatchEvent(new AnimateEvent('endAnimation'));
+                }
+                if (this._listenFrameEvents.reachLabel) {
+                    for (let i = 0; i < this.labels.length; i++) {
+                        const label = this.labels[i];
+                        if (this.currentFrame === label.position) {
+                            this.dispatchEvent(new AnimateReachLabelEvent('reachLabel', label));
+                            break;
+                        }
                     }
                 }
             }
+            this._updateState();
         }
-        this._updateState();
         return updateDisplayObjectChildren(this, e);
+    }
+    updateBlendModeForPixi(mode) {
+        if (this._createjsParams.compositeOperation && blendModes[this._createjsParams.compositeOperation] === mode)
+            return;
+        this._pixiData.reservedBlendMode = mode;
+        for (let i = 0; i < this.children.length; i++) {
+            this.children[i].updateBlendModeForPixi(mode);
+        }
+    }
+    get compositeOperation() {
+        return this._createjsParams.compositeOperation;
+    }
+    set compositeOperation(value) {
+        if (this._createjsParams.compositeOperation === value)
+            return;
+        const blendMode = (value && blendModes[value]) || this._pixiData.reservedBlendMode;
+        this.updateBlendModeForPixi(blendMode);
+        this._createjsParams.compositeOperation = value;
     }
     get filters() {
         return this._createjsParams.filters;
@@ -647,12 +698,20 @@ let CreatejsMovieClip$1 = class CreatejsMovieClip extends mixinCreatejsDisplayOb
         this._createjsParams.filters = value;
     }
     //*/
+    _updateChildrenBlendModeForPixi(child) {
+        const blendMode = (this._createjsParams.compositeOperation && blendModes[this._createjsParams.compositeOperation]) || this._pixiData.reservedBlendMode;
+        if (!blendMode)
+            return;
+        child.updateBlendModeForPixi(blendMode);
+    }
     addChild(child) {
         this._pixiData.subInstance.addChild(child.pixi);
+        this._updateChildrenBlendModeForPixi(child);
         return super.addChild(child);
     }
     addChildAt(child, index) {
         this._pixiData.subInstance.addChildAt(child.pixi, index);
+        this._updateChildrenBlendModeForPixi(child);
         return super.addChildAt(child, index);
     }
     removeChild(child) {
@@ -685,7 +744,7 @@ Object.defineProperties(CreatejsMovieClip$1.prototype, {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Sprite.html | PIXI.Sprite}
  */
-class PixiSprite extends PIXI.Sprite {
+class PixiSprite extends PIXI$1.Sprite {
     constructor(cjs) {
         super();
         this._createjs = cjs;
@@ -731,11 +790,14 @@ let CreatejsSprite$1 = class CreatejsSprite extends mixinCreatejsDisplayObject(c
     updateForPixi(e) {
         return true;
     }
+    updateBlendModeForPixi(mode) {
+        this._pixiData.instance.blendMode = mode;
+    }
     gotoAndStop(...args) {
         super.gotoAndStop(...args);
         const frame = this.spriteSheet.getFrame(this.currentFrame);
-        const baseTexture = PIXI.BaseTexture.from(frame.image);
-        const texture = new PIXI.Texture(baseTexture, frame.rect);
+        const baseTexture = PIXI$1.BaseTexture.from(frame.image);
+        const texture = new PIXI$1.Texture(baseTexture, frame.rect);
         this._pixiData.instance.texture = texture;
     }
 };
@@ -754,7 +816,7 @@ Object.defineProperties(CreatejsSprite$1.prototype, {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Container.html | PIXI.Container}
  */
-class PixiShape extends PIXI.Container {
+class PixiShape extends PIXI$1.Container {
     constructor(cjs) {
         super();
         this._createjs = cjs;
@@ -804,6 +866,11 @@ class CreatejsShape extends mixinCreatejsDisplayObject(createjs.Shape) {
     updateForPixi(e) {
         return true;
     }
+    updateBlendModeForPixi(mode) {
+        var _a;
+        this._pixiData.reservedBlendMode = mode;
+        (_a = this._createjsParams.graphics) === null || _a === void 0 ? void 0 : _a.updateBlendModeForPixi(mode);
+    }
     get graphics() {
         return this._createjsParams.graphics;
     }
@@ -845,7 +912,7 @@ Object.defineProperties(CreatejsShape.prototype, {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Sprite.html | PIXI.Sprite}
  */
-class PixiBitmap extends PIXI.Sprite {
+class PixiBitmap extends PIXI$1.Sprite {
     constructor(cjs) {
         super();
         this._createjs = cjs;
@@ -887,12 +954,15 @@ let CreatejsBitmap$1 = class CreatejsBitmap extends mixinCreatejsDisplayObject(c
         this._createjsParams = createCreatejsBitmapParams();
         this._createjsEventManager = new CreatejsEventManager(this);
         const res = super.initialize(...args);
-        const texture = PIXI.Texture.from(this.image);
+        const texture = PIXI$1.Texture.from(this.image);
         this._pixiData.instance.texture = texture;
         return res;
     }
     updateForPixi(e) {
         return true;
+    }
+    updateBlendModeForPixi(mode) {
+        this._pixiData.instance.blendMode = mode;
     }
 };
 // temporary prototype
@@ -910,7 +980,7 @@ Object.defineProperties(CreatejsBitmap$1.prototype, {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Graphics.html | PIXI.Graphics}
  */
-class PixiGraphics extends PIXI.Graphics {
+class PixiGraphics extends PIXI$1.Graphics {
     constructor(cjs) {
         super();
         this._createjs = cjs;
@@ -947,17 +1017,17 @@ const COLOR_GREEN = 16 * 16;
  * @ignore
  */
 const LineCap = {
-    0: PIXI.LINE_CAP.BUTT,
-    1: PIXI.LINE_CAP.ROUND,
-    2: PIXI.LINE_CAP.SQUARE
+    0: PIXI$1.LINE_CAP.BUTT,
+    1: PIXI$1.LINE_CAP.ROUND,
+    2: PIXI$1.LINE_CAP.SQUARE
 };
 /**
  * @ignore
  */
 const LineJoin = {
-    0: PIXI.LINE_JOIN.MITER,
-    1: PIXI.LINE_JOIN.ROUND,
-    2: PIXI.LINE_JOIN.BEVEL
+    0: PIXI$1.LINE_JOIN.MITER,
+    1: PIXI$1.LINE_JOIN.ROUND,
+    2: PIXI$1.LINE_JOIN.BEVEL
 };
 /**
  * @ignore
@@ -985,6 +1055,11 @@ class CreatejsGraphics extends mixinCreatejsDisplayObject(createjs.Graphics) {
     }
     updateForPixi(e) {
         return true;
+    }
+    updateBlendModeForPixi(mode) {
+        if (!mode)
+            return;
+        this._pixiData.instance.blendMode = mode;
     }
     // path methods
     moveTo(x, y) {
@@ -1165,12 +1240,12 @@ Object.defineProperties(CreatejsGraphics.prototype, {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Text.html | PIXI.Text}
  */
-class PixiText extends PIXI.Text {
+class PixiText extends PIXI$1.Text {
 }
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.Container.html | PIXI.Container}
  */
-class PixiTextContainer extends PIXI.Container {
+class PixiTextContainer extends PIXI$1.Container {
     constructor(cjs, text) {
         super();
         this._createjs = cjs;
@@ -1233,6 +1308,9 @@ class CreatejsText extends mixinCreatejsDisplayObject(createjs.Text) {
     }
     updateForPixi(e) {
         return true;
+    }
+    updateBlendModeForPixi(mode) {
+        this._pixiData.instance.text.blendMode = mode;
     }
     get text() {
         return this._createjsParams.text;
@@ -1328,7 +1406,7 @@ Object.defineProperties(CreatejsText.prototype, {
 /**
  * inherited {@link http://pixijs.download/release/docs/PIXI.ColorMatrixFilter.html | PIXI.Sprite}
  */
-class PixiColorMatrixFilter extends PIXI.filters.ColorMatrixFilter {
+class PixiColorMatrixFilter extends PIXI$1.filters.ColorMatrixFilter {
     constructor(cjs) {
         super();
         this._createjs = cjs;
@@ -1534,7 +1612,7 @@ function loadAssetAsync(targets) {
             else if (manifest.src.indexOf('blob:') === 0) ;
             else if (manifest.src.indexOf('file:') === 0) ;
             else {
-                manifest.src = PIXI__namespace.utils.url.resolve(target.basepath, manifest.src);
+                manifest.src = PIXI$1__namespace.utils.url.resolve(target.basepath, manifest.src);
             }
         }
         if (crossOrigin) {
@@ -1660,7 +1738,7 @@ class CreatejsController {
 /**
  * inherited {@link https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container}
  */
-let Container$1 = class Container extends PIXI.Container {
+let Container$1 = class Container extends PIXI$1.Container {
     constructor() {
         super();
         this._createjsData = {

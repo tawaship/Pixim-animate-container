@@ -97,6 +97,14 @@ See [here](interfaces/IAnimateManifestTargetDictionary.html) for complete option
 
 ## Change log
 
+### 2.1.0
+
+- Compatible with [@tawaship/pixi-animate-container@2.1.0](https://github.com/tawaship/pixi-animate-container)
+
+### 2.0.0
+
+- Compatible with [@tawaship/pixi-animate-container@2.0.0](https://github.com/tawaship/pixi-animate-container)
+
 ### 1.0.0
 
 - Overrides
@@ -105,6 +113,3 @@ See [here](interfaces/IAnimateManifestTargetDictionary.html) for complete option
 	|:--|:--|
 	|createjs.MovieClip|[CreatejsMovieClip](https://tawaship.github.io/Pixim-animate-container/docs/classes/CreatejsMovieClip.html)|
 
-### 2.0.0
-
-- Compatible with [@tawaship/pixi-animate-container@2.0.0](https://github.com/tawaship/Pixim-animate-container)

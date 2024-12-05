@@ -93,7 +93,7 @@ app
 	});
 ```
 
-See [here](interfaces/IAnimateManifestTargetDictionary.html) for complete options for `Pixim.animate.defineAnimatesTo` and `Pixim.animate.addAnimatesTo`.
+See [here](https://tawaship.github.io/Pixim-animate-container/docs/interfaces/IAnimateManifestTargetDictionary.html) for complete options for `Pixim.animate.defineAnimatesTo` and `Pixim.animate.addAnimatesTo`.
 
 ## Change log
 

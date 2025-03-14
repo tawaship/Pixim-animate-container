@@ -93,9 +93,11 @@ app
 	});
 ```
 
-See [here](https://tawaship.github.io/Pixim-animate-container/docs/interfaces/IAnimateManifestTargetDictionary.html) for complete options for `Pixim.animate.defineAnimatesTo` and `Pixim.animate.addAnimatesTo`.
-
 ## Change log
+
+### 2.2.0
+
+Compatible with [@tawaship/pixim.js@1.15.0](https://github.com/tawaship/Pixim.js)
 
 ### 2.1.0
 

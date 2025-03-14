@@ -6,7 +6,7 @@
     "strict": true
   },
   "typedocOptions": {
-    "out": "docs",
+    "out": "docs/docs",
     "gitRemote": "docs",
     "gitRevision": "master",
     "entryPoints": ["src/index.ts"],

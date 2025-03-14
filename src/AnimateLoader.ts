@@ -1,6 +1,6 @@
-import * as Pixim from '@tawaship/pixim.js';
 import { loadAssetAsync, IAnimateLibrary, IAnimateLoadAssetOption, IAnimateManifest, IAnimatePrepareTarget } from '@tawaship/pixi-animate-container';
 import { AnimateBlobLoader, TAnimateBlobLoaderTarget } from './AnimateBlobLoader';
+import { ILoaderOption, JsLoader, LoaderBase, LoaderResource, utils } from '@tawaship/pixim.js';
 
 /**
  * @ignore
@@ -9,7 +9,7 @@ declare const AdobeAn: any;
 
 export type TAnimateLoaderRawResource = IAnimateLibrary;
 
-export class AnimateLoaderResource extends Pixim.LoaderResource<TAnimateLoaderRawResource> {
+export class AnimateLoaderResource extends LoaderResource<TAnimateLoaderRawResource> {
 	destroy() {
 		
 	}
@@ -33,15 +33,7 @@ export interface IAnimateLoaderTarget extends IAnimatePrepareTarget {
 
 export type TAnimateLoaderTarget = IAnimateLoaderTarget;
 
-export interface IAnimateLoaderTargetDictionary extends Pixim.ILoaderTargetDictionary<TAnimateLoaderTarget> {
-
-}
-
-export interface IAnimateLoaderResourceDictionary extends Pixim.ILoaderResourceDictionary<TAnimateLoaderRawResource> {
-
-}
-
-export interface IAnimateLoaderOption extends Pixim.ILoaderOption, IAnimateLoadAssetOption {
+export interface IAnimateLoaderOption extends ILoaderOption, IAnimateLoadAssetOption {
 	/**
 	 * Animate javascript file version.
 	 */
@@ -53,7 +45,7 @@ export interface IAnimateLoaderOption extends Pixim.ILoaderOption, IAnimateLoadA
 	assetVersion?: string | number;
 }
 
-export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnimateLoaderRawResource, AnimateLoaderResource> {
+export class AnimateLoader extends LoaderBase<TAnimateLoaderTarget, TAnimateLoaderRawResource, AnimateLoaderResource> {
 	protected _loadAsync(target: TAnimateLoaderTarget, options: IAnimateLoaderOption = {}) {
 		return this._loadJsAsync(target, options)
 			.then(() => {
@@ -71,14 +63,14 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 				return (target.options?.handleManifest ? target.options.handleManifest(manifests) : Promise.resolve())
 					.then(() => {
 						const _target = Object.assign({}, target);
-						_target.basepath = Pixim.utils.resolvePath(options.basepath || "", target.basepath);
+						_target.basepath = utils.resolvePath(options.basepath || "", target.basepath);
 
 						return this._prepareAssetsAsync(_target.basepath || "", manifests, options)
 							.then(() => {
 								const version = options.assetVersion || options.version || '';
 								for (let i = 0; i < manifests.length; i++) {
 									const manifest = manifests[i];
-									manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
+									manifest.src = utils.resolveUri("", manifest.src, version);
 								}
 
 								return loadAssetAsync(_target);
@@ -100,9 +92,9 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 			return Promise.resolve();
 		}
 		
-		const filepath = Pixim.utils.resolveUri(target.basepath, target.filepath);
+		const filepath = utils.resolveUri(target.basepath, target.filepath);
 		
-		const loader = new Pixim.JsLoader();
+		const loader = new JsLoader();
 		
 		return loader.loadAsync(filepath, Object.assign({}, options, { version: options.fileVersion || options.version }))
 			.then(resource => {
@@ -115,7 +107,7 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 	}
 	
 	private _prepareAssetsAsync(basepath: string, manifests: IAnimateManifest[], options: IAnimateLoaderOption) {
-		const targets: Pixim.ILoaderTargetDictionary<TAnimateBlobLoaderTarget> = {};
+		const targets: Record<string, TAnimateBlobLoaderTarget> = {};
 		
 		if (!options.xhr)  {
 			return Promise.resolve();
@@ -124,11 +116,11 @@ export class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnima
 		for (let i = 0; i < manifests.length; i++) {
 			const manifest = manifests[i];
 			
-			if (!Pixim.utils.isUrl(manifest.src)) {
+			if (!utils.isUrl(manifest.src)) {
 				continue;
 			}
 			
-			targets[i] = Pixim.utils.resolveUri(basepath, manifest.src);
+			targets[i] = utils.resolveUri(basepath, manifest.src);
 		}
 		
 		if (Object.keys(targets).length === 0) {

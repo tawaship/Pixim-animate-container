@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v2.1.0
+ * Pixim-animate-container - v2.2.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v^1.14.0
+ * @require @tawaship/pixim.js vundefined
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -11,7 +11,7 @@
 
 var createjs = require('@tawaship/createjs-module');
 var PIXI$1 = require('pixi.js');
-var Pixim = require('@tawaship/pixim.js');
+var pixim_js = require('@tawaship/pixim.js');
 
 function _interopNamespaceDefault(e) {
     var n = Object.create(null);
@@ -31,7 +31,6 @@ function _interopNamespaceDefault(e) {
 }
 
 var PIXI$1__namespace = /*#__PURE__*/_interopNamespaceDefault(PIXI$1);
-var Pixim__namespace = /*#__PURE__*/_interopNamespaceDefault(Pixim);
 
 /*!
  * pixi-animate-container - v2.1.0
@@ -1883,7 +1882,7 @@ class CreatejsBitmap extends CreatejsBitmap$1 {
     }
 }
 
-class AnimateBlobLoaderResource extends Pixim.LoaderResource {
+class AnimateBlobLoaderResource extends pixim_js.LoaderResource {
     destroy() {
         if (this._data) {
             (window.URL || window.webkitURL).revokeObjectURL(this._data.src);
@@ -1891,7 +1890,7 @@ class AnimateBlobLoaderResource extends Pixim.LoaderResource {
         this._data = null;
     }
 }
-class AnimateBlobLoader extends Pixim.LoaderBase {
+class AnimateBlobLoader extends pixim_js.LoaderBase {
     _loadAsync(target, options = {}) {
         return (() => {
             const data = this._resolveParams(target, options);
@@ -1916,11 +1915,11 @@ class AnimateBlobLoader extends Pixim.LoaderBase {
     }
 }
 
-class AnimateLoaderResource extends Pixim__namespace.LoaderResource {
+class AnimateLoaderResource extends pixim_js.LoaderResource {
     destroy() {
     }
 }
-class AnimateLoader extends Pixim__namespace.LoaderBase {
+class AnimateLoader extends pixim_js.LoaderBase {
     _loadAsync(target, options = {}) {
         return this._loadJsAsync(target, options)
             .then(() => {
@@ -1937,13 +1936,13 @@ class AnimateLoader extends Pixim__namespace.LoaderBase {
             return (((_a = target.options) === null || _a === void 0 ? void 0 : _a.handleManifest) ? target.options.handleManifest(manifests) : Promise.resolve())
                 .then(() => {
                 const _target = Object.assign({}, target);
-                _target.basepath = Pixim__namespace.utils.resolvePath(options.basepath || "", target.basepath);
+                _target.basepath = pixim_js.utils.resolvePath(options.basepath || "", target.basepath);
                 return this._prepareAssetsAsync(_target.basepath || "", manifests, options)
                     .then(() => {
                     const version = options.assetVersion || options.version || '';
                     for (let i = 0; i < manifests.length; i++) {
                         const manifest = manifests[i];
-                        manifest.src = Pixim__namespace.utils.resolveUri("", manifest.src, version);
+                        manifest.src = pixim_js.utils.resolveUri("", manifest.src, version);
                     }
                     return loadAssetAsync(_target);
                 })
@@ -1962,8 +1961,8 @@ class AnimateLoader extends Pixim__namespace.LoaderBase {
         if (!target.filepath) {
             return Promise.resolve();
         }
-        const filepath = Pixim__namespace.utils.resolveUri(target.basepath, target.filepath);
-        const loader = new Pixim__namespace.JsLoader();
+        const filepath = pixim_js.utils.resolveUri(target.basepath, target.filepath);
+        const loader = new pixim_js.JsLoader();
         return loader.loadAsync(filepath, Object.assign({}, options, { version: options.fileVersion || options.version }))
             .then(resource => {
             if (resource.error) {
@@ -1979,10 +1978,10 @@ class AnimateLoader extends Pixim__namespace.LoaderBase {
         }
         for (let i = 0; i < manifests.length; i++) {
             const manifest = manifests[i];
-            if (!Pixim__namespace.utils.isUrl(manifest.src)) {
+            if (!pixim_js.utils.isUrl(manifest.src)) {
                 continue;
             }
-            targets[i] = Pixim__namespace.utils.resolveUri(basepath, manifest.src);
+            targets[i] = pixim_js.utils.resolveUri(basepath, manifest.src);
         }
         if (Object.keys(targets).length === 0) {
             return Promise.resolve();
@@ -2009,19 +2008,19 @@ class AnimateLoader extends Pixim__namespace.LoaderBase {
     }
 }
 
-class AnimateManifest extends Pixim__namespace.ManifestBase {
+class AnimateManifest extends pixim_js.ManifestBase {
     _createLoader() {
         return new AnimateLoader();
     }
 }
 
-Pixim.Content.registerManifest('animates', AnimateManifest);
+pixim_js.Content.registerManifest('animates', AnimateManifest);
 /**
  * Define animate assets for class.
  *
  * @param Content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} class.
  */
-function defineAnimatesTo(Content, data) {
+function defineAnimatesTo(Content, data, options = {}) {
     Content.defineTargets('animates', data, {});
 }
 /**
@@ -2029,19 +2028,19 @@ function defineAnimatesTo(Content, data) {
  *
  * @param content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} instance.
  */
-function addAnimatesTo(content, data) {
+function addAnimatesTo(content, data, options = {}) {
     content.addTargets('animates', data, {});
 }
 
 /**
  * inherited {@link https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container}
  */
-class Container extends Pixim.Container {
+class Container extends pixim_js.Container {
     constructor() {
         super();
         this._createjsData = {
             controller: new CreatejsController(this),
-            task: new Pixim.Task([], this),
+            task: new pixim_js.Task([], this),
         };
         this._createjsData.task.add((e) => {
             this.handleTick(e.delta);

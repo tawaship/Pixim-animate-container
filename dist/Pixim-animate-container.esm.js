@@ -1,8 +1,8 @@
 /*!
- * Pixim-animate-container - v2.1.0
+ * Pixim-animate-container - v2.2.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v^1.14.0
+ * @require @tawaship/pixim.js vundefined
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
@@ -10,8 +10,7 @@
 import createjs from '@tawaship/createjs-module';
 import * as PIXI$1 from 'pixi.js';
 import { BaseTexture, Texture, LINE_CAP, LINE_JOIN, filters, utils, Container as Container$2, Sprite, Graphics, Text } from 'pixi.js';
-import * as Pixim from '@tawaship/pixim.js';
-import { LoaderResource, LoaderBase, Content, Container as Container$3, Task } from '@tawaship/pixim.js';
+import { LoaderResource, LoaderBase, utils as utils$1, JsLoader, ManifestBase, Content, Container as Container$3, Task } from '@tawaship/pixim.js';
 
 /*!
  * pixi-animate-container - v2.1.0
@@ -1896,11 +1895,11 @@ class AnimateBlobLoader extends LoaderBase {
     }
 }
 
-class AnimateLoaderResource extends Pixim.LoaderResource {
+class AnimateLoaderResource extends LoaderResource {
     destroy() {
     }
 }
-class AnimateLoader extends Pixim.LoaderBase {
+class AnimateLoader extends LoaderBase {
     _loadAsync(target, options = {}) {
         return this._loadJsAsync(target, options)
             .then(() => {
@@ -1917,13 +1916,13 @@ class AnimateLoader extends Pixim.LoaderBase {
             return (((_a = target.options) === null || _a === void 0 ? void 0 : _a.handleManifest) ? target.options.handleManifest(manifests) : Promise.resolve())
                 .then(() => {
                 const _target = Object.assign({}, target);
-                _target.basepath = Pixim.utils.resolvePath(options.basepath || "", target.basepath);
+                _target.basepath = utils$1.resolvePath(options.basepath || "", target.basepath);
                 return this._prepareAssetsAsync(_target.basepath || "", manifests, options)
                     .then(() => {
                     const version = options.assetVersion || options.version || '';
                     for (let i = 0; i < manifests.length; i++) {
                         const manifest = manifests[i];
-                        manifest.src = Pixim.utils.resolveUri("", manifest.src, version);
+                        manifest.src = utils$1.resolveUri("", manifest.src, version);
                     }
                     return loadAssetAsync(_target);
                 })
@@ -1942,8 +1941,8 @@ class AnimateLoader extends Pixim.LoaderBase {
         if (!target.filepath) {
             return Promise.resolve();
         }
-        const filepath = Pixim.utils.resolveUri(target.basepath, target.filepath);
-        const loader = new Pixim.JsLoader();
+        const filepath = utils$1.resolveUri(target.basepath, target.filepath);
+        const loader = new JsLoader();
         return loader.loadAsync(filepath, Object.assign({}, options, { version: options.fileVersion || options.version }))
             .then(resource => {
             if (resource.error) {
@@ -1959,10 +1958,10 @@ class AnimateLoader extends Pixim.LoaderBase {
         }
         for (let i = 0; i < manifests.length; i++) {
             const manifest = manifests[i];
-            if (!Pixim.utils.isUrl(manifest.src)) {
+            if (!utils$1.isUrl(manifest.src)) {
                 continue;
             }
-            targets[i] = Pixim.utils.resolveUri(basepath, manifest.src);
+            targets[i] = utils$1.resolveUri(basepath, manifest.src);
         }
         if (Object.keys(targets).length === 0) {
             return Promise.resolve();
@@ -1989,7 +1988,7 @@ class AnimateLoader extends Pixim.LoaderBase {
     }
 }
 
-class AnimateManifest extends Pixim.ManifestBase {
+class AnimateManifest extends ManifestBase {
     _createLoader() {
         return new AnimateLoader();
     }
@@ -2001,7 +2000,7 @@ Content.registerManifest('animates', AnimateManifest);
  *
  * @param Content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} class.
  */
-function defineAnimatesTo(Content, data) {
+function defineAnimatesTo(Content, data, options = {}) {
     Content.defineTargets('animates', data, {});
 }
 /**
@@ -2009,7 +2008,7 @@ function defineAnimatesTo(Content, data) {
  *
  * @param content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} instance.
  */
-function addAnimatesTo(content, data) {
+function addAnimatesTo(content, data, options = {}) {
     content.addTargets('animates', data, {});
 }
 

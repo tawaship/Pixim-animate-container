@@ -1,16 +1,8 @@
-import * as Pixim from '@tawaship/pixim.js';
-import * as AnimateLoader from './AnimateLoader';
+import { ManifestBase } from '@tawaship/pixim.js';
+import { AnimateLoader, AnimateLoaderResource, TAnimateLoaderRawResource, TAnimateLoaderTarget } from './AnimateLoader';
 
-export interface IAnimateManifestTargetDictionary extends Pixim.IManifestTargetDictionary<AnimateLoader.TAnimateLoaderTarget> {
-
-}
-
-export interface IAnimateDictionary extends Pixim.IRawResourceDictionary<AnimateLoader.TAnimateLoaderRawResource> {
-
-}
-
-export class AnimateManifest extends Pixim.ManifestBase<AnimateLoader.TAnimateLoaderTarget, AnimateLoader.TAnimateLoaderRawResource, AnimateLoader.AnimateLoaderResource> {
+export class AnimateManifest extends ManifestBase<TAnimateLoaderTarget, TAnimateLoaderRawResource, AnimateLoaderResource> {
 	protected _createLoader() {
-		return new AnimateLoader.AnimateLoader();
+		return new AnimateLoader();
 	}
 }

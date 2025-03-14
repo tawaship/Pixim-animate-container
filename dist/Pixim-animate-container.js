@@ -1,12 +1,12 @@
 /*!
- * Pixim-animate-container - v2.1.0
+ * Pixim-animate-container - v2.2.0
  * 
  * @require pixi.js v^5.3.2
- * @require @tawaship/pixim.js v^1.14.0
+ * @require @tawaship/pixim.js vundefined
  * @author tawaship (makazu.mori@gmail.com)
  * @license MIT
  */
-this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
+this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
     "use strict";
     function _interopNamespaceDefault(e) {
         var n = Object.create(null);
@@ -22,7 +22,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
             }
         })), n.default = e, Object.freeze(n);
     }
-    var PIXI$1__namespace = _interopNamespaceDefault(PIXI$1), Pixim__namespace = _interopNamespaceDefault(Pixim), CreatejsButtonHelper = function(superclass) {
+    var PIXI$1__namespace = _interopNamespaceDefault(PIXI$1), CreatejsButtonHelper = function(superclass) {
         function CreatejsButtonHelper() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -48,7 +48,13 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
         return superclass && (CreatejsButtonHelper.__proto__ = superclass), CreatejsButtonHelper.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsButtonHelper.prototype.constructor = CreatejsButtonHelper, CreatejsButtonHelper;
     }(createjs.ButtonHelper);
-    function createObject(proto) {
+    /*!
+     * pixi-animate-container - v2.1.0
+     * 
+     * @require pixi.js v^5.3.2
+     * @author tawaship (makazu.mori@gmail.com)
+     * @license MIT
+     */    function createObject(proto) {
         return Object.create(proto);
     }
     var DEG_TO_RAD = Math.PI / 180;
@@ -1490,7 +1496,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
             this._data && (window.URL || window.webkitURL).revokeObjectURL(this._data.src), 
             this._data = null;
         }, AnimateBlobLoaderResource;
-    }(Pixim.LoaderResource), AnimateBlobLoader = function(LoaderBase) {
+    }(pixim_js.LoaderResource), AnimateBlobLoader = function(LoaderBase) {
         function AnimateBlobLoader() {
             LoaderBase.apply(this, arguments);
         }
@@ -1514,18 +1520,18 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
                 return new AnimateBlobLoaderResource(null, e);
             }));
         }, AnimateBlobLoader;
-    }(Pixim.LoaderBase), AnimateLoaderResource = function(superclass) {
+    }(pixim_js.LoaderBase), AnimateLoaderResource = function(LoaderResource) {
         function AnimateLoaderResource() {
-            superclass.apply(this, arguments);
+            LoaderResource.apply(this, arguments);
         }
-        return superclass && (AnimateLoaderResource.__proto__ = superclass), AnimateLoaderResource.prototype = Object.create(superclass && superclass.prototype), 
+        return LoaderResource && (AnimateLoaderResource.__proto__ = LoaderResource), AnimateLoaderResource.prototype = Object.create(LoaderResource && LoaderResource.prototype), 
         AnimateLoaderResource.prototype.constructor = AnimateLoaderResource, AnimateLoaderResource.prototype.destroy = function() {}, 
         AnimateLoaderResource;
-    }(Pixim__namespace.LoaderResource), AnimateLoader = function(superclass) {
+    }(pixim_js.LoaderResource), AnimateLoader = function(LoaderBase) {
         function AnimateLoader() {
-            superclass.apply(this, arguments);
+            LoaderBase.apply(this, arguments);
         }
-        return superclass && (AnimateLoader.__proto__ = superclass), AnimateLoader.prototype = Object.create(superclass && superclass.prototype), 
+        return LoaderBase && (AnimateLoader.__proto__ = LoaderBase), AnimateLoader.prototype = Object.create(LoaderBase && LoaderBase.prototype), 
         AnimateLoader.prototype.constructor = AnimateLoader, AnimateLoader.prototype._loadAsync = function(target, options) {
             var this$1$1 = this;
             return void 0 === options && (options = {}), this._loadJsAsync(target, options).then((function() {
@@ -1538,11 +1544,11 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
                 }));
                 return ((null === (_a = target.options) || void 0 === _a ? void 0 : _a.handleManifest) ? target.options.handleManifest(manifests) : Promise.resolve()).then((function() {
                     var _target = Object.assign({}, target);
-                    return _target.basepath = Pixim__namespace.utils.resolvePath(options.basepath || "", target.basepath), 
+                    return _target.basepath = pixim_js.utils.resolvePath(options.basepath || "", target.basepath), 
                     this$1$1._prepareAssetsAsync(_target.basepath || "", manifests, options).then((function() {
                         for (var version = options.assetVersion || options.version || "", i = 0; i < manifests.length; i++) {
                             var manifest = manifests[i];
-                            manifest.src = Pixim__namespace.utils.resolveUri("", manifest.src, version);
+                            manifest.src = pixim_js.utils.resolveUri("", manifest.src, version);
                         }
                         return loadAssetAsync(_target);
                     })).then((function(_lib) {
@@ -1558,8 +1564,8 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
             if (!target.filepath) {
                 return Promise.resolve();
             }
-            var filepath = Pixim__namespace.utils.resolveUri(target.basepath, target.filepath);
-            return (new Pixim__namespace.JsLoader).loadAsync(filepath, Object.assign({}, options, {
+            var filepath = pixim_js.utils.resolveUri(target.basepath, target.filepath);
+            return (new pixim_js.JsLoader).loadAsync(filepath, Object.assign({}, options, {
                 version: options.fileVersion || options.version
             })).then((function(resource) {
                 if (resource.error) {
@@ -1574,7 +1580,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
             }
             for (var i = 0; i < manifests.length; i++) {
                 var manifest = manifests[i];
-                Pixim__namespace.utils.isUrl(manifest.src) && (targets[i] = Pixim__namespace.utils.resolveUri(basepath, manifest.src));
+                pixim_js.utils.isUrl(manifest.src) && (targets[i] = pixim_js.utils.resolveUri(basepath, manifest.src));
             }
             return 0 === Object.keys(targets).length ? Promise.resolve() : (new AnimateBlobLoader).loadAllAsync(targets, Object.assign({}, options, {
                 version: options.assetVersion || options.version
@@ -1592,22 +1598,22 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
                 }
             }));
         }, AnimateLoader;
-    }(Pixim__namespace.LoaderBase), AnimateManifest = function(superclass) {
+    }(pixim_js.LoaderBase), AnimateManifest = function(ManifestBase) {
         function AnimateManifest() {
-            superclass.apply(this, arguments);
+            ManifestBase.apply(this, arguments);
         }
-        return superclass && (AnimateManifest.__proto__ = superclass), AnimateManifest.prototype = Object.create(superclass && superclass.prototype), 
+        return ManifestBase && (AnimateManifest.__proto__ = ManifestBase), AnimateManifest.prototype = Object.create(ManifestBase && ManifestBase.prototype), 
         AnimateManifest.prototype.constructor = AnimateManifest, AnimateManifest.prototype._createLoader = function() {
             return new AnimateLoader;
         }, AnimateManifest;
-    }(Pixim__namespace.ManifestBase);
-    Pixim.Content.registerManifest("animates", AnimateManifest);
+    }(pixim_js.ManifestBase);
+    pixim_js.Content.registerManifest("animates", AnimateManifest);
     var Container = function(PiximContainer) {
         function Container() {
             var this$1$1 = this;
             PiximContainer.call(this), this._createjsData = {
                 controller: new CreatejsController(this),
-                task: new Pixim.Task([], this)
+                task: new pixim_js.Task([], this)
             }, this._createjsData.task.add((function(e) {
                 this$1$1.handleTick(e.delta);
             })), this._createjsData.task.first();
@@ -1626,15 +1632,15 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, Pixim) {
         }, Container.prototype.removeCreatejs = function(cjs) {
             return this._createjsData.controller.removeCreatejs(cjs);
         }, Container;
-    }(Pixim.Container);
+    }(pixim_js.Container);
     createjs.MovieClip = CreatejsMovieClip, createjs.Bitmap = CreatejsBitmap, createjs.Sprite = CreatejsSprite, 
     exports.AnimateBlobLoader = AnimateBlobLoader, exports.AnimateBlobLoaderResource = AnimateBlobLoaderResource, 
     exports.AnimateLoader = AnimateLoader, exports.AnimateLoaderResource = AnimateLoaderResource, 
     exports.AnimateManifest = AnimateManifest, exports.Container = Container, exports.CreatejsBitmap = CreatejsBitmap, 
     exports.CreatejsMovieClip = CreatejsMovieClip, exports.CreatejsSprite = CreatejsSprite, 
-    exports.addAnimatesTo = function(content, data) {
+    exports.addAnimatesTo = function(content, data, options) {
         content.addTargets("animates", data, {});
-    }, exports.core = pixiAnimateContainer_esm, exports.defineAnimatesTo = function(Content, data) {
+    }, exports.core = pixiAnimateContainer_esm, exports.defineAnimatesTo = function(Content, data, options) {
         Content.defineTargets("animates", data, {});
     };
 }(this.Pixim.animate = this.Pixim.animate || {}, createjs, PIXI, Pixim);

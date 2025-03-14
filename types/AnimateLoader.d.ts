@@ -1,7 +1,7 @@
-import * as Pixim from '@tawaship/pixim.js';
 import { IAnimateLibrary, IAnimateLoadAssetOption, IAnimateManifest, IAnimatePrepareTarget } from '@tawaship/pixi-animate-container';
+import { ILoaderOption, LoaderBase, LoaderResource } from '@tawaship/pixim.js';
 export type TAnimateLoaderRawResource = IAnimateLibrary;
-export declare class AnimateLoaderResource extends Pixim.LoaderResource<TAnimateLoaderRawResource> {
+export declare class AnimateLoaderResource extends LoaderResource<TAnimateLoaderRawResource> {
     destroy(): void;
 }
 export interface IAnimateLoaderTarget extends IAnimatePrepareTarget {
@@ -19,11 +19,7 @@ export interface IAnimateLoaderTarget extends IAnimatePrepareTarget {
     };
 }
 export type TAnimateLoaderTarget = IAnimateLoaderTarget;
-export interface IAnimateLoaderTargetDictionary extends Pixim.ILoaderTargetDictionary<TAnimateLoaderTarget> {
-}
-export interface IAnimateLoaderResourceDictionary extends Pixim.ILoaderResourceDictionary<TAnimateLoaderRawResource> {
-}
-export interface IAnimateLoaderOption extends Pixim.ILoaderOption, IAnimateLoadAssetOption {
+export interface IAnimateLoaderOption extends ILoaderOption, IAnimateLoadAssetOption {
     /**
      * Animate javascript file version.
      */
@@ -33,7 +29,7 @@ export interface IAnimateLoaderOption extends Pixim.ILoaderOption, IAnimateLoadA
      */
     assetVersion?: string | number;
 }
-export declare class AnimateLoader extends Pixim.LoaderBase<TAnimateLoaderTarget, TAnimateLoaderRawResource, AnimateLoaderResource> {
+export declare class AnimateLoader extends LoaderBase<TAnimateLoaderTarget, TAnimateLoaderRawResource, AnimateLoaderResource> {
     protected _loadAsync(target: TAnimateLoaderTarget, options?: IAnimateLoaderOption): Promise<AnimateLoaderResource>;
     private _loadJsAsync;
     private _prepareAssetsAsync;

@@ -1,5 +1,6 @@
-import { Content as PiximContent } from '@tawaship/pixim.js';
-import { AnimateManifest, IAnimateManifestTargetDictionary } from './AnimateManifest';
+import { IManifestOption, Content as PiximContent } from '@tawaship/pixim.js';
+import { AnimateManifest } from './AnimateManifest';
+import { TAnimateLoaderTarget } from './AnimateLoader';
 
 PiximContent.registerManifest('animates', AnimateManifest);
 
@@ -8,7 +9,7 @@ PiximContent.registerManifest('animates', AnimateManifest);
  * 
  * @param Content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} class.
  */
-export function defineAnimatesTo(Content: typeof PiximContent, data: IAnimateManifestTargetDictionary) {
+export function defineAnimatesTo(Content: typeof PiximContent, data: Record<string, TAnimateLoaderTarget>, options: IManifestOption = {}) {
 	Content.defineTargets('animates', data, {});
 }
 
@@ -17,6 +18,6 @@ export function defineAnimatesTo(Content: typeof PiximContent, data: IAnimateMan
  * 
  * @param content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} instance.
  */
-export function addAnimatesTo(content: PiximContent, data: IAnimateManifestTargetDictionary) {
+export function addAnimatesTo(content: PiximContent, data: Record<string, TAnimateLoaderTarget>, options: IManifestOption = {}) {
 	content.addTargets('animates', data, {});
 }

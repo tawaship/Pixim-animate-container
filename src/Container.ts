@@ -2,7 +2,7 @@ import { Container as PiximContainer, Task, ITickerData } from '@tawaship/pixim.
 import { Container as _PixiAnimateContainer, CreatejsController, IAnimateContainer, TCreatejsObject } from '@tawaship/pixi-animate-container';
 
 /**
- * inherited {@link https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container}
+ * inherited {@link https://tawaship.github.io/Pixim.js/docs/classes/Container.html | Pixim.Container}
  */
 export class Container extends PiximContainer implements IAnimateContainer {
 	private _createjsData: {

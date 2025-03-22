@@ -64,6 +64,42 @@ export default (async () => {
 				})
 			]
 		},
+        {
+			input: 'src/index.ts',
+			output: [
+				{
+					banner: banner,
+					file: 'docs/Pixim-animate-container.js',
+					format: 'iife',
+					name: 'Pixim.animate',
+					sourcemap: true,
+					extend: true,
+					globals: {
+						'pixi.js': 'PIXI',
+						'@tawaship/pixim.js': 'Pixim',
+						'@tawaship/createjs-module': 'createjs'
+					}
+				}
+			],
+			external: ['pixi.js', '@tawaship/pixim.js', '@tawaship/createjs-module'],
+			plugins: [
+				nodeResolve(),
+				commonjs(),
+				typescript(),
+				buble(),
+				terser({
+					compress: {
+						//drop_console: true
+						//pure_funcs: ['console.log']
+					},
+					mangle: false,
+					output: {
+						beautify: true,
+						braces: true
+					}
+				})
+			]
+		},
 		{
 			input: 'src/index.ts',
 			output: [

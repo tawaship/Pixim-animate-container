@@ -1998,7 +1998,7 @@ Content.registerManifest('animates', AnimateManifest);
 /**
  * Define animate assets for class.
  *
- * @param Content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} class.
+ * @param Content Target {@link https://tawaship.github.io/Pixim.js/docs/classes/Content.html | Pixim.Content} class.
  */
 function defineAnimatesTo(Content, data, options = {}) {
     Content.defineTargets('animates', data, {});
@@ -2006,14 +2006,14 @@ function defineAnimatesTo(Content, data, options = {}) {
 /**
  * Define animate assets for instance.
  *
- * @param content Target {@link https://tawaship.github.io/Pixim.js/classes/content.html | Pixim.Content} instance.
+ * @param content Target {@link https://tawaship.github.io/Pixim.js/docs/classes/Content.html | Pixim.Content} instance.
  */
 function addAnimatesTo(content, data, options = {}) {
     content.addTargets('animates', data, {});
 }
 
 /**
- * inherited {@link https://tawaship.github.io/Pixim.js/classes/container.html | Pixim.Container}
+ * inherited {@link https://tawaship.github.io/Pixim.js/docs/classes/Container.html | Pixim.Container}
  */
 class Container extends Container$3 {
     constructor() {

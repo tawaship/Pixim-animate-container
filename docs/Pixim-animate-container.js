@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.2.0
+ * Pixim-animate-container - v2.2.1
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -49,7 +49,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
         CreatejsButtonHelper.prototype.constructor = CreatejsButtonHelper, CreatejsButtonHelper;
     }(createjs.ButtonHelper);
     /*!
-     * pixi-animate-container - v2.1.0
+     * pixi-animate-container - v2.1.1
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -655,29 +655,32 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
         }, prototypeAccessors$4.graphics.get = function() {
             return this._createjsParams.graphics;
         }, prototypeAccessors$4.graphics.set = function(value) {
-            if (this._pixiData.masked.length) {
-                if (this._pixiData.instance.removeChildren(), value) {
-                    for (var i = 0; i < this._pixiData.masked.length; i++) {
-                        this._pixiData.masked[i].mask = this._pixiData.instance;
-                    }
-                } else {
-                    for (var i$1 = 0; i$1 < this._pixiData.masked.length; i$1++) {
-                        this._pixiData.masked[i$1].mask = null;
+            if (this._pixiData !== defaultPixiData) {
+                if (this._pixiData.masked.length) {
+                    if (this._pixiData.instance.removeChildren(), value) {
+                        for (var i = 0; i < this._pixiData.masked.length; i++) {
+                            this._pixiData.masked[i].mask = this._pixiData.instance;
+                        }
+                    } else {
+                        for (var i$1 = 0; i$1 < this._pixiData.masked.length; i$1++) {
+                            this._pixiData.masked[i$1].mask = null;
+                        }
                     }
                 }
+                value && this._pixiData.instance.addChild(value.pixi);
             }
-            value && this._pixiData.instance.addChild(value.pixi), this._createjsParams.graphics = value;
+            this._createjsParams !== defaultCreatejsParams && (this._createjsParams.graphics = value);
         }, prototypeAccessors$4.masked.get = function() {
             return this._pixiData.masked;
         }, Object.defineProperties(CreatejsShape.prototype, prototypeAccessors$4), CreatejsShape;
-    }(mixinCreatejsDisplayObject(createjs.Shape));
+    }(mixinCreatejsDisplayObject(createjs.Shape)), defaultCreatejsParams = createCreatejsShapeParams(null), defaultPixiData = createPixiShapeData(createObject(CreatejsShape.prototype));
     Object.defineProperties(CreatejsShape.prototype, {
         _createjsParams: {
-            value: createCreatejsShapeParams(null),
+            value: defaultCreatejsParams,
             writable: !0
         },
         _pixiData: {
-            value: createPixiShapeData(createObject(CreatejsShape.prototype)),
+            value: defaultPixiData,
             writable: !0
         }
     });

@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.2.1
+ * Pixim-animate-container - v2.2.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -2030,6 +2030,7 @@ function addAnimatesTo(content, data, options = {}) {
 class Container extends Container$3 {
     constructor() {
         super();
+        this._speed = 1;
         this._createjsData = {
             controller: new CreatejsController(this),
             task: new Task([], this),
@@ -2038,6 +2039,12 @@ class Container extends Container$3 {
             this.handleTick(e.delta);
         });
         this._createjsData.task.first();
+    }
+    get speed() {
+        return this._speed;
+    }
+    set speed(value) {
+        this._speed = value;
     }
     updateTask(e) {
         super.updateTask(e);
@@ -2048,7 +2055,7 @@ class Container extends Container$3 {
         task.done(e);
     }
     handleTick(delta) {
-        return this._createjsData.controller.handleTick(delta);
+        return this._createjsData.controller.handleTick(delta * this._speed);
     }
     addCreatejs(cjs) {
         return this._createjsData.controller.addCreatejs(cjs);

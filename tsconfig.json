@@ -10,7 +10,8 @@
     "gitRemote": "docs",
     "gitRevision": "master",
     "entryPoints": ["src/index.ts"],
-    "includeVersion": true
+    "includeVersion": true,
+    "excludeExternals": true
   },
   "exclude": ["node_modules", "src/**/*.d.ts"]
 }

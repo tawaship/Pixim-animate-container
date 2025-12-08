@@ -5,7 +5,10 @@ import { IAnimateContainer, TCreatejsObject } from '@tawaship/pixi-animate-conta
  */
 export declare class Container extends PiximContainer implements IAnimateContainer {
     private _createjsData;
+    private _speed;
     constructor();
+    get speed(): number;
+    set speed(value: number);
     updateTask(e: ITickerData): void;
     handleTick(delta: number): void;
     addCreatejs(cjs: TCreatejsObject): TCreatejsObject;

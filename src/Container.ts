@@ -9,6 +9,8 @@ export class Container extends PiximContainer implements IAnimateContainer {
 		controller: CreatejsController;
 		task: Task;
 	};
+
+    private _speed: number = 1;
 	
 	constructor() {
 		super();
@@ -24,6 +26,14 @@ export class Container extends PiximContainer implements IAnimateContainer {
 		this._createjsData.task.first();
 	}
 
+    get speed() {
+        return this._speed;
+    }
+
+    set speed(value: number) {
+        this._speed = value;
+    }
+
 	updateTask(e: ITickerData) {
 		super.updateTask(e);
 		
@@ -37,7 +47,7 @@ export class Container extends PiximContainer implements IAnimateContainer {
 	}
 
 	handleTick(delta: number) {
-		return this._createjsData.controller.handleTick(delta);
+		return this._createjsData.controller.handleTick(delta * this._speed);
 	}
 	
 	addCreatejs(cjs: TCreatejsObject) {

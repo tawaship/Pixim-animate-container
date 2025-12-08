@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.2.1
+ * Pixim-animate-container - v2.2.2
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -1614,27 +1614,37 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
     var Container = function(PiximContainer) {
         function Container() {
             var this$1$1 = this;
-            PiximContainer.call(this), this._createjsData = {
+            PiximContainer.call(this), this._speed = 1, this._createjsData = {
                 controller: new CreatejsController(this),
                 task: new pixim_js.Task([], this)
             }, this._createjsData.task.add((function(e) {
                 this$1$1.handleTick(e.delta);
             })), this._createjsData.task.first();
         }
-        return PiximContainer && (Container.__proto__ = PiximContainer), Container.prototype = Object.create(PiximContainer && PiximContainer.prototype), 
-        Container.prototype.constructor = Container, Container.prototype.updateTask = function(e) {
+        PiximContainer && (Container.__proto__ = PiximContainer), Container.prototype = Object.create(PiximContainer && PiximContainer.prototype), 
+        Container.prototype.constructor = Container;
+        var prototypeAccessors = {
+            speed: {
+                configurable: !0
+            }
+        };
+        return prototypeAccessors.speed.get = function() {
+            return this._speed;
+        }, prototypeAccessors.speed.set = function(value) {
+            this._speed = value;
+        }, Container.prototype.updateTask = function(e) {
             PiximContainer.prototype.updateTask.call(this, e);
             var task = this._createjsData.task;
             this.taskEnabled && task.done(e);
         }, Container.prototype.handleTick = function(delta) {
-            return this._createjsData.controller.handleTick(delta);
+            return this._createjsData.controller.handleTick(delta * this._speed);
         }, Container.prototype.addCreatejs = function(cjs) {
             return this._createjsData.controller.addCreatejs(cjs);
         }, Container.prototype.addCreatejsAt = function(cjs, index) {
             return this._createjsData.controller.addCreatejsAt(cjs, index);
         }, Container.prototype.removeCreatejs = function(cjs) {
             return this._createjsData.controller.removeCreatejs(cjs);
-        }, Container;
+        }, Object.defineProperties(Container.prototype, prototypeAccessors), Container;
     }(pixim_js.Container);
     createjs.MovieClip = CreatejsMovieClip, createjs.Bitmap = CreatejsBitmap, createjs.Sprite = CreatejsSprite, 
     exports.AnimateBlobLoader = AnimateBlobLoader, exports.AnimateBlobLoaderResource = AnimateBlobLoaderResource, 

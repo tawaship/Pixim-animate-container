@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.2.2
+ * Pixim-animate-container - v2.3.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -33,7 +33,7 @@ function _interopNamespaceDefault(e) {
 var PIXI$1__namespace = /*#__PURE__*/_interopNamespaceDefault(PIXI$1);
 
 /*!
- * pixi-animate-container - v2.1.1
+ * pixi-animate-container - v2.3.1
  * 
  * @require pixi.js v^5.3.2
  * @author tawaship (makazu.mori@gmail.com)
@@ -533,6 +533,7 @@ let CreatejsMovieClip$1 = class CreatejsMovieClip extends mixinCreatejsDisplayOb
         this._createjsEventManager = new CreatejsEventManager(this);
         P$6.apply(this, args);
         this.framerate = this._framerateBase;
+        this._listenFrameEvents = Object.assign({}, this._listenFrameEventsBase || {});
     }
     initialize(...args) {
         this._pixiData = createPixiMovieClipData(this);
@@ -540,6 +541,13 @@ let CreatejsMovieClip$1 = class CreatejsMovieClip extends mixinCreatejsDisplayOb
         this._createjsEventManager = new CreatejsEventManager(this);
         super.initialize(...args);
         this.framerate = this._framerateBase;
+        this._listenFrameEvents = Object.assign({}, this._listenFrameEventsBase || {});
+    }
+    /**
+     * 指定のカスタムイベントを `listen` するかどうかを変更します。
+     */
+    listenCustomFrameEvent(type, value) {
+        this._listenFrameEvents[type] = value;
     }
     updateForPixi(e) {
         const currentFrame = this.currentFrame;
@@ -1676,7 +1684,7 @@ function loadAssetAsync(targets) {
             for (let i in lib) {
                 if (lib[i].prototype instanceof CreatejsMovieClip$1) {
                     lib[i].prototype._framerateBase = lib.properties.fps;
-                    lib[i].prototype._listenFrameEvents = (_a = target.options) === null || _a === void 0 ? void 0 : _a.listenFrameEvents;
+                    lib[i].prototype._listenFrameEventsBase = (_a = target.options) === null || _a === void 0 ? void 0 : _a.listenFrameEvents;
                 }
             }
             return lib;
@@ -1701,7 +1709,21 @@ function handleFileLoad(evt, comp) {
 }
 
 class CreatejsController {
+    get speed() {
+        return this._speed;
+    }
+    set speed(value) {
+        this._speed = value;
+    }
+    get overSpeed() {
+        return this._overSpeed;
+    }
+    set overSpeed(value) {
+        this._overSpeed = value;
+    }
     constructor(container) {
+        this._speed = 1;
+        this._overSpeed = false;
         this._createjsData = {
             id: 0,
             targets: {},
@@ -1709,8 +1731,8 @@ class CreatejsController {
         };
     }
     handleTick(delta) {
-        // delta timeが1以上になるとフレーム飛びするので
-        const e = { delta: Math.min(delta, 1) };
+        const d = delta * this._speed;
+        const e = { delta: this._overSpeed ? d : Math.min(d, 1) };
         const targets = this._createjsData.targets;
         for (let i in targets) {
             targets[i].updateForPixi(e);
@@ -1755,6 +1777,18 @@ let Container$1 = class Container extends PIXI$1.Container {
         this._createjsData = {
             controller: new CreatejsController(this)
         };
+    }
+    get createjsSpeed() {
+        return this._createjsData.controller.speed;
+    }
+    set createjsSpeed(value) {
+        this._createjsData.controller.speed = value;
+    }
+    get createjsOverSpeed() {
+        return this._createjsData.controller.overSpeed;
+    }
+    set createjsOverSpeed(value) {
+        this._createjsData.controller.overSpeed = value;
     }
     handleTick(delta) {
         return this._createjsData.controller.handleTick(delta);
@@ -2050,7 +2084,6 @@ function addAnimatesTo(content, data, options = {}) {
 class Container extends pixim_js.Container {
     constructor() {
         super();
-        this._speed = 1;
         this._createjsData = {
             controller: new CreatejsController(this),
             task: new pixim_js.Task([], this),
@@ -2060,11 +2093,17 @@ class Container extends pixim_js.Container {
         });
         this._createjsData.task.first();
     }
-    get speed() {
-        return this._speed;
+    get createjsSpeed() {
+        return this._createjsData.controller.speed;
     }
-    set speed(value) {
-        this._speed = value;
+    set createjsSpeed(value) {
+        this._createjsData.controller.speed = value;
+    }
+    get createjsOverSpeed() {
+        return this._createjsData.controller.overSpeed;
+    }
+    set createjsOverSpeed(value) {
+        this._createjsData.controller.overSpeed = value;
     }
     updateTask(e) {
         super.updateTask(e);
@@ -2075,7 +2114,7 @@ class Container extends pixim_js.Container {
         task.done(e);
     }
     handleTick(delta) {
-        return this._createjsData.controller.handleTick(delta * this._speed);
+        return this._createjsData.controller.handleTick(delta);
     }
     addCreatejs(cjs) {
         return this._createjsData.controller.addCreatejs(cjs);

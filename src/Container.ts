@@ -1,5 +1,5 @@
 import { Container as PiximContainer, Task, ITickerData } from '@tawaship/pixim.js';
-import { Container as _PixiAnimateContainer, CreatejsController, IAnimateContainer, TCreatejsObject } from '@tawaship/pixi-animate-container';
+import { Container as _PixiAnimateContainer, CreatejsController, CreatejsMovieClip, IAnimateContainer, TCreatejsObject } from '@tawaship/pixi-animate-container';
 
 /**
  * inherited {@link https://tawaship.github.io/Pixim.js/docs/classes/Container.html | Pixim.Container}
@@ -10,8 +10,6 @@ export class Container extends PiximContainer implements IAnimateContainer {
 		task: Task;
 	};
 
-    private _speed: number = 1;
-	
 	constructor() {
 		super();
 		
@@ -26,12 +24,18 @@ export class Container extends PiximContainer implements IAnimateContainer {
 		this._createjsData.task.first();
 	}
 
-    get speed() {
-        return this._speed;
+    get createjsSpeed() {
+        return this._createjsData.controller.speed;
+    }
+    set createjsSpeed(value: number) {
+        this._createjsData.controller.speed = value;
     }
 
-    set speed(value: number) {
-        this._speed = value;
+    get createjsOverSpeed() {
+        return this._createjsData.controller.overSpeed;
+    }
+    set createjsOverSpeed(value: boolean) {
+        this._createjsData.controller.overSpeed = value;
     }
 
 	updateTask(e: ITickerData) {
@@ -47,15 +51,15 @@ export class Container extends PiximContainer implements IAnimateContainer {
 	}
 
 	handleTick(delta: number) {
-		return this._createjsData.controller.handleTick(delta * this._speed);
+		return this._createjsData.controller.handleTick(delta);
 	}
 	
-	addCreatejs(cjs: TCreatejsObject) {
-		return this._createjsData.controller.addCreatejs(cjs);
+	addCreatejs<T extends TCreatejsObject = TCreatejsObject>(cjs: TCreatejsObject) {
+		return this._createjsData.controller.addCreatejs<T>(cjs);
 	}
 	
-	addCreatejsAt(cjs: TCreatejsObject, index: number) {
-		return this._createjsData.controller.addCreatejsAt(cjs, index);
+	addCreatejsAt<T extends TCreatejsObject = TCreatejsObject>(cjs: TCreatejsObject, index: number) {
+		return this._createjsData.controller.addCreatejsAt<T>(cjs, index);
 	}
 	
 	removeCreatejs(cjs: TCreatejsObject) {

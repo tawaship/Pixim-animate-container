@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.2.2
+ * Pixim-animate-container - v2.3.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -49,7 +49,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
         CreatejsButtonHelper.prototype.constructor = CreatejsButtonHelper, CreatejsButtonHelper;
     }(createjs.ButtonHelper);
     /*!
-     * pixi-animate-container - v2.1.1
+     * pixi-animate-container - v2.3.1
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -397,7 +397,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
             }
             superclass.call(this), this._pixiData = createPixiMovieClipData(this), this._createjsParams = createCreatejsMovieClipParams(), 
             this._createjsEventManager = new CreatejsEventManager(this), P$6.apply(this, args), 
-            this.framerate = this._framerateBase;
+            this.framerate = this._framerateBase, this._listenFrameEvents = Object.assign({}, this._listenFrameEventsBase || {});
         }
         superclass && (CreatejsMovieClip.__proto__ = superclass), CreatejsMovieClip.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsMovieClip.prototype.constructor = CreatejsMovieClip;
@@ -416,7 +416,9 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
             }
             this._pixiData = createPixiMovieClipData(this), this._createjsParams = createCreatejsMovieClipParams(), 
             this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args), 
-            this.framerate = this._framerateBase;
+            this.framerate = this._framerateBase, this._listenFrameEvents = Object.assign({}, this._listenFrameEventsBase || {});
+        }, CreatejsMovieClip.prototype.listenCustomFrameEvent = function(type, value) {
+            this._listenFrameEvents[type] = value;
         }, CreatejsMovieClip.prototype.updateForPixi = function(e) {
             var currentFrame = this.currentFrame;
             if (!this.paused) {
@@ -1334,7 +1336,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
                 var _a;
                 for (var i in lib) {
                     lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._framerateBase = lib.properties.fps, 
-                    lib[i].prototype._listenFrameEvents = null === (_a = target.options) || void 0 === _a ? void 0 : _a.listenFrameEvents);
+                    lib[i].prototype._listenFrameEventsBase = null === (_a = target.options) || void 0 === _a ? void 0 : _a.listenFrameEvents);
                 }
                 return lib;
             })));
@@ -1356,15 +1358,30 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
         }
     });
     var CreatejsController = function(container) {
-        this._createjsData = {
+        this._speed = 1, this._overSpeed = !1, this._createjsData = {
             id: 0,
             targets: {},
             container: container
         };
+    }, prototypeAccessors$11 = {
+        speed: {
+            configurable: !0
+        },
+        overSpeed: {
+            configurable: !0
+        }
     };
-    CreatejsController.prototype.handleTick = function(delta) {
-        var e = {
-            delta: Math.min(delta, 1)
+    prototypeAccessors$11.speed.get = function() {
+        return this._speed;
+    }, prototypeAccessors$11.speed.set = function(value) {
+        this._speed = value;
+    }, prototypeAccessors$11.overSpeed.get = function() {
+        return this._overSpeed;
+    }, prototypeAccessors$11.overSpeed.set = function(value) {
+        this._overSpeed = value;
+    }, CreatejsController.prototype.handleTick = function(delta) {
+        var d = delta * this._speed, e = {
+            delta: this._overSpeed ? d : Math.min(d, 1)
         }, targets = this._createjsData.targets;
         for (var i in targets) {
             targets[i].updateForPixi(e);
@@ -1389,15 +1406,32 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
         cjs;
     }, CreatejsController.prototype.removeCreatejs = function(cjs) {
         return this._createjsData.container.removeChild(cjs.pixi), cjs;
-    };
+    }, Object.defineProperties(CreatejsController.prototype, prototypeAccessors$11);
     var Container$1 = function(Container$1) {
         function Container() {
             Container$1.call(this), this._createjsData = {
                 controller: new CreatejsController(this)
             };
         }
-        return Container$1 && (Container.__proto__ = Container$1), Container.prototype = Object.create(Container$1 && Container$1.prototype), 
-        Container.prototype.constructor = Container, Container.prototype.handleTick = function(delta) {
+        Container$1 && (Container.__proto__ = Container$1), Container.prototype = Object.create(Container$1 && Container$1.prototype), 
+        Container.prototype.constructor = Container;
+        var prototypeAccessors$12 = {
+            createjsSpeed: {
+                configurable: !0
+            },
+            createjsOverSpeed: {
+                configurable: !0
+            }
+        };
+        return prototypeAccessors$12.createjsSpeed.get = function() {
+            return this._createjsData.controller.speed;
+        }, prototypeAccessors$12.createjsSpeed.set = function(value) {
+            this._createjsData.controller.speed = value;
+        }, prototypeAccessors$12.createjsOverSpeed.get = function() {
+            return this._createjsData.controller.overSpeed;
+        }, prototypeAccessors$12.createjsOverSpeed.set = function(value) {
+            this._createjsData.controller.overSpeed = value;
+        }, Container.prototype.handleTick = function(delta) {
             return this._createjsData.controller.handleTick(delta);
         }, Container.prototype.addCreatejs = function(cjs) {
             return this._createjsData.controller.addCreatejs(cjs);
@@ -1405,7 +1439,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
             return this._createjsData.controller.addCreatejsAt(cjs, index);
         }, Container.prototype.removeCreatejs = function(cjs) {
             return this._createjsData.controller.removeCreatejs(cjs);
-        }, Container;
+        }, Object.defineProperties(Container.prototype, prototypeAccessors$12), Container;
     }(PIXI$1.Container);
     createjs.Stage = CreatejsStage, createjs.StageGL = CreatejsStageGL, createjs.MovieClip = CreatejsMovieClip$1, 
     createjs.Sprite = CreatejsSprite$1, createjs.Shape = CreatejsShape, createjs.Bitmap = CreatejsBitmap$1, 
@@ -1614,7 +1648,7 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
     var Container = function(PiximContainer) {
         function Container() {
             var this$1$1 = this;
-            PiximContainer.call(this), this._speed = 1, this._createjsData = {
+            PiximContainer.call(this), this._createjsData = {
                 controller: new CreatejsController(this),
                 task: new pixim_js.Task([], this)
             }, this._createjsData.task.add((function(e) {
@@ -1624,20 +1658,27 @@ this.Pixim = this.Pixim || {}, function(exports, createjs, PIXI$1, pixim_js) {
         PiximContainer && (Container.__proto__ = PiximContainer), Container.prototype = Object.create(PiximContainer && PiximContainer.prototype), 
         Container.prototype.constructor = Container;
         var prototypeAccessors = {
-            speed: {
+            createjsSpeed: {
+                configurable: !0
+            },
+            createjsOverSpeed: {
                 configurable: !0
             }
         };
-        return prototypeAccessors.speed.get = function() {
-            return this._speed;
-        }, prototypeAccessors.speed.set = function(value) {
-            this._speed = value;
+        return prototypeAccessors.createjsSpeed.get = function() {
+            return this._createjsData.controller.speed;
+        }, prototypeAccessors.createjsSpeed.set = function(value) {
+            this._createjsData.controller.speed = value;
+        }, prototypeAccessors.createjsOverSpeed.get = function() {
+            return this._createjsData.controller.overSpeed;
+        }, prototypeAccessors.createjsOverSpeed.set = function(value) {
+            this._createjsData.controller.overSpeed = value;
         }, Container.prototype.updateTask = function(e) {
             PiximContainer.prototype.updateTask.call(this, e);
             var task = this._createjsData.task;
             this.taskEnabled && task.done(e);
         }, Container.prototype.handleTick = function(delta) {
-            return this._createjsData.controller.handleTick(delta * this._speed);
+            return this._createjsData.controller.handleTick(delta);
         }, Container.prototype.addCreatejs = function(cjs) {
             return this._createjsData.controller.addCreatejs(cjs);
         }, Container.prototype.addCreatejsAt = function(cjs, index) {

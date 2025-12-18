@@ -95,6 +95,10 @@ app
 
 ## Change log
 
+### 2.3.0
+
+Compatible with [@tawaship/pixi-animate-container@2.3.1](https://github.com/tawaship/pixi-animate-container)
+
 ### 2.2.0
 
 Compatible with [@tawaship/pixim.js@1.15.0](https://github.com/tawaship/Pixim.js)

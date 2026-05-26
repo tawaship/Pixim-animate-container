@@ -33,7 +33,7 @@ export class AnimateBlobLoader extends LoaderBase<TAnimateBlobLoaderTarget, TAni
 		})()
 		.then(res => {
 			if (!res.ok) {
-				throw res.statusText;
+				throw res.statusText || "error";
 			}
 			
 			return res.blob();

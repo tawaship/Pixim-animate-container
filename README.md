@@ -95,6 +95,10 @@ app
 
 ## Change log
 
+### 2.4.0
+
+Compatible with [@tawaship/pixi-animate-container@2.4.0](https://github.com/tawaship/pixi-animate-container)
+
 ### 2.3.0
 
 Compatible with [@tawaship/pixi-animate-container@2.3.1](https://github.com/tawaship/pixi-animate-container)

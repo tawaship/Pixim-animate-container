@@ -148,7 +148,7 @@ export default (async () => {
 					sourcemap: true
 				}
 			],
-			external: ['pixi.js', '@tawaship/pixim.js', '@tawaship/createjs-module'],
+			external: ['pixi.js', '@tawaship/pixim.js', '@tawaship/createjs-module', "@tawaship/pixi-animate-container"],
 			watch: {
 				clearScreen: false
 			},

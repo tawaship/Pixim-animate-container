@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@tawaship/pixi-animate-container": "^2.4.2",
-    "@tawaship/pixim.js": "^1.15.0"
+    "@tawaship/pixim.js": "^1.15.2"
   },
   "peerDependencies": {
     "@tawaship/createjs-module": "^1.0.0",

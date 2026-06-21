@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.4.2
+ * Pixim-animate-container - v2.5.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -10,7 +10,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
     "use strict";
     function _interopNamespaceDefault(e) {
         var n = Object.create(null);
-        return e && Object.keys(e).forEach((function(k) {
+        return e && Object.keys(e).forEach(function(k) {
             if ("default" !== k) {
                 var d = Object.getOwnPropertyDescriptor(e, k);
                 Object.defineProperty(n, k, d.get ? d : {
@@ -20,7 +20,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                     }
                 });
             }
-        })), n.default = e, Object.freeze(n);
+        }), n.default = e, Object.freeze(n);
     }
     var PIXI__namespace = _interopNamespaceDefault(PIXI), CreatejsButtonHelper = function(superclass) {
         function CreatejsButtonHelper() {
@@ -33,23 +33,23 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             var hitPixi = pixi.addChild(hit.pixi);
             hitPixi.alpha = 1e-5;
             var isOver = !1, isDown = !1;
-            hitPixi.on("pointerover", (function() {
+            hitPixi.on("pointerover", function() {
                 isOver = !0, isDown ? createjs.gotoAndStop(downFrame) : createjs.gotoAndStop(overFrame);
-            })), hitPixi.on("pointerout", (function() {
+            }), hitPixi.on("pointerout", function() {
                 isOver = !1, isDown ? createjs.gotoAndStop(overFrame) : createjs.gotoAndStop(baseFrame);
-            })), hitPixi.on("pointerdown", (function() {
+            }), hitPixi.on("pointerdown", function() {
                 isDown = !0, createjs.gotoAndStop(downFrame);
-            })), hitPixi.on("pointerup", (function() {
+            }), hitPixi.on("pointerup", function() {
                 isDown = !1, isOver ? createjs.gotoAndStop(overFrame) : createjs.gotoAndStop(baseFrame);
-            })), hitPixi.on("pointerupoutside", (function() {
+            }), hitPixi.on("pointerupoutside", function() {
                 isDown = !1, isOver ? createjs.gotoAndStop(overFrame) : createjs.gotoAndStop(baseFrame);
-            })), hitPixi.interactive = !0, hitPixi.cursor = "pointer";
+            }), hitPixi.interactive = !0, hitPixi.cursor = "pointer";
         }
         return superclass && (CreatejsButtonHelper.__proto__ = superclass), CreatejsButtonHelper.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsButtonHelper.prototype.constructor = CreatejsButtonHelper, CreatejsButtonHelper;
     }(createjs.ButtonHelper);
     /*!
-     * pixi-animate-container - v2.4.2
+     * pixi-animate-container - v2.5.0
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)
@@ -214,9 +214,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             }, prototypeAccessors.mask.set = function(value) {
                 var this$1$1 = this;
                 value ? (value.masked.push(this._pixiData.instance), this._pixiData.instance.mask = value.pixi, 
-                this._pixiData.instance.once("added", (function() {
+                this._pixiData.instance.once("added", function() {
                     this$1$1._pixiData.instance.parent.addChild(value.pixi);
-                }))) : this._pixiData.instance.mask = null, this._createjsParams.mask = value;
+                })) : this._pixiData.instance.mask = null, this._createjsParams.mask = value;
             }, Object.defineProperties(C.prototype, prototypeAccessors), C;
         }(superClass);
         return C;
@@ -410,6 +410,11 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._fps;
         }, CreatejsMovieClip.prototype.listenCustomFrameEvent = function(type, value) {
             this._listenFrameEvents[type] = value;
+        }, CreatejsMovieClip.prototype.updateStateForPixi = function() {
+            this._updateState();
+            for (var list = this.children.slice(), i = 0; i < list.length; i++) {
+                list[i].updateStateForPixi();
+            }
         }, CreatejsMovieClip.prototype.updateForPixi = function() {
             var currentFrame = this.currentFrame;
             if (!this.paused) {
@@ -539,7 +544,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 _off: !1,
                 mask: null
             }, this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args);
-        }, CreatejsSprite.prototype.updateForPixi = function() {
+        }, CreatejsSprite.prototype.updateStateForPixi = function() {}, CreatejsSprite.prototype.updateForPixi = function() {
             return !0;
         }, CreatejsSprite.prototype.updateBlendModeForPixi = function(mode) {
             this._pixiData.instance.blendMode = mode;
@@ -640,7 +645,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             }
             return this._pixiData = createPixiShapeData(this), this._createjsParams = createCreatejsShapeParams(null), 
             this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args);
-        }, CreatejsShape.prototype.updateForPixi = function() {
+        }, CreatejsShape.prototype.updateStateForPixi = function() {}, CreatejsShape.prototype.updateForPixi = function() {
             return !0;
         }, CreatejsShape.prototype.updateBlendModeForPixi = function(mode) {
             var _a;
@@ -739,7 +744,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             }, this._createjsEventManager = new CreatejsEventManager(this);
             var res = superclass.prototype.initialize.apply(this, args), texture = PIXI.Texture.from(this.image);
             return this._pixiData.instance.texture = texture, res;
-        }, CreatejsBitmap.prototype.updateForPixi = function() {
+        }, CreatejsBitmap.prototype.updateStateForPixi = function() {}, CreatejsBitmap.prototype.updateForPixi = function() {
             return !0;
         }, CreatejsBitmap.prototype.updateBlendModeForPixi = function(mode) {
             this._pixiData.instance.blendMode = mode;
@@ -841,7 +846,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 _off: !1,
                 mask: null
             }, this._createjsEventManager = new CreatejsEventManager(this), superclass.prototype.initialize.apply(this, args);
-        }, CreatejsGraphics.prototype.updateForPixi = function() {
+        }, CreatejsGraphics.prototype.updateStateForPixi = function() {}, CreatejsGraphics.prototype.updateForPixi = function() {
             return !0;
         }, CreatejsGraphics.prototype.updateBlendModeForPixi = function(mode) {
             mode && (this._pixiData.instance.blendMode = mode);
@@ -1068,7 +1073,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 configurable: !0
             }
         };
-        return CreatejsText.prototype.updateForPixi = function() {
+        return CreatejsText.prototype.updateStateForPixi = function() {}, CreatejsText.prototype.updateForPixi = function() {
             return !0;
         }, CreatejsText.prototype.updateBlendModeForPixi = function(mode) {
             this._pixiData.instance.text.blendMode = mode;
@@ -1280,9 +1285,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             if (!comp) {
                 throw new Error("no composition: " + target.id);
             }
-            for (var lib = comp.getLibrary(), manifests = lib.properties.manifest.map((function(v) {
+            for (var lib = comp.getLibrary(), manifests = lib.properties.manifest.map(function(v) {
                 return JSON.parse(JSON.stringify(v));
-            })), crossOrigin = "boolean" != typeof (null === (_b = target.options) || void 0 === _b ? void 0 : _b.crossOrigin) || target.options.crossOrigin, i$1 = 0; i$1 < manifests.length; i$1++) {
+            }), crossOrigin = "boolean" != typeof (null === (_b = target.options) || void 0 === _b ? void 0 : _b.crossOrigin) || target.options.crossOrigin, i$1 = 0; i$1 < manifests.length; i$1++) {
                 var manifest = manifests[i$1];
                 if (0 === manifest.src.indexOf("data:image")) {
                     manifest.type = createjs.Types.IMAGE;
@@ -1298,23 +1303,23 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                     manifests[i$2].crossOrigin = !0;
                 }
             }
-            var loadPromise = new Promise((function(resolve, reject) {
+            var loadPromise = new Promise(function(resolve, reject) {
                 var _a;
                 0 === manifests.length && resolve({});
                 var loader = new createjs.LoadQueue(!1);
                 (null === (_a = target.options) || void 0 === _a ? void 0 : _a.useSound) && loader.installPlugin(createjs.Sound);
                 var errors = [];
-                loader.addEventListener("fileload", (function(evt) {
+                loader.addEventListener("fileload", function(evt) {
                     !function(evt, comp) {
                         var images = comp.getImages();
                         evt && "image" == evt.item.type && (images[evt.item.id] = evt.result);
                     }(evt, comp);
-                })), loader.addEventListener("complete", (function(evt) {
+                }), loader.addEventListener("complete", function(evt) {
                     errors.length ? reject(errors) : resolve(evt);
-                })), loader.addEventListener("error", (function(evt) {
+                }), loader.addEventListener("error", function(evt) {
                     errors.push(evt.data);
-                })), loader.loadManifest(manifests || []);
-            })).then((function(evt) {
+                }), loader.loadManifest(manifests || []);
+            }).then(function(evt) {
                 for (var ss = comp.getSpriteSheet(), queue = evt.target, ssMetadata = lib.ssMetadata, i = 0; i < ssMetadata.length; i++) {
                     ss[ssMetadata[i].name] = new createjs.SpriteSheet({
                         images: [ queue.getResult(ssMetadata[i].name) ],
@@ -1322,21 +1327,21 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                     });
                 }
                 return lib;
-            }));
-            promises.push(loadPromise.then((function(lib) {
+            });
+            promises.push(loadPromise.then(function(lib) {
                 var _a;
                 for (var i in lib) {
                     lib[i].prototype instanceof CreatejsMovieClip$1 && (lib[i].prototype._fps = lib.properties.fps, 
                     lib[i].prototype._listenFrameEventsBase = null === (_a = target.options) || void 0 === _a ? void 0 : _a.listenFrameEvents);
                 }
                 return lib;
-            })));
+            }));
         }, i = 0; i < targets.length; i++) {
             loop(i);
         }
-        return Promise.all(promises).then((function(resolvers) {
+        return Promise.all(promises).then(function(resolvers) {
             return 1 === resolvers.length ? resolvers[0] : resolvers;
-        }));
+        });
     }
     Object.defineProperties(CreatejsColorFilter.prototype, {
         _createjsParams: {
@@ -1376,25 +1381,30 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             var target = targets[i];
             target.t += d * target.cjs.fps / 60;
             var p = 0 | target.t, frame = this._overSpeed ? p : Math.min(p, 1);
-            target.t -= p;
-            for (var f = 0; f < frame; f++) {
-                target.cjs.updateForPixi();
+            if (target.isFirst) {
+                target.isFirst = !1, target.cjs.updateStateForPixi();
+            } else {
+                target.t -= p;
+                for (var f = 0; f < frame; f++) {
+                    target.cjs.updateForPixi();
+                }
             }
         }
     }, CreatejsController.prototype._addCreatejs = function(cjs) {
         var this$1$1 = this;
         if (cjs instanceof CreatejsMovieClip$1) {
             var p = cjs.pixi.parent;
-            cjs.pixi.once("added", (function() {
+            cjs.pixi.once("added", function() {
                 cjs.pixi.parent !== p && cjs.gotoAndPlay(0);
                 var id = this$1$1._createjsData.id++;
                 this$1$1._createjsData.targets[id] = {
                     cjs: cjs,
-                    t: 0
-                }, cjs.pixi.once("removed", (function() {
+                    t: 0,
+                    isFirst: !0
+                }, cjs.pixi.once("removed", function() {
                     delete this$1$1._createjsData.targets[id];
-                }));
-            }));
+                });
+            });
         }
     }, CreatejsController.prototype.addCreatejs = function(cjs) {
         return this._addCreatejs(cjs), this._createjsData.container.addChild(cjs.pixi), 
@@ -1537,21 +1547,21 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         AnimateBlobLoader.prototype.constructor = AnimateBlobLoader, AnimateBlobLoader.prototype._loadAsync = function(target, options) {
             var data, src, xhr;
             return void 0 === options && (options = {}), (data = this._resolveParams(target, options), 
-            src = data.src, xhr = data.xhr, xhr ? fetch(src, xhr.requestOptions || {}) : fetch(src)).then((function(res) {
+            src = data.src, xhr = data.xhr, xhr ? fetch(src, xhr.requestOptions || {}) : fetch(src)).then(function(res) {
                 if (!res.ok) {
                     throw res.statusText || "error";
                 }
                 return res.blob();
-            })).then((function(blob) {
+            }).then(function(blob) {
                 return {
                     src: (window.URL || window.webkitURL).createObjectURL(blob),
                     type: blob.type
                 };
-            })).then((function(data) {
+            }).then(function(data) {
                 return new AnimateBlobLoaderResource(data, null);
-            })).catch((function(e) {
+            }).catch(function(e) {
                 return new AnimateBlobLoaderResource(null, e);
-            }));
+            });
         }, AnimateBlobLoader;
     }(pixim_js.LoaderBase), AnimateLoaderResource = function(LoaderResource) {
         function AnimateLoaderResource() {
@@ -1567,32 +1577,32 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         return LoaderBase && (AnimateLoader.__proto__ = LoaderBase), AnimateLoader.prototype = Object.create(LoaderBase && LoaderBase.prototype), 
         AnimateLoader.prototype.constructor = AnimateLoader, AnimateLoader.prototype._loadAsync = function(target, options) {
             var this$1$1 = this;
-            return void 0 === options && (options = {}), this._loadJsAsync(target, options).then((function() {
+            return void 0 === options && (options = {}), this._loadJsAsync(target, options).then(function() {
                 var _a, comp = AdobeAn.getComposition(target.id);
                 if (!comp) {
                     throw new Error("no composition: " + target.id);
                 }
-                var lib = comp.getLibrary(), originalManifests = lib.properties.manifest, manifests = lib.properties.manifest = originalManifests.map((function(v) {
+                var lib = comp.getLibrary(), originalManifests = lib.properties.manifest, manifests = lib.properties.manifest = originalManifests.map(function(v) {
                     return JSON.parse(JSON.stringify(v));
-                }));
-                return ((null === (_a = target.options) || void 0 === _a ? void 0 : _a.handleManifest) ? target.options.handleManifest(manifests) : Promise.resolve()).then((function() {
+                });
+                return ((null === (_a = target.options) || void 0 === _a ? void 0 : _a.handleManifest) ? target.options.handleManifest(manifests) : Promise.resolve()).then(function() {
                     var _target = Object.assign({}, target);
                     return _target.basepath = pixim_js.utils.resolvePath(options.basepath || "", target.basepath), 
-                    this$1$1._prepareAssetsAsync(_target.basepath || "", manifests, options).then((function() {
+                    this$1$1._prepareAssetsAsync(_target.basepath || "", manifests, options).then(function() {
                         for (var version = options.assetVersion || options.version || "", i = 0; i < manifests.length; i++) {
                             var manifest = manifests[i];
                             manifest.src = pixim_js.utils.resolveUri("", manifest.src, version);
                         }
                         return loadAssetAsync(_target);
-                    })).then((function(_lib) {
+                    }).then(function(_lib) {
                         return lib.properties.manifest = originalManifests, _lib;
-                    }));
-                }));
-            })).then((function(lib) {
+                    });
+                });
+            }).then(function(lib) {
                 return new AnimateLoaderResource(lib, null);
-            })).catch((function(e) {
+            }).catch(function(e) {
                 return new AnimateLoaderResource({}, e);
-            }));
+            });
         }, AnimateLoader.prototype._loadJsAsync = function(target, options) {
             if (!target.filepath) {
                 return Promise.resolve();
@@ -1600,12 +1610,12 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             var filepath = pixim_js.utils.resolveUri(target.basepath, target.filepath);
             return (new pixim_js.JsLoader).loadAsync(filepath, Object.assign({}, options, {
                 version: options.fileVersion || options.version
-            })).then((function(resource) {
+            })).then(function(resource) {
                 if (resource.error) {
                     throw resource.error;
                 }
                 resource.ref();
-            }));
+            });
         }, AnimateLoader.prototype._prepareAssetsAsync = function(basepath, manifests, options) {
             var targets = {};
             if (!options.xhr) {
@@ -1617,7 +1627,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             }
             return 0 === Object.keys(targets).length ? Promise.resolve() : (new AnimateBlobLoader).loadAllAsync(targets, Object.assign({}, options, {
                 version: options.assetVersion || options.version
-            })).then((function(resources) {
+            })).then(function(resources) {
                 for (var i in resources) {
                     var resource = resources[i];
                     if (resource.error) {
@@ -1629,7 +1639,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                     var _i = Number(i);
                     manifests[_i] && (manifests[_i].src = resource.data.src, manifests[_i].type = resource.data.type.split("/")[0]);
                 }
-            }));
+            });
         }, AnimateLoader;
     }(pixim_js.LoaderBase), AnimateManifest = function(ManifestBase) {
         function AnimateManifest() {
@@ -1647,9 +1657,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             PiximContainer.call(this), this._createjsData = {
                 controller: new CreatejsController(this),
                 task: new pixim_js.Task([], this)
-            }, this._createjsData.task.add((function(e) {
+            }, this._createjsData.task.add(function(e) {
                 this$1$1.handleTick(e.delta);
-            })), this._createjsData.task.first();
+            }), this._createjsData.task.first();
         }
         PiximContainer && (Container.__proto__ = PiximContainer), Container.prototype = Object.create(PiximContainer && PiximContainer.prototype), 
         Container.prototype.constructor = Container;

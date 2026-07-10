@@ -12,7 +12,7 @@ export declare class Container extends PiximContainer implements IAnimateContain
     set createjsOverSpeed(value: boolean);
     updateTask(e: ITickerData): void;
     handleTick(delta: number): void;
-    addCreatejs<T extends TCreatejsObject = TCreatejsObject>(cjs: TCreatejsObject): T;
-    addCreatejsAt<T extends TCreatejsObject = TCreatejsObject>(cjs: TCreatejsObject, index: number): T;
+    addCreatejs<T extends TCreatejsObject = TCreatejsObject>(cjs: T): T;
+    addCreatejsAt<T extends TCreatejsObject = TCreatejsObject>(cjs: T, index: number): T;
     removeCreatejs(cjs: TCreatejsObject): TCreatejsObject;
 }

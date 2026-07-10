@@ -11,8 +11,17 @@ import { CreatejsMovieClip as CreatejsMovieClip$1, CreatejsSprite as CreatejsSpr
 import * as pixiAnimateContainer from '@tawaship/pixi-animate-container';
 export { pixiAnimateContainer as core };
 import createjs from '@tawaship/createjs-module';
-import { LoaderResource, LoaderBase, utils, JsLoader, ManifestBase, Content, Container as Container$1, Task } from '@tawaship/pixim.js';
+import { LoaderBase, LoaderResource, utils, JsLoader, ManifestBase, Content, Container as Container$1, Task } from '@tawaship/pixim.js';
 
+/**
+ * Named instances are stamped onto the MovieClip by publish output, so they
+ * can only be reached by dynamic key access.
+ *
+ * @ignore
+ */
+function getNamedInstance(target, name) {
+    return Reflect.get(target, name);
+}
 /**
  * inherited {@link https://tawaship.github.io/pixi-animate-container/docs/classes/CreatejsMovieClip.html | CreatejsMovieClip}
  */
@@ -24,12 +33,13 @@ class CreatejsMovieClip extends CreatejsMovieClip$1 {
      * @param cls Class of new instance.
      */
     replaceInstance(name, cls) {
-        const old = this[name];
+        const old = getNamedInstance(this, name);
         if (!old) {
             console.warn(`instance '${name}' was not found.`);
+            throw new Error(`instance '${name}' was not found.`);
         }
-        const props = ['x', 'y', 'scaleX', 'scaleY', 'rotation', 'skewX', 'skewY', 'regX', 'regY', '_off', 'alpha'];
-        const instance = this[name] = new cls(old.mode, old.startPosition, old.loop, old.timeline.reversed);
+        const instance = new cls(old.mode, old.startPosition, old.loop, old.timeline.reversed);
+        Reflect.set(this, name, instance);
         const tweens = this.timeline.tweens;
         for (let i = 0; i < tweens.length; i++) {
             const target = tweens[i].target;
@@ -44,9 +54,17 @@ class CreatejsMovieClip extends CreatejsMovieClip$1 {
                 tweens[i].target = instance;
             }
         }
-        for (let i = 0; i < props.length; i++) {
-            instance[props[i]] = old[props[i]];
-        }
+        instance.x = old.x;
+        instance.y = old.y;
+        instance.scaleX = old.scaleX;
+        instance.scaleY = old.scaleY;
+        instance.rotation = old.rotation;
+        instance.skewX = old.skewX;
+        instance.skewY = old.skewY;
+        instance.regX = old.regX;
+        instance.regY = old.regY;
+        instance._off = old._off;
+        instance.alpha = old.alpha;
         if (old.mask) {
             instance.mask = old.mask;
             old.mask = null;
@@ -72,7 +90,7 @@ class CreatejsSprite extends CreatejsSprite$1 {
      * @param texture Texture to replace.
      */
     replaceTexture(texture) {
-        this._pixiData.instance.texture = texture;
+        this.pixi.texture = texture;
     }
 }
 
@@ -86,7 +104,7 @@ class CreatejsBitmap extends CreatejsBitmap$1 {
      * @param texture Texture to replace.
      */
     replaceTexture(texture) {
-        this._pixiData.instance.texture = texture;
+        this.pixi.texture = texture;
     }
 }
 

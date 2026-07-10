@@ -7,10 +7,10 @@ import { CreatejsBitmap as _CreatejsBitmap } from '@tawaship/pixi-animate-contai
 export class CreatejsBitmap extends _CreatejsBitmap {
 	/**
 	 * Replace texture.
-	 * 
+	 *
 	 * @param texture Texture to replace.
 	 */
 	replaceTexture(texture: Texture) {
-		this._pixiData.instance.texture = texture;
+		this.pixi.texture = texture;
 	}
 }

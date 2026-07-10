@@ -7,10 +7,10 @@ import { CreatejsSprite as _CreatejsSprite } from '@tawaship/pixi-animate-contai
 export class CreatejsSprite extends _CreatejsSprite {
 	/**
 	 * Replace texture.
-	 * 
+	 *
 	 * @param texture Texture to replace.
 	 */
 	replaceTexture(texture: Texture) {
-		this._pixiData.instance.texture = texture;
+		this.pixi.texture = texture;
 	}
 }

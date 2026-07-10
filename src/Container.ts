@@ -54,12 +54,12 @@ export class Container extends PiximContainer implements IAnimateContainer {
 		return this._createjsData.controller.handleTick(delta);
 	}
 	
-	addCreatejs<T extends TCreatejsObject = TCreatejsObject>(cjs: TCreatejsObject) {
-		return this._createjsData.controller.addCreatejs<T>(cjs);
+	addCreatejs<T extends TCreatejsObject = TCreatejsObject>(cjs: T) {
+		return this._createjsData.controller.addCreatejs(cjs);
 	}
-	
-	addCreatejsAt<T extends TCreatejsObject = TCreatejsObject>(cjs: TCreatejsObject, index: number) {
-		return this._createjsData.controller.addCreatejsAt<T>(cjs, index);
+
+	addCreatejsAt<T extends TCreatejsObject = TCreatejsObject>(cjs: T, index: number) {
+		return this._createjsData.controller.addCreatejsAt(cjs, index);
 	}
 	
 	removeCreatejs(cjs: TCreatejsObject) {

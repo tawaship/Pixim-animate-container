@@ -95,6 +95,12 @@ app
 
 ## Change log
 
+### 3.0.0
+
+Compatible with [@tawaship/pixi-animate-container@3.0.0](https://github.com/tawaship/pixi-animate-container) — see its change log for the behavior changes of the tick/sync redesign. The Pixim-side APIs (`replaceInstance`, `replaceTexture`) are unchanged.
+
+This release was implemented with Claude (Anthropic's AI assistant) and verified by the same per-tick full-state differential suite as the core module.
+
 ### 2.4.0
 
 Compatible with [@tawaship/pixi-animate-container@2.4.0](https://github.com/tawaship/pixi-animate-container)

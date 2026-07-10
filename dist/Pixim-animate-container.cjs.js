@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.5.0
+ * Pixim-animate-container - v3.0.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined

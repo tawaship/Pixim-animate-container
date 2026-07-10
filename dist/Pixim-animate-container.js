@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v2.5.0
+ * Pixim-animate-container - v3.0.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -24,7 +24,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
     }
     var PIXI__namespace = _interopNamespaceDefault(PIXI), DEG_TO_RAD = Math.PI / 180;
     /*!
-     * pixi-animate-container - v2.5.0
+     * pixi-animate-container - v3.0.0
      * 
      * @require pixi.js v^5.3.2
      * @author tawaship (makazu.mori@gmail.com)

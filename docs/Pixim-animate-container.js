@@ -1095,7 +1095,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             } else {
                 target.t -= p;
                 for (var f = 0; f < frame; f++) {
-                    target.cjs._tick(new CreatejsEvent("tick"));
+                    target.cjs._tick(new CreatejsEvent("tick")), target.cjs.updateStateForPixi();
                 }
                 syncToPixi(target.cjs);
             }

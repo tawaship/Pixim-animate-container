@@ -19,7 +19,7 @@
     "docs": "typedoc --tsconfig tsconfig.json",
     "watch": "npm run rollup -- -w",
     "test": "jest",
-    "build": "ENV PROD=1 npm run rollup && npm run test && npm run docs && npm run d && echo done."
+    "build": "npm run rollup -- --environment PROD && npm run test && npm run docs && npm run d && echo done."
   },
   "keywords": [
     "pixi.js",

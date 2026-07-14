@@ -14,6 +14,13 @@ function getNamedInstance(target: object, name: string): CreatejsMovieClip | und
  * inherited {@link https://tawaship.github.io/pixi-animate-container/docs/classes/CreatejsMovieClip.html | CreatejsMovieClip}
  */
 export class CreatejsMovieClip extends _CreatejsMovieClip {
+	// Stamped onto published symbol prototypes by Adobe Animate's publish
+	// output (the same mechanism as named child instances) - not a createjs
+	// API member, so the createjs types cannot declare it. replaceInstance
+	// operates on published symbols, which always carry it. `declare` emits
+	// no code, so the runtime object is untouched.
+	declare nominalBounds: createjs.Rectangle;
+
 	/**
 	 * Replace child instance
 	 *

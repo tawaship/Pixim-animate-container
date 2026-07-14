@@ -3,6 +3,7 @@ import { CreatejsMovieClip as _CreatejsMovieClip } from '@tawaship/pixi-animate-
  * inherited {@link https://tawaship.github.io/pixi-animate-container/docs/classes/CreatejsMovieClip.html | CreatejsMovieClip}
  */
 export declare class CreatejsMovieClip extends _CreatejsMovieClip {
+    nominalBounds: createjs.Rectangle;
     /**
      * Replace child instance
      *

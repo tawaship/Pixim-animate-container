@@ -38,6 +38,13 @@ export class Container extends PiximContainer implements IAnimateContainer {
         this._createjsData.controller.overSpeed = value;
     }
 
+    get createjsSmooth() {
+        return this._createjsData.controller.smooth;
+    }
+    set createjsSmooth(value: boolean) {
+        this._createjsData.controller.smooth = value;
+    }
+
 	updateTask(e: ITickerData) {
 		super.updateTask(e);
 		
@@ -53,7 +60,18 @@ export class Container extends PiximContainer implements IAnimateContainer {
 	handleTick(delta: number) {
 		return this._createjsData.controller.handleTick(delta);
 	}
-	
+
+	/**
+	 * Pixi calls this on the tree before drawing: the createjs content is
+	 * brought up to date first (CreatejsController.flushForRender), so that
+	 * what is drawn is what createjs would draw at that moment, whenever the
+	 * render comes.
+	 */
+	updateTransform() {
+		this._createjsData.controller.flushForRender();
+		super.updateTransform();
+	}
+
 	addCreatejs<T extends TCreatejsObject = TCreatejsObject>(cjs: T) {
 		return this._createjsData.controller.addCreatejs(cjs);
 	}

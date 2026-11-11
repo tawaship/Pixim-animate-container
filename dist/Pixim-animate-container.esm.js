@@ -1,5 +1,5 @@
 /*!
- * Pixim-animate-container - v3.0.1
+ * Pixim-animate-container - v3.1.0
  * 
  * @require pixi.js v^5.3.2
  * @require @tawaship/pixim.js vundefined
@@ -285,6 +285,12 @@ class Container extends Container$1 {
     set createjsOverSpeed(value) {
         this._createjsData.controller.overSpeed = value;
     }
+    get createjsSmooth() {
+        return this._createjsData.controller.smooth;
+    }
+    set createjsSmooth(value) {
+        this._createjsData.controller.smooth = value;
+    }
     updateTask(e) {
         super.updateTask(e);
         const task = this._createjsData.task;
@@ -295,6 +301,16 @@ class Container extends Container$1 {
     }
     handleTick(delta) {
         return this._createjsData.controller.handleTick(delta);
+    }
+    /**
+     * Pixi calls this on the tree before drawing: the createjs content is
+     * brought up to date first (CreatejsController.flushForRender), so that
+     * what is drawn is what createjs would draw at that moment, whenever the
+     * render comes.
+     */
+    updateTransform() {
+        this._createjsData.controller.flushForRender();
+        super.updateTransform();
     }
     addCreatejs(cjs) {
         return this._createjsData.controller.addCreatejs(cjs);

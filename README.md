@@ -95,6 +95,10 @@ app
 
 ## Change log
 
+### 3.1.0
+
+Compatible with [@tawaship/pixi-animate-container@3.1.0](https://github.com/tawaship/pixi-animate-container): `createjsSmooth` (default `true`) keeps the playing even when `delta` jitters, the content is brought up to date right before each render, so a `gotoAndPlay()` / `gotoAndStop()` made between frames (for example from another task) is drawn correctly at once, values written to `instance.pixi` stay until the timeline writes them again, and rotated-and-skewed objects are drawn as in the browser output of Animate. See its change log for the complete list.
+
 ### 3.0.1
 
 Compatible with [@tawaship/pixi-animate-container@3.0.1](https://github.com/tawaship/pixi-animate-container): the full createjs 1.0 API is now typed, named Animate instances (`this.a` and friends) resolve through `CreatejsMovieClip`, `off()` correctly detaches the Pixi-side interaction bridge, and `addChild` with multiple children forwards every child. See its change log for the complete list. `replaceInstance()` is fully typed, including the publish-stamped `nominalBounds` it reads; runtime behavior is unchanged.

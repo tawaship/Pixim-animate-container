@@ -1,6 +1,6 @@
 {
   "name": "@tawaship/pixim-animate-container",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "",
   "files": [
     "dist",
@@ -54,7 +54,7 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@tawaship/pixi-animate-container": "^3.0.1",
+    "@tawaship/pixi-animate-container": "^3.1.0",
     "@tawaship/pixim.js": "^1.15.2"
   },
   "peerDependencies": {

@@ -89,6 +89,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
     function createPixiData(pixi, anchor) {
         var transform = new CjsTransform;
         return pixi.transform = transform, {
+            owner: null,
             regObj: anchor || pixi.pivot,
             instance: pixi,
             transform: transform,
@@ -108,13 +109,12 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             syncedAlpha: 1
         };
     }
-    var pixiDataStore = new WeakMap;
     function registerPixiData(cjs, data) {
-        pixiDataStore.set(cjs, data), function(cjs) {
+        data.owner = cjs, function(cjs) {
             return "x" in cjs && "regX" in cjs && "alpha" in cjs;
-        }(cjs) && (cjs[PIXI_DATA] = data, data.transform.owner = cjs);
+        }(cjs) && (data.transform.owner = cjs);
     }
-    var settleMarks = new WeakSet, driveDepth = 0;
+    var driveDepth = 0;
     function beginDrive() {
         driveDepth++;
     }
@@ -123,15 +123,6 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
     }
     function isDriving() {
         return driveDepth > 0;
-    }
-    function markForSettle(node) {
-        for (var top = node; top.parent; ) {
-            top = top.parent;
-        }
-        settleMarks.add(top);
-    }
-    function takeSettleMark(root) {
-        return !!settleMarks.has(root) && (settleMarks.delete(root), !0);
     }
     function setMaskForPixi(data, value) {
         var old = data.mask, instance = data.instance;
@@ -156,12 +147,12 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             var transform = writes[i];
             transform.logged = !1;
             var cjs = transform.owner, data = cjs ? cjs[PIXI_DATA] : void 0;
-            cjs && data && data.transform === transform && pullNode(cjs, data);
+            cjs && data && data.owner === cjs && data.transform === transform && pullNode(cjs, data);
         }
     }
     function pushNode(cjs) {
         var data = cjs[PIXI_DATA];
-        if (data) {
+        if (data && data.owner === cjs) {
             var pixi = data.instance, transform = data.transform, x = cjs.x, y = cjs.y, xChanged = x !== data.syncedX, yChanged = y !== data.syncedY;
             if (xChanged || yChanged) {
                 var position = transform.position;
@@ -232,15 +223,15 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiColorMatrixFilter.prototype, prototypeAccessors), 
         PixiColorMatrixFilter;
-    }(PIXI.filters.ColorMatrixFilter), pixiFilterStore = new WeakMap;
+    }(PIXI.filters.ColorMatrixFilter), PIXI_FILTER = Symbol("pixiFilter");
     function getPixiColorMatrixFilter(filter) {
-        var pixi = pixiFilterStore.get(filter);
-        return pixi || (function(filter, pixi) {
+        var pixi = filter[PIXI_FILTER];
+        return pixi && pixi.createjs === filter || (function(filter, pixi) {
             var matrix = pixi.matrix;
             matrix[0] = filter.redMultiplier, matrix[6] = filter.greenMultiplier, matrix[12] = filter.blueMultiplier, 
             matrix[18] = filter.alphaMultiplier, matrix[4] = filter.redOffset / 255, matrix[9] = filter.greenOffset / 255, 
             matrix[14] = filter.blueOffset / 255, matrix[19] = filter.alphaOffset / 255;
-        }(filter, pixi = new PixiColorMatrixFilter(filter)), pixiFilterStore.set(filter, pixi)), 
+        }(filter, pixi = new PixiColorMatrixFilter(filter)), filter[PIXI_FILTER] = pixi), 
         pixi;
     }
     var createjsInteractionEvents, CreatejsColorFilter = function(superclass) {
@@ -271,7 +262,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         this._downTarget = null, this._cjs = cjs, this._emitter = new PIXI.utils.EventEmitter, 
         cjs.pixi.on("pointerdown", this._onPointerDown, this).on("pointermove", this._onPointerMove, this).on("pointerup", this._onPointerUp, this).on("pointerupoutside", this._onPointerUpOutside, this).on("pointertap", this._onPointerTap, this).on("pointerover", this._onPointerOver, this).on("pointerout", this._onPointerOut, this);
     };
-    CreatejsEventManager.prototype._onPointerDown = function(e) {
+    CreatejsEventManager.prototype.isFor = function(cjs) {
+        return this._cjs === cjs;
+    }, CreatejsEventManager.prototype._onPointerDown = function(e) {
         var ev = {
             type: createjsInteractionEvents.mousedown,
             currentTarget: e.currentTarget.createjs,
@@ -344,21 +337,21 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         type && !(type in createjsInteractionEvents) || (this._emitter.removeAllListeners(type), 
         0 === this._emitter.eventNames().length && (this._cjs.pixi.interactive = !1));
     };
-    var eventManagerStore = new WeakMap;
+    var EVENT_MANAGER = Symbol("eventManager");
     function addInteractionListener(cjs, type, cb) {
         type in createjsInteractionEvents && function(cjs) {
-            var manager = eventManagerStore.get(cjs);
-            return manager || (manager = new CreatejsEventManager(cjs), eventManagerStore.set(cjs, manager)), 
-            manager;
+            var manager = cjs[EVENT_MANAGER];
+            return manager && manager.isFor(cjs) || (manager = new CreatejsEventManager(cjs), 
+            cjs[EVENT_MANAGER] = manager), manager;
         }(cjs).add(type, cb);
     }
     function removeInteractionListener(cjs, type, cb) {
-        var manager = eventManagerStore.get(cjs);
-        manager && manager.remove(type, cb);
+        var manager = cjs[EVENT_MANAGER];
+        manager && manager.isFor(cjs) && manager.remove(type, cb);
     }
     function removeAllInteractionListeners(cjs, type) {
-        var manager = eventManagerStore.get(cjs);
-        manager && manager.removeAll(type);
+        var manager = cjs[EVENT_MANAGER];
+        manager && manager.isFor(cjs) && manager.removeAll(type);
     }
     var PixiMovieClip = function(Container$1) {
         function PixiMovieClip(cjs) {
@@ -405,9 +398,6 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CompositeOperations.Screen = "screen";
     }(CompositeOperations || (CompositeOperations = {}));
     var blendModes = {};
-    blendModes[CompositeOperations.Lighter] = PIXI.BLEND_MODES.ADD, blendModes[CompositeOperations.Multiply] = PIXI.BLEND_MODES.MULTIPLY, 
-    blendModes[CompositeOperations.Screen] = PIXI.BLEND_MODES.SCREEN;
-    var dataStore$5 = new WeakMap;
     function resetData$5(cjs) {
         var data = function(cjs) {
             var pixi = new PixiMovieClip(cjs);
@@ -418,11 +408,23 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 compositeOperation: null
             });
         }(cjs);
-        return dataStore$5.set(cjs, data), registerPixiData(cjs, data), data;
+        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
     }
     function ensureData$5(cjs) {
-        var data = dataStore$5.get(cjs);
-        return data || resetData$5(cjs);
+        var data = cjs[PIXI_DATA];
+        return data && data.owner === cjs ? data : resetData$5(cjs);
+    }
+    blendModes[CompositeOperations.Lighter] = PIXI.BLEND_MODES.ADD, blendModes[CompositeOperations.Multiply] = PIXI.BLEND_MODES.MULTIPLY, 
+    blendModes[CompositeOperations.Screen] = PIXI.BLEND_MODES.SCREEN;
+    var SETTLE_MARK = Symbol("settleMark");
+    function markForSettle(node) {
+        for (var top = node; top.parent; ) {
+            top = top.parent;
+        }
+        top instanceof CreatejsMovieClip$1 && (top[SETTLE_MARK] = !0);
+    }
+    function takeSettleMark(root) {
+        return !!root[SETTLE_MARK] && (root[SETTLE_MARK] = !1, !0);
     }
     function isBlendModeChild(child) {
         return "pixi" in child && "updateBlendModeForPixi" in child;
@@ -619,19 +621,18 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiSprite.prototype, prototypeAccessors$4), PixiSprite;
     }(PIXI.Sprite);
-    logPixiWrites(PixiSprite.prototype);
-    var dataStore$4 = new WeakMap;
     function resetData$4(cjs) {
         var data = function(cjs) {
             var pixi = new PixiSprite(cjs);
             return createPixiData(pixi, pixi.anchor);
         }(cjs);
-        return dataStore$4.set(cjs, data), registerPixiData(cjs, data), data;
+        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
     }
     function ensureData$4(cjs) {
-        var data = dataStore$4.get(cjs);
-        return data || resetData$4(cjs);
+        var data = cjs[PIXI_DATA];
+        return data && data.owner === cjs ? data : resetData$4(cjs);
     }
+    logPixiWrites(PixiSprite.prototype);
     var CreatejsSprite$1 = function(superclass) {
         function CreatejsSprite() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -698,8 +699,6 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiShape.prototype, prototypeAccessors$6), PixiShape;
     }(PIXI.Container);
-    logPixiWrites(PixiShape.prototype);
-    var dataStore$3 = new WeakMap;
     function resetData$3(cjs) {
         var data = function(cjs) {
             var pixi = new PixiShape(cjs);
@@ -708,12 +707,13 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 graphics: null
             });
         }(cjs);
-        return dataStore$3.set(cjs, data), registerPixiData(cjs, data), data;
+        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
     }
     function ensureData$3(cjs) {
-        var data = dataStore$3.get(cjs);
-        return data || resetData$3(cjs);
+        var data = cjs[PIXI_DATA];
+        return data && data.owner === cjs ? data : resetData$3(cjs);
     }
+    logPixiWrites(PixiShape.prototype);
     var CreatejsShape = function(superclass) {
         function CreatejsShape(graphics) {
             superclass.call(this, graphics), ensureData$3(this);
@@ -793,19 +793,18 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiBitmap.prototype, prototypeAccessors$8), PixiBitmap;
     }(PIXI.Sprite);
-    logPixiWrites(PixiBitmap.prototype);
-    var dataStore$2 = new WeakMap;
     function resetData$2(cjs) {
         var data = function(cjs) {
             var pixi = new PixiBitmap(cjs);
             return createPixiData(pixi, pixi.anchor);
         }(cjs);
-        return dataStore$2.set(cjs, data), registerPixiData(cjs, data), data;
+        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
     }
     function ensureData$2(cjs) {
-        var data = dataStore$2.get(cjs);
-        return data || resetData$2(cjs);
+        var data = cjs[PIXI_DATA];
+        return data && data.owner === cjs ? data : resetData$2(cjs);
     }
+    logPixiWrites(PixiBitmap.prototype);
     var CreatejsBitmap$1 = function(superclass) {
         function CreatejsBitmap() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -869,7 +868,6 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiGraphics.prototype, prototypeAccessors$10), PixiGraphics;
     }(PIXI.Graphics);
-    var dataStore$1 = new WeakMap;
     function resetData$1(cjs) {
         var data = function(cjs) {
             var pixi = new PixiGraphics(cjs);
@@ -878,11 +876,11 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 strokeAlpha: 1
             });
         }(cjs);
-        return dataStore$1.set(cjs, data), registerPixiData(cjs, data), data;
+        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
     }
     function ensureData$1(cjs) {
-        var data = dataStore$1.get(cjs);
-        return data || resetData$1(cjs);
+        var data = cjs[PIXI_DATA];
+        return data && data.owner === cjs ? data : resetData$1(cjs);
     }
     var LineCap = {
         0: PIXI.LINE_CAP.BUTT,
@@ -1069,7 +1067,6 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         PixiTextContainer;
     }(PIXI.Container);
     logPixiWrites(PixiTextContainer.prototype);
-    var dataStore = new WeakMap;
     function resetData(cjs) {
         var data = function(cjs) {
             var text = new PixiText("", {
@@ -1084,11 +1081,11 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 lineWidth: 0
             });
         }(cjs);
-        return dataStore.set(cjs, data), registerPixiData(cjs, data), data;
+        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
     }
     function ensureData(cjs) {
-        var data = dataStore.get(cjs);
-        return data || resetData(cjs);
+        var data = cjs[PIXI_DATA];
+        return data && data.owner === cjs ? data : resetData(cjs);
     }
     var CreatejsText = function(superclass) {
         function CreatejsText(text, font, color) {
@@ -1471,7 +1468,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CreatejsShape: CreatejsShape,
         CreatejsSprite: CreatejsSprite$1,
         CreatejsText: CreatejsText,
+        EVENT_MANAGER: EVENT_MANAGER,
         PIXI_DATA: PIXI_DATA,
+        PIXI_FILTER: PIXI_FILTER,
         PixiBitmap: PixiBitmap,
         PixiColorMatrixFilter: PixiColorMatrixFilter,
         PixiGraphics: PixiGraphics,
@@ -1480,6 +1479,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         PixiSprite: PixiSprite,
         PixiText: PixiText,
         PixiTextContainer: PixiTextContainer,
+        SETTLE_MARK: SETTLE_MARK,
         addInteractionListener: addInteractionListener,
         beginDrive: beginDrive,
         createPixiData: createPixiData,
@@ -1489,8 +1489,8 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         },
         endDrive: endDrive,
         findPixiData: function(cjs) {
-            var data = pixiDataStore.get(cjs);
-            return data || null;
+            var data = cjs[PIXI_DATA];
+            return data && data.owner === cjs ? data : null;
         },
         getPixiColorMatrixFilter: getPixiColorMatrixFilter,
         isDriving: isDriving,

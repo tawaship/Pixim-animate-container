@@ -18,7 +18,7 @@ EventDispatcher, no initialize) - a Shape holds it rather than it being
 added to a container directly, so this wrapper does not implement
 ICreatejsDisplayObject.</p>
 </div></section>
-<section class="tsd-panel tsd-hierarchy" data-refl="2979">
+<section class="tsd-panel tsd-hierarchy" data-refl="3004">
 <h4>Hierarchy (<a href="../hierarchy.html#core.CreatejsGraphics">View Summary</a>)</h4>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><a href="../modules/core.html" class="tsd-signature-type tsd-kind-namespace">core</a><span class="tsd-signature-symbol">.</span><a href="../modules/core.createjs.html" class="tsd-signature-type tsd-kind-namespace">createjs</a><span class="tsd-signature-symbol">.</span><a href="core.createjs.Graphics.html" class="tsd-signature-type tsd-kind-class">Graphics</a>
@@ -37,7 +37,8 @@ ICreatejsDisplayObject.</p>
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading tsd-anchor-link" id="properties">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-index-list"><a href="#command" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>command</span></a>
+<div class="tsd-index-list"><a href="#pixi_data" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>[<wbr/>PIXI_<wbr/>DATA]?</span></a>
+<a href="#command" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>command</span></a>
 <a href="#instructions" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instructions</span></a>
 <a href="#base_64" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>BASE_<wbr/>64</span></a>
 <a href="#begincmd" class="tsd-index-link tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>begin<wbr/>Cmd</span></a>
@@ -138,10 +139,17 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">CreatejsGraphics</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#constructor">constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L26">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:26</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L28">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:28</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="properties-1">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="pixi_data"><code class="tsd-tag">Optional</code><span>[<wbr/>PIXI_<wbr/>DATA]</span><a href="#pixi_data" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">&quot;[PIXI_DATA]&quot;</span><span class="tsd-signature-symbol">?:</span> <a href="../interfaces/core.IPixiGraphicsData.html" class="tsd-signature-type tsd-kind-interface">IPixiGraphicsData</a></div>
+<div class="tsd-comment tsd-typography"><p>The wrapper data (see PIXI_DATA in core)</p>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L27">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:27</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="command"><span>command</span><a href="#command" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">command</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div><aside class="tsd-sources">
@@ -189,7 +197,7 @@ ICreatejsDisplayObject.</p>
 <div class="tsd-description">
 <h4 class="tsd-returns-title">Returns <a href="../types/core.TCreatejsMask.html" class="tsd-signature-type tsd-kind-type-alias">TCreatejsMask</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L67">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:67</a></li></ul></aside></div></li>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L69">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:69</a></li></ul></aside></div></li>
 <li>
 <div class="tsd-signature" id="maskmask-1"><span class="tsd-signature-keyword">set</span> <span class="tsd-kind-set-signature">mask</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">:</span> <a href="../types/core.TCreatejsMask.html" class="tsd-signature-type tsd-kind-type-alias">TCreatejsMask</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span></div>
 <div class="tsd-description">
@@ -199,7 +207,7 @@ ICreatejsDisplayObject.</p>
 <li><span><span class="tsd-kind-parameter">value</span>: <a href="../types/core.TCreatejsMask.html" class="tsd-signature-type tsd-kind-type-alias">TCreatejsMask</a></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L68">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:68</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L70">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:70</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="pixi"><span>pixi</span><a href="#pixi" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -208,7 +216,7 @@ ICreatejsDisplayObject.</p>
 <div class="tsd-description">
 <h4 class="tsd-returns-title">Returns <a href="core.PixiGraphics.html" class="tsd-signature-type tsd-kind-class">PixiGraphics</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L27">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:27</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L29">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:29</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -230,7 +238,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#a">a</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L36">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:36</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L38">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:38</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="append"><span>append</span><a href="#append" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -264,7 +272,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#arc">arc</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L35">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:35</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L37">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:37</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="arcto"><span>arc<wbr/>To</span><a href="#arcto" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -282,7 +290,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#arcto">arcTo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L33">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:33</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L35">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:35</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="at"><span>at</span><a href="#at" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -300,7 +308,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#at">at</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L34">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:34</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L36">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:36</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="beginbitmapfill"><span>begin<wbr/>Bitmap<wbr/>Fill</span><a href="#beginbitmapfill" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -345,7 +353,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#beginfill">beginFill</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L51">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:51</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L53">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:53</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="beginlineargradientfill"><span>begin<wbr/>Linear<wbr/>Gradient<wbr/>Fill</span><a href="#beginlineargradientfill" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -439,7 +447,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#beginstroke">beginStroke</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L57">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:57</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L59">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:59</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="beziercurveto"><span>bezier<wbr/>Curve<wbr/>To</span><a href="#beziercurveto" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -458,7 +466,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#beziercurveto">bezierCurveTo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L40">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:40</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L42">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:42</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="bf"><span>bf</span><a href="#bf" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -508,7 +516,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#bt">bt</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L41">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:41</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L43">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:43</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="c"><span>c</span><a href="#c" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -518,7 +526,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#c">c</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L49">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:49</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L51">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:51</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="clear"><span>clear</span><a href="#clear" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -528,7 +536,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#clear">clear</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L48">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:48</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L50">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:50</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="clone"><span>clone</span><a href="#clone" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -548,7 +556,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#closepath">closePath</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L46">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:46</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L48">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:48</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="cp"><span>cp</span><a href="#cp" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -558,7 +566,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#cp">cp</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L47">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:47</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L49">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:49</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="curveto"><span>curve<wbr/>To</span><a href="#curveto" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -575,7 +583,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#curveto">curveTo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L39">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:39</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L41">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:41</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="dc"><span>dc</span><a href="#dc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -591,7 +599,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#dc">dc</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L62">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:62</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L64">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:64</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="de"><span>de</span><a href="#de" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -608,7 +616,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#de">de</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L64">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:64</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L66">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:66</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="decodepath"><span>decode<wbr/>Path</span><a href="#decodepath" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -641,7 +649,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#dp">dp</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L66">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:66</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L68">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:68</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="dr"><span>dr</span><a href="#dr" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -658,7 +666,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#dr">dr</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L45">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:45</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L47">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:47</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="draw"><span>draw</span><a href="#draw" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -702,7 +710,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#drawcircle">drawCircle</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L61">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:61</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L63">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:63</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="drawellipse"><span>draw<wbr/>Ellipse</span><a href="#drawellipse" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -719,7 +727,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#drawellipse">drawEllipse</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L63">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:63</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L65">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:65</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="drawpolystar"><span>draw<wbr/>Poly<wbr/>Star</span><a href="#drawpolystar" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -738,7 +746,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#drawpolystar">drawPolyStar</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L65">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:65</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L67">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:67</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="drawrect"><span>draw<wbr/>Rect</span><a href="#drawrect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -755,7 +763,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#drawrect">drawRect</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L44">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:44</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L46">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:46</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="drawroundrect"><span>draw<wbr/>Round<wbr/>Rect</span><a href="#drawroundrect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -773,7 +781,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#drawroundrect">drawRoundRect</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L59">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:59</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L61">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:61</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="drawroundrectcomplex"><span>draw<wbr/>Round<wbr/>Rect<wbr/>Complex</span><a href="#drawroundrectcomplex" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -804,7 +812,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#ef">ef</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L54">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:54</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L56">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:56</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="endfill"><span>end<wbr/>Fill</span><a href="#endfill" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -814,7 +822,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#endfill">endFill</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L53">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:53</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L55">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:55</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="endstroke"><span>end<wbr/>Stroke</span><a href="#endstroke" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -848,7 +856,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#f">f</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L52">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:52</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L54">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:54</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="getinstructions"><span class="deprecated">get<wbr/>Instructions</span><a href="#getinstructions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -923,7 +931,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#lineto">lineTo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L31">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:31</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L33">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:33</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="ls"><span>ls</span><a href="#ls" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -957,7 +965,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#lt">lt</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L32">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:32</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L34">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:34</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="moveto"><span>move<wbr/>To</span><a href="#moveto" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -972,7 +980,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#moveto">moveTo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L29">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:29</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L31">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:31</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="mt"><span>mt</span><a href="#mt" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -987,7 +995,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#mt">mt</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L30">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:30</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L32">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:32</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="p"><span>p</span><a href="#p" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1018,7 +1026,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#qt">qt</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L38">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:38</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L40">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:40</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="quadraticcurveto"><span>quadratic<wbr/>Curve<wbr/>To</span><a href="#quadraticcurveto" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -1035,7 +1043,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#quadraticcurveto">quadraticCurveTo</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L37">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:37</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L39">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:39</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="r"><span>r</span><a href="#r" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -1052,7 +1060,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#r">r</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L43">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:43</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L45">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:45</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="rc"><span>rc</span><a href="#rc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1090,7 +1098,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#rect">rect</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L42">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:42</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L44">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:44</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="rf"><span>rf</span><a href="#rf" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1129,7 +1137,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#rr">rr</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L60">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:60</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L62">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:62</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="rs"><span>rs</span><a href="#rs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1164,7 +1172,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#s">s</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L58">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:58</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L60">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:60</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="sd"><span>sd</span><a href="#sd" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1212,7 +1220,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#setstrokestyle">setStrokeStyle</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L55">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:55</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L57">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:57</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="ss"><span>ss</span><a href="#ss" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -1230,7 +1238,7 @@ ICreatejsDisplayObject.</p>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><aside class="tsd-sources">
 <p>Overrides <a href="core.createjs.Graphics.html">Graphics</a>.<a href="core.createjs.Graphics.html#ss">ss</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L56">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:56</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L58">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:58</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="store"><span>store</span><a href="#store" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1273,7 +1281,7 @@ ICreatejsDisplayObject.</p>
 <li><span><span class="tsd-kind-parameter">mode</span>: <a href="https://pixijs.download/v5.3.9/docs/index.html" class="tsd-signature-type external" target="_blank">BLEND_MODES</a></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L28">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:28</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/Graphics.d.ts#L30">packages/pixi-animate-container/types/createjs/modules/Graphics.d.ts:30</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited">
 <h3 class="tsd-anchor-link" id="gethsl"><code class="tsd-tag">Static</code><span>get<wbr/>HSL</span><a href="#gethsl" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-inherited">
@@ -1325,7 +1333,7 @@ ICreatejsDisplayObject.</p>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Constructors</summary>
 <div><a href="#constructor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Properties</summary>
-<div><a href="#command" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>command</span></a><a href="#instructions" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instructions</span></a><a href="#base_64" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>BASE_<wbr/>64</span></a><a href="#begincmd" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>begin<wbr/>Cmd</span></a><a href="#stroke_caps_map" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>STROKE_<wbr/>CAPS_<wbr/>MAP</span></a><a href="#stroke_joints_map" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>STROKE_<wbr/>JOINTS_<wbr/>MAP</span></a></div></details>
+<div><a href="#pixi_data"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>[<wbr/>PIXI_<wbr/>DATA]</span></a><a href="#command" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>command</span></a><a href="#instructions" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>instructions</span></a><a href="#base_64" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>BASE_<wbr/>64</span></a><a href="#begincmd" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>begin<wbr/>Cmd</span></a><a href="#stroke_caps_map" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>STROKE_<wbr/>CAPS_<wbr/>MAP</span></a><a href="#stroke_joints_map" class="tsd-is-inherited"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>STROKE_<wbr/>JOINTS_<wbr/>MAP</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Accessors</summary>
 <div><a href="#mask"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>mask</span></a><a href="#pixi"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>pixi</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>

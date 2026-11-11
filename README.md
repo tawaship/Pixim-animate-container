@@ -93,11 +93,22 @@ app
 	});
 ```
 
+## Claude Code skills
+
+The package comes with skills for Claude Code (Anthropic's AI coding tool) in `dist-skills/`: `pixim-animate-container-guide`, which tells it how to use this package with Pixim.js, and `pixi-animate-container-guide` (the core module, which the first one builds on). To let Claude Code use them in your project, copy them into the project's `.claude/skills/`:
+
+```
+mkdir -p .claude/skills
+cp -r node_modules/@tawaship/pixim-animate-container/dist-skills/* .claude/skills/
+```
+
+Copy them again after updating the package: each skill describes the version it comes with, and tells Claude Code to follow the type definitions in `node_modules` when the installed version is another one.
+
 ## Change log
 
 ### 3.1.0
 
-Compatible with [@tawaship/pixi-animate-container@3.1.0](https://github.com/tawaship/pixi-animate-container): `createjsSmooth` (default `true`) keeps the playing even when `delta` jitters, the content is brought up to date right before each render, so a `gotoAndPlay()` / `gotoAndStop()` made between frames (for example from another task) is drawn correctly at once, values written to `instance.pixi` stay until the timeline writes them again, and rotated-and-skewed objects are drawn as in the browser output of Animate. See its change log for the complete list.
+Compatible with [@tawaship/pixi-animate-container@3.1.0](https://github.com/tawaship/pixi-animate-container): `createjsSmooth` (default `true`) keeps the playing even when `delta` jitters, the content is brought up to date right before each render, so a `gotoAndPlay()` / `gotoAndStop()` made between frames (for example from another task) is drawn correctly at once, values written to `instance.pixi` stay until the timeline writes them again, and rotated-and-skewed objects are drawn as in the browser output of Animate. See its change log for the complete list. Claude Code skills now come with the package in `dist-skills/` (see "Claude Code skills").
 
 ### 3.0.1
 

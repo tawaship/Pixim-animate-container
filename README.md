@@ -93,6 +93,12 @@ app
 	});
 ```
 
+## Supported features
+
+The same as [pixi-animate-container](https://github.com/tawaship/pixi-animate-container#supported-features), which plays the content. In addition:
+
+- Sound (`playSound` in frame scripts) plays with `options: { useSound: true }` in the content's definition, but not with the `xhr` option of the Pixim content: the assets are then read as blob URLs, from which CreateJS's `Sound` cannot tell a sound
+
 ## Claude Code skills
 
 The package comes with skills for Claude Code (Anthropic's AI coding tool) in `dist-skills/`: `pixim-animate-container-guide`, which tells it how to use this package with Pixim.js, and `pixi-animate-container-guide` (the core module, which the first one builds on). To let Claude Code use them in your project, copy them into the project's `.claude/skills/`:
@@ -108,7 +114,7 @@ Copy them again after updating the package: each skill describes the version it 
 
 ### 3.1.0
 
-Compatible with [@tawaship/pixi-animate-container@3.1.0](https://github.com/tawaship/pixi-animate-container): `createjsSmooth` (default `true`) keeps the playing even when `delta` jitters, the content is brought up to date right before each render, so a `gotoAndPlay()` / `gotoAndStop()` made between frames (for example from another task) is drawn correctly at once, values written to `instance.pixi` stay until the timeline writes them again, and rotated-and-skewed objects are drawn as in the browser output of Animate. See its change log for the complete list. Claude Code skills now come with the package in `dist-skills/` (see "Claude Code skills").
+Compatible with [@tawaship/pixi-animate-container@3.1.0](https://github.com/tawaship/pixi-animate-container): `createjsSmooth` (default `true`) keeps the playing even when `delta` jitters, the content is brought up to date right before each render, so a `gotoAndPlay()` / `gotoAndStop()` made between frames (for example from another task) is drawn correctly at once, values written to `instance.pixi` stay until the timeline writes them again, rotated-and-skewed objects are drawn as in the browser output of Animate, blend modes (`compositeOperation`) switch on and off as in createjs, and bitmap and gradient fills are drawn. See its change log for the complete list. Claude Code skills now come with the package in `dist-skills/` (see "Claude Code skills").
 
 ### 3.0.1
 

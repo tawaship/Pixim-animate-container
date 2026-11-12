@@ -13,15 +13,19 @@
 <h1>Class PixiColorMatrixFilter</h1></div>
 <section class="tsd-panel tsd-comment">
 <div class="tsd-comment tsd-typography"><p>inherited <a href="https://pixijs.download/v5.3.9/docs/PIXI.filters.ColorMatrixFilter.html">PIXI.filters.ColorMatrixFilter</a></p>
+<p>Its matrix follows the 8 scalars of its createjs ColorFilter. They are
+plain data properties (tweens write them), so they are copied over when
+the filter is about to be drawn (see PixiMovieClip.updateTransform) and
+when <code>matrix</code> is read.</p>
 </div></section>
-<section class="tsd-panel tsd-hierarchy" data-refl="3879">
+<section class="tsd-panel tsd-hierarchy" data-refl="3882">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><a href="https://pixijs.download/v5.3.9/docs/index.html" class="tsd-signature-type external" target="_blank">ColorMatrixFilter</a>
 <ul class="tsd-hierarchy">
 <li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">PixiColorMatrixFilter</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L6">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:6</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L11">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:11</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -34,6 +38,11 @@
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading tsd-anchor-link" id="accessors">Accessors<a href="#accessors" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-index-list"><a href="#createjs" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>createjs</span></a>
+<a href="#matrix" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>matrix</span></a>
+</div></section>
+<section class="tsd-index-section">
+<h3 class="tsd-index-heading tsd-anchor-link" id="methods">Methods<a href="#methods" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-index-list"><a href="#syncfromcreatejs" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>sync<wbr/>From<wbr/>Createjs</span></a>
 </div></section></div></details></section></section>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="constructors-1">Constructors<a href="#constructors-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
@@ -51,7 +60,7 @@
 <h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">PixiColorMatrixFilter</a></h4><aside class="tsd-sources">
 <p>Overrides <a href="https://pixijs.download/v5.3.9/docs/index.html" class="external" target="_blank">filters.ColorMatrixFilter.constructor</a></p>
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L8">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:8</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L13">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:13</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="accessors-1">Accessors<a href="#accessors-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -63,7 +72,62 @@
 <div class="tsd-description">
 <h4 class="tsd-returns-title">Returns <a href="core.CreatejsColorFilter.html" class="tsd-signature-type tsd-kind-class">CreatejsColorFilter</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L9">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:9</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L14">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:14</a></li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="matrix"><span>matrix</span><a href="#matrix" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li>
+<div class="tsd-signature" id="matrixmatrix"><span class="tsd-signature-keyword">get</span> <span class="tsd-kind-get-signature">matrix</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>The matrix of the color matrix filter</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-member">
+<h4 class="tsd-anchor-link" id="member">Member<a href="#member" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4></div>
+<div class="tsd-tag-default">
+<h4 class="tsd-anchor-link" id="default">Default<a href="#default" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-1">[</span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">]</span>
+</code><button type="button">Copy</button></pre>
+
+</div></div><aside class="tsd-sources">
+<p>Overrides filters.ColorMatrixFilter.matrix</p>
+<ul>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L15">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:15</a></li></ul></aside></div></li>
+<li>
+<div class="tsd-signature" id="matrixmatrix-1"><span class="tsd-signature-keyword">set</span> <span class="tsd-kind-set-signature">matrix</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>The matrix of the color matrix filter</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">value</span>: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></span></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-member">
+<h4 class="tsd-anchor-link" id="member-1">Member<a href="#member-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4></div>
+<div class="tsd-tag-default">
+<h4 class="tsd-anchor-link" id="default-1">Default<a href="#default-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-1">[</span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">, </span><span class="hl-12">1</span><span class="hl-1">, </span><span class="hl-12">0</span><span class="hl-1">]</span>
+</code><button type="button">Copy</button></pre>
+
+</div></div><aside class="tsd-sources">
+<p>Overrides filters.ColorMatrixFilter.matrix</p>
+<ul>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L16">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:16</a></li></ul></aside></div></li></ul></section></section></details>
+<details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
+<section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="syncfromcreatejs"><span>sync<wbr/>From<wbr/>Createjs</span><a href="#syncfromcreatejs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="syncfromcreatejs-1"><span class="tsd-kind-call-signature">syncFromCreatejs</span><span class="tsd-signature-symbol">()</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">void</span><a href="#syncfromcreatejs-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Copies the scalars of the createjs ColorFilter into the matrix.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/tawaship/pixi-animate-container/blob/master/types/createjs/modules/ColorFilter.d.ts#L20">packages/pixi-animate-container/types/createjs/modules/ColorFilter.d.ts:20</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -81,7 +145,9 @@
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Constructors</summary>
 <div><a href="#constructor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Accessors</summary>
-<div><a href="#createjs"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>createjs</span></a></div></details></div></details></div>
+<div><a href="#createjs"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>createjs</span></a><a href="#matrix"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>matrix</span></a></div></details>
+<details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
+<div><a href="#syncfromcreatejs"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>sync<wbr/>From<wbr/>Createjs</span></a></div></details></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html">@tawaship/pixim-animate-container - v3.1.0</a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container">

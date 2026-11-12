@@ -170,6 +170,14 @@ See "Using with TypeScript" in the `pixi-animate-container-guide` skill for the 
 
 `cjs.stop()` stops only the timeline of that instance. Child movie clips keep playing, so it does not stop the entire Animate content. If you do not want the content displayed, do not call `addCreatejs`.
 
-### Read the createjs-side properties from frame scripts
+### Read the createjs-side properties
 
-The display properties of the pixi mirror (`instance.pixi.*`) are synced at the end of each tick. Reading `instance.pixi.x` etc. from inside a frame script returns the value from the previous tick. Always read the createjs-side properties (`instance.x` etc. — always current) from frame scripts.
+A display property written on the createjs side (`instance.x = 10`, or by the timeline) is passed to the pixi node (`instance.pixi.x`) at once. The createjs-side value is what the content works with: read `instance.x` etc. rather than `instance.pixi.*`, which differs after a direct write to the pixi node (a value written there stays until the timeline writes that property again; `instance.x` keeps what createjs wrote).
+
+### Sound and the xhr option
+
+Sound (`playSound` in frame scripts) needs `options: { useSound: true }` in the content's definition (`defineAnimatesTo`). With the Pixim content's `xhr` option, sounds are not played: the assets are read as blob URLs, from which CreateJS's `Sound` cannot tell a sound.
+
+### What is not drawn as CreateJS draws it
+
+See the pixi-animate-container skill ("What is not drawn as CreateJS draws it") and the pixi-animate-container README's "Supported features".

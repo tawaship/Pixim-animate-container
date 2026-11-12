@@ -22,33 +22,25 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             }
         }), n.default = e, Object.freeze(n);
     }
-    var PIXI__namespace = _interopNamespaceDefault(PIXI), DEG_TO_RAD = Math.PI / 180, RAD_TO_DEG = 180 / Math.PI, pixiWrites = [], logSuspended = 0;
-    /*!
-     * pixi-animate-container - v3.1.0
-     * 
-     * @require pixi.js v^5.3.2
-     * @author tawaship (makazu.mori@gmail.com)
-     * @license MIT
-     */    var CjsTransform = function(Transform) {
+    var PIXI__namespace = _interopNamespaceDefault(PIXI), DEG_TO_RAD = Math.PI / 180, RAD_TO_DEG = 180 / Math.PI, CjsTransform = function(Transform) {
         function CjsTransform() {
             Transform.apply(this, arguments), this.degRotation = 0, this.degSkewX = 0, this.degSkewY = 0, 
-            this.owner = null, this.logged = !1, this._radRotation = 0, this._radSkewX = 0, 
-            this._radSkewY = 0;
+            this._radRotation = 0, this._radSkewX = 0, this._radSkewY = 0;
         }
         return Transform && (CjsTransform.__proto__ = Transform), CjsTransform.prototype = Object.create(Transform && Transform.prototype), 
-        CjsTransform.prototype.constructor = CjsTransform, CjsTransform.prototype.logPixiWrite = function() {
-            logSuspended || this.logged || !this.owner || (this.logged = !0, pixiWrites.push(this));
-        }, CjsTransform.prototype.setRotationSkew = function(rotation, skewX, skewY) {
-            this.degRotation = rotation, this._radRotation = rotation * DEG_TO_RAD, this._rotation = this._radRotation, 
-            this.degSkewX = skewX, this._radSkewX = -skewX * DEG_TO_RAD, this.degSkewY = skewY, 
-            this._radSkewY = skewY * DEG_TO_RAD, this.skew.x !== this._radSkewX || this.skew.y !== this._radSkewY ? this.skew.set(this._radSkewX, this._radSkewY) : this.updateSkew();
-        }, CjsTransform.prototype.onChange = function() {
-            this._localID++, this.logPixiWrite();
+        CjsTransform.prototype.constructor = CjsTransform, CjsTransform.prototype.setRotation = function(degrees) {
+            degrees === this.degRotation && this._rotation === this._radRotation || (this.degRotation = degrees, 
+            this._radRotation = degrees * DEG_TO_RAD, this._rotation = this._radRotation, this.updateSkew());
+        }, CjsTransform.prototype.setSkewX = function(degrees) {
+            degrees === this.degSkewX && this.skew.x === this._radSkewX || (this.degSkewX = degrees, 
+            this._radSkewX = -degrees * DEG_TO_RAD, this.skew.x !== this._radSkewX ? this.skew.x = this._radSkewX : this.updateSkew());
+        }, CjsTransform.prototype.setSkewY = function(degrees) {
+            degrees === this.degSkewY && this.skew.y === this._radSkewY || (this.degSkewY = degrees, 
+            this._radSkewY = degrees * DEG_TO_RAD, this.skew.y !== this._radSkewY ? this.skew.y = this._radSkewY : this.updateSkew());
         }, CjsTransform.prototype.updateSkew = function() {
-            this._rotation !== this._radRotation && (this._radRotation = this._rotation, this.degRotation = this._rotation * RAD_TO_DEG, 
-            this.logPixiWrite()), this.skew.x !== this._radSkewX && (this._radSkewX = this.skew.x, 
-            this.degSkewX = -this.skew.x * RAD_TO_DEG, this.logPixiWrite()), this.skew.y !== this._radSkewY && (this._radSkewY = this.skew.y, 
-            this.degSkewY = this.skew.y * RAD_TO_DEG, this.logPixiWrite());
+            this._rotation !== this._radRotation && (this._radRotation = this._rotation, this.degRotation = this._rotation * RAD_TO_DEG), 
+            this.skew.x !== this._radSkewX && (this._radSkewX = this.skew.x, this.degSkewX = -this.skew.x * RAD_TO_DEG), 
+            this.skew.y !== this._radSkewY && (this._radSkewY = this.skew.y, this.degSkewY = this.skew.y * RAD_TO_DEG);
             var cos = 1, sin = 0;
             if (this.degRotation % 360) {
                 var r = this.degRotation * DEG_TO_RAD;
@@ -64,57 +56,116 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             this._localID++;
         }, CjsTransform;
     }(PIXI.Transform);
-    function logPixiWrites(proto) {
-        Object.defineProperty(proto, "alpha", {
-            configurable: !0,
-            enumerable: !0,
-            get: function() {
-                return this._cjsAlpha;
-            },
-            set: function(value) {
-                this._cjsAlpha !== value && (this._cjsAlpha = value, this.transform instanceof CjsTransform && this.transform.logPixiWrite());
-            }
-        }), Object.defineProperty(proto, "visible", {
-            configurable: !0,
-            enumerable: !0,
-            get: function() {
-                return this._cjsVisible;
-            },
-            set: function(value) {
-                this._cjsVisible !== value && (this._cjsVisible = value, this.transform instanceof CjsTransform && this.transform.logPixiWrite());
-            }
-        });
-    }
-    var PIXI_DATA = Symbol("pixiData");
-    function createPixiData(pixi, anchor) {
+    /*!
+     * pixi-animate-container - v3.1.0
+     * 
+     * @require pixi.js v^5.3.2
+     * @author tawaship (makazu.mori@gmail.com)
+     * @license MIT
+     */    function createPixiData(pixi, anchor) {
         var transform = new CjsTransform;
         return pixi.transform = transform, {
-            owner: null,
             regObj: anchor || pixi.pivot,
             instance: pixi,
             transform: transform,
             reservedBlendMode: PIXI.BLEND_MODES.NORMAL,
+            compositeOperation: null,
             mask: null,
             colorFilters: null,
-            syncedX: 0,
-            syncedY: 0,
-            syncedScaleX: 1,
-            syncedScaleY: 1,
-            syncedRotation: 0,
-            syncedSkewX: 0,
-            syncedSkewY: 0,
-            syncedRegX: 0,
-            syncedRegY: 0,
-            syncedVisible: !0,
-            syncedAlpha: 1
+            cjsX: 0,
+            cjsY: 0,
+            cjsScaleX: 1,
+            cjsScaleY: 1,
+            cjsRotation: 0,
+            cjsSkewX: 0,
+            cjsSkewY: 0,
+            cjsRegX: 0,
+            cjsRegY: 0,
+            cjsVisible: !0,
+            cjsAlpha: 1
         };
     }
-    function registerPixiData(cjs, data) {
-        data.owner = cjs, function(cjs) {
-            return "x" in cjs && "regX" in cjs && "alpha" in cjs;
-        }(cjs) && (data.transform.owner = cjs);
+    var BLEND_MODE_OF_OPERATION = {
+        "source-over": PIXI.BLEND_MODES.NORMAL,
+        lighter: PIXI.BLEND_MODES.ADD,
+        multiply: PIXI.BLEND_MODES.MULTIPLY,
+        screen: PIXI.BLEND_MODES.SCREEN
+    };
+    function blendModeForPixi(data) {
+        var operation = data.compositeOperation;
+        return operation && Object.prototype.hasOwnProperty.call(BLEND_MODE_OF_OPERATION, operation) ? BLEND_MODE_OF_OPERATION[operation] : data.reservedBlendMode;
     }
-    var driveDepth = 0;
+    var pixiDataStore = new WeakMap;
+    function registerPixiData(cjs, data) {
+        pixiDataStore.set(cjs, data);
+    }
+    function defineDisplayAccessors(proto, getData) {
+        function define(name, get, set) {
+            Object.defineProperty(proto, name, {
+                configurable: !0,
+                enumerable: !0,
+                get: get,
+                set: set
+            });
+        }
+        define("x", function() {
+            return getData(this).cjsX;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsX = value, data.transform.position.x = value;
+        }), define("y", function() {
+            return getData(this).cjsY;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsY = value, data.transform.position.y = value;
+        }), define("scaleX", function() {
+            return getData(this).cjsScaleX;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsScaleX = value, data.transform.scale.x = value;
+        }), define("scaleY", function() {
+            return getData(this).cjsScaleY;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsScaleY = value, data.transform.scale.y = value;
+        }), define("rotation", function() {
+            return getData(this).cjsRotation;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsRotation = value, data.transform.setRotation(value);
+        }), define("skewX", function() {
+            return getData(this).cjsSkewX;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsSkewX = value, data.transform.setSkewX(value);
+        }), define("skewY", function() {
+            return getData(this).cjsSkewY;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsSkewY = value, data.transform.setSkewY(value);
+        }), define("regX", function() {
+            return getData(this).cjsRegX;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsRegX = value, data.regObj.x = value;
+        }), define("regY", function() {
+            return getData(this).cjsRegY;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsRegY = value, data.regObj.y = value;
+        }), define("visible", function() {
+            return getData(this).cjsVisible;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsVisible = value, data.instance.visible = !!value;
+        }), define("alpha", function() {
+            return getData(this).cjsAlpha;
+        }, function(value) {
+            var data = getData(this);
+            data.cjsAlpha = value, data.instance.alpha = value;
+        });
+    }
+    var settleMarks = new WeakSet, driveDepth = 0;
     function beginDrive() {
         driveDepth++;
     }
@@ -123,6 +174,15 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
     }
     function isDriving() {
         return driveDepth > 0;
+    }
+    function markForSettle(node) {
+        for (var top = node; top.parent; ) {
+            top = top.parent;
+        }
+        settleMarks.add(top);
+    }
+    function takeSettleMark(root) {
+        return !!settleMarks.has(root) && (settleMarks.delete(root), !0);
     }
     function setMaskForPixi(data, value) {
         var old = data.mask, instance = data.instance;
@@ -137,101 +197,56 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         })) : instance.mask = null, data.mask = value;
     }
     function syncToPixi(root) {
-        logSuspended++, pushNode(root), logSuspended--;
-    }
-    function pullFromPixi() {
-        for (var writes = function() {
-            var writes = pixiWrites;
-            return writes.length && (pixiWrites = []), writes;
-        }(), i = 0; i < writes.length; i++) {
-            var transform = writes[i];
-            transform.logged = !1;
-            var cjs = transform.owner, data = cjs ? cjs[PIXI_DATA] : void 0;
-            cjs && data && data.owner === cjs && data.transform === transform && pullNode(cjs, data);
-        }
-    }
-    function pushNode(cjs) {
-        var data = cjs[PIXI_DATA];
-        if (data && data.owner === cjs) {
-            var pixi = data.instance, transform = data.transform, x = cjs.x, y = cjs.y, xChanged = x !== data.syncedX, yChanged = y !== data.syncedY;
-            if (xChanged || yChanged) {
-                var position = transform.position;
-                position.set(xChanged ? data.syncedX = x : position.x, yChanged ? data.syncedY = y : position.y);
+        var data = pixiDataStore.get(root);
+        data && (data.colorFilters && function(colorFilters) {
+            for (var i = 0; i < colorFilters.length; i++) {
+                var source = colorFilters[i].source, matrix = colorFilters[i].matrix;
+                matrix[0] = source.redMultiplier, matrix[6] = source.greenMultiplier, matrix[12] = source.blueMultiplier, 
+                matrix[18] = source.alphaMultiplier, matrix[4] = source.redOffset / 255, matrix[9] = source.greenOffset / 255, 
+                matrix[14] = source.blueOffset / 255, matrix[19] = source.alphaOffset / 255;
             }
-            var scaleX = cjs.scaleX, scaleY = cjs.scaleY, scaleXChanged = scaleX !== data.syncedScaleX, scaleYChanged = scaleY !== data.syncedScaleY;
-            if (scaleXChanged || scaleYChanged) {
-                var scale = transform.scale;
-                scale.set(scaleXChanged ? data.syncedScaleX = scaleX : scale.x, scaleYChanged ? data.syncedScaleY = scaleY : scale.y);
-            }
-            var rotation = cjs.rotation, skewX = cjs.skewX, skewY = cjs.skewY, rotationChanged = rotation !== data.syncedRotation, skewXChanged = skewX !== data.syncedSkewX, skewYChanged = skewY !== data.syncedSkewY;
-            (rotationChanged || skewXChanged || skewYChanged) && transform.setRotationSkew(rotationChanged ? data.syncedRotation = rotation : transform.degRotation, skewXChanged ? data.syncedSkewX = skewX : transform.degSkewX, skewYChanged ? data.syncedSkewY = skewY : transform.degSkewY);
-            var regX = cjs.regX, regY = cjs.regY, regXChanged = regX !== data.syncedRegX, regYChanged = regY !== data.syncedRegY;
-            if (regXChanged || regYChanged) {
-                var regObj = data.regObj;
-                regObj.set(regXChanged ? data.syncedRegX = regX : regObj.x, regYChanged ? data.syncedRegY = regY : regObj.y);
-            }
-            var visible = !!cjs.visible;
-            visible !== data.syncedVisible && (pixi.visible = data.syncedVisible = visible), 
-            cjs.alpha !== data.syncedAlpha && (pixi.alpha = data.syncedAlpha = cjs.alpha);
-            var colorFilters = data.colorFilters;
-            if (colorFilters) {
-                for (var i = 0; i < colorFilters.length; i++) {
-                    var source = colorFilters[i].source, matrix = colorFilters[i].matrix;
-                    matrix[0] = source.redMultiplier, matrix[6] = source.greenMultiplier, matrix[12] = source.blueMultiplier, 
-                    matrix[18] = source.alphaMultiplier, matrix[4] = source.redOffset / 255, matrix[9] = source.greenOffset / 255, 
-                    matrix[14] = source.blueOffset / 255, matrix[19] = source.alphaOffset / 255;
-                }
-            }
-            data.mask && pushNode(data.mask);
-        }
-        var children = cjs.children;
+        }(data.colorFilters), data.mask && syncToPixi(data.mask));
+        var children = root.children;
         if (children) {
-            for (var i$1 = 0; i$1 < children.length; i$1++) {
-                pushNode(children[i$1]);
+            for (var i = 0; i < children.length; i++) {
+                syncToPixi(children[i]);
             }
         }
-    }
-    function pullNode(cjs, data) {
-        var pixi = data.instance, transform = data.transform, x = transform.position.x;
-        x !== data.syncedX && (cjs.x = data.syncedX = x);
-        var y = transform.position.y;
-        y !== data.syncedY && (cjs.y = data.syncedY = y);
-        var scaleX = transform.scale.x;
-        scaleX !== data.syncedScaleX && (cjs.scaleX = data.syncedScaleX = scaleX);
-        var scaleY = transform.scale.y;
-        scaleY !== data.syncedScaleY && (cjs.scaleY = data.syncedScaleY = scaleY), transform.degRotation !== data.syncedRotation && (cjs.rotation = data.syncedRotation = transform.degRotation), 
-        transform.degSkewX !== data.syncedSkewX && (cjs.skewX = data.syncedSkewX = transform.degSkewX), 
-        transform.degSkewY !== data.syncedSkewY && (cjs.skewY = data.syncedSkewY = transform.degSkewY);
-        var regX = data.regObj.x;
-        regX !== data.syncedRegX && (cjs.regX = data.syncedRegX = regX);
-        var regY = data.regObj.y;
-        regY !== data.syncedRegY && (cjs.regY = data.syncedRegY = regY), pixi.visible !== data.syncedVisible && (cjs.visible = data.syncedVisible = pixi.visible), 
-        pixi.alpha !== data.syncedAlpha && (cjs.alpha = data.syncedAlpha = pixi.alpha);
     }
     var PixiColorMatrixFilter = function(superclass) {
         function PixiColorMatrixFilter(cjs) {
-            superclass.call(this), this._createjs = cjs;
+            superclass.call(this), this._createjs = cjs, this.syncFromCreatejs();
         }
         superclass && (PixiColorMatrixFilter.__proto__ = superclass), PixiColorMatrixFilter.prototype = Object.create(superclass && superclass.prototype), 
         PixiColorMatrixFilter.prototype.constructor = PixiColorMatrixFilter;
         var prototypeAccessors = {
             createjs: {
                 configurable: !0
+            },
+            matrix: {
+                configurable: !0
             }
         };
         return prototypeAccessors.createjs.get = function() {
             return this._createjs;
+        }, prototypeAccessors.matrix.get = function() {
+            return this.syncFromCreatejs(), this.uniforms.m;
+        }, prototypeAccessors.matrix.set = function(value) {
+            this.uniforms.m = value;
+        }, PixiColorMatrixFilter.prototype.syncFromCreatejs = function() {
+            var filter = this._createjs;
+            if (filter) {
+                var matrix = this.uniforms.m;
+                matrix[0] = filter.redMultiplier, matrix[6] = filter.greenMultiplier, matrix[12] = filter.blueMultiplier, 
+                matrix[18] = filter.alphaMultiplier, matrix[4] = filter.redOffset / 255, matrix[9] = filter.greenOffset / 255, 
+                matrix[14] = filter.blueOffset / 255, matrix[19] = filter.alphaOffset / 255;
+            }
         }, Object.defineProperties(PixiColorMatrixFilter.prototype, prototypeAccessors), 
         PixiColorMatrixFilter;
-    }(PIXI.filters.ColorMatrixFilter), PIXI_FILTER = Symbol("pixiFilter");
+    }(PIXI.filters.ColorMatrixFilter), pixiFilterStore = new WeakMap;
     function getPixiColorMatrixFilter(filter) {
-        var pixi = filter[PIXI_FILTER];
-        return pixi && pixi.createjs === filter || (function(filter, pixi) {
-            var matrix = pixi.matrix;
-            matrix[0] = filter.redMultiplier, matrix[6] = filter.greenMultiplier, matrix[12] = filter.blueMultiplier, 
-            matrix[18] = filter.alphaMultiplier, matrix[4] = filter.redOffset / 255, matrix[9] = filter.greenOffset / 255, 
-            matrix[14] = filter.blueOffset / 255, matrix[19] = filter.alphaOffset / 255;
-        }(filter, pixi = new PixiColorMatrixFilter(filter)), filter[PIXI_FILTER] = pixi), 
+        var pixi = pixiFilterStore.get(filter);
+        return pixi || (pixi = new PixiColorMatrixFilter(filter), pixiFilterStore.set(filter, pixi)), 
         pixi;
     }
     var createjsInteractionEvents, CreatejsColorFilter = function(superclass) {
@@ -262,9 +277,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         this._downTarget = null, this._cjs = cjs, this._emitter = new PIXI.utils.EventEmitter, 
         cjs.pixi.on("pointerdown", this._onPointerDown, this).on("pointermove", this._onPointerMove, this).on("pointerup", this._onPointerUp, this).on("pointerupoutside", this._onPointerUpOutside, this).on("pointertap", this._onPointerTap, this).on("pointerover", this._onPointerOver, this).on("pointerout", this._onPointerOut, this);
     };
-    CreatejsEventManager.prototype.isFor = function(cjs) {
-        return this._cjs === cjs;
-    }, CreatejsEventManager.prototype._onPointerDown = function(e) {
+    CreatejsEventManager.prototype._onPointerDown = function(e) {
         var ev = {
             type: createjsInteractionEvents.mousedown,
             currentTarget: e.currentTarget.createjs,
@@ -337,25 +350,26 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         type && !(type in createjsInteractionEvents) || (this._emitter.removeAllListeners(type), 
         0 === this._emitter.eventNames().length && (this._cjs.pixi.interactive = !1));
     };
-    var EVENT_MANAGER = Symbol("eventManager");
+    var eventManagerStore = new WeakMap;
     function addInteractionListener(cjs, type, cb) {
         type in createjsInteractionEvents && function(cjs) {
-            var manager = cjs[EVENT_MANAGER];
-            return manager && manager.isFor(cjs) || (manager = new CreatejsEventManager(cjs), 
-            cjs[EVENT_MANAGER] = manager), manager;
+            var manager = eventManagerStore.get(cjs);
+            return manager || (manager = new CreatejsEventManager(cjs), eventManagerStore.set(cjs, manager)), 
+            manager;
         }(cjs).add(type, cb);
     }
     function removeInteractionListener(cjs, type, cb) {
-        var manager = cjs[EVENT_MANAGER];
-        manager && manager.isFor(cjs) && manager.remove(type, cb);
+        var manager = eventManagerStore.get(cjs);
+        manager && manager.remove(type, cb);
     }
     function removeAllInteractionListeners(cjs, type) {
-        var manager = cjs[EVENT_MANAGER];
-        manager && manager.isFor(cjs) && manager.removeAll(type);
+        var manager = eventManagerStore.get(cjs);
+        manager && manager.removeAll(type);
     }
     var PixiMovieClip = function(Container$1) {
         function PixiMovieClip(cjs) {
-            Container$1.call(this), this._filterContainer = null, this._createjs = cjs;
+            Container$1.call(this), this._filterContainer = null, this._colorFilters = null, 
+            this._createjs = cjs;
         }
         Container$1 && (PixiMovieClip.__proto__ = Container$1), PixiMovieClip.prototype = Object.create(Container$1 && Container$1.prototype), 
         PixiMovieClip.prototype.constructor = PixiMovieClip;
@@ -367,16 +381,24 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 configurable: !0
             }
         };
-        return prototypeAccessors$2.filterContainer.get = function() {
+        return PixiMovieClip.prototype.setColorFiltersForPixi = function(value) {
+            this._colorFilters = value;
+        }, PixiMovieClip.prototype.updateTransform = function() {
+            var colorFilters = this._colorFilters;
+            if (colorFilters) {
+                for (var i = 0; i < colorFilters.length; i++) {
+                    colorFilters[i].syncFromCreatejs();
+                }
+            }
+            Container$1.prototype.updateTransform.call(this);
+        }, prototypeAccessors$2.filterContainer.get = function() {
             return this._filterContainer;
         }, prototypeAccessors$2.filterContainer.set = function(value) {
             this._filterContainer = value;
         }, prototypeAccessors$2.createjs.get = function() {
             return this._createjs;
         }, Object.defineProperties(PixiMovieClip.prototype, prototypeAccessors$2), PixiMovieClip;
-    }(PIXI.Container);
-    logPixiWrites(PixiMovieClip.prototype);
-    var AnimateEvent = function(superclass) {
+    }(PIXI.Container), AnimateEvent = function(superclass) {
         function AnimateEvent(type) {
             superclass.call(this, type);
         }
@@ -397,34 +419,21 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CompositeOperations.Lighter = "lighter", CompositeOperations.Multiply = "multiply", 
         CompositeOperations.Screen = "screen";
     }(CompositeOperations || (CompositeOperations = {}));
-    var blendModes = {};
+    var dataStore$5 = new WeakMap;
     function resetData$5(cjs) {
         var data = function(cjs) {
             var pixi = new PixiMovieClip(cjs);
             return Object.assign(createPixiData(pixi, null), {
                 subInstance: pixi,
                 listenFrameEvents: {},
-                filters: null,
-                compositeOperation: null
+                filters: null
             });
         }(cjs);
-        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
+        return dataStore$5.set(cjs, data), registerPixiData(cjs, data), data;
     }
     function ensureData$5(cjs) {
-        var data = cjs[PIXI_DATA];
-        return data && data.owner === cjs ? data : resetData$5(cjs);
-    }
-    blendModes[CompositeOperations.Lighter] = PIXI.BLEND_MODES.ADD, blendModes[CompositeOperations.Multiply] = PIXI.BLEND_MODES.MULTIPLY, 
-    blendModes[CompositeOperations.Screen] = PIXI.BLEND_MODES.SCREEN;
-    var SETTLE_MARK = Symbol("settleMark");
-    function markForSettle(node) {
-        for (var top = node; top.parent; ) {
-            top = top.parent;
-        }
-        top instanceof CreatejsMovieClip$1 && (top[SETTLE_MARK] = !0);
-    }
-    function takeSettleMark(root) {
-        return !!root[SETTLE_MARK] && (root[SETTLE_MARK] = !1, !0);
+        var data = dataStore$5.get(cjs);
+        return data || resetData$5(cjs);
     }
     function isBlendModeChild(child) {
         return "pixi" in child && "updateBlendModeForPixi" in child;
@@ -506,21 +515,20 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             superclass.prototype.gotoAndStop.call(this, positionOrLabel), markForSettle(this);
         }, CreatejsMovieClip.prototype.updateBlendModeForPixi = function(mode) {
             var data = ensureData$5(this);
-            if (!data.compositeOperation || blendModes[data.compositeOperation] !== mode) {
-                data.reservedBlendMode = mode;
-                for (var i = 0; i < this.children.length; i++) {
-                    var child = this.children[i];
+            data.reservedBlendMode !== mode && (data.reservedBlendMode = mode, this._passBlendModeForPixi(data));
+        }, CreatejsMovieClip.prototype._passBlendModeForPixi = function(data) {
+            var children = this.children;
+            if (children) {
+                for (var mode = blendModeForPixi(data), i = 0; i < children.length; i++) {
+                    var child = children[i];
                     isBlendModeChild(child) && child.updateBlendModeForPixi(mode);
                 }
             }
         }, prototypeAccessors$3.compositeOperation.get = function() {
             return ensureData$5(this).compositeOperation;
         }, prototypeAccessors$3.compositeOperation.set = function(value) {
-            var data = ensureData$5(this);
-            if (data.compositeOperation !== value) {
-                var blendMode = value && blendModes[value] || data.reservedBlendMode;
-                this.updateBlendModeForPixi(blendMode), data.compositeOperation = value;
-            }
+            var data = ensureData$5(this), before = blendModeForPixi(data);
+            data.compositeOperation = value, blendModeForPixi(data) !== before && this._passBlendModeForPixi(data);
         }, prototypeAccessors$3.filters.get = function() {
             return ensureData$5(this).filters;
         }, prototypeAccessors$3.filters.set = function(value) {
@@ -537,14 +545,14 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                     }
                 }
             }
-            data.instance.filters = list, data.colorFilters = pairs.length ? pairs : null, data.filters = value;
+            data.instance.filters = list, data.instance.setColorFiltersForPixi(list.length ? list : null), 
+            data.colorFilters = pairs.length ? pairs : null, data.filters = value;
         }, prototypeAccessors$3.mask.get = function() {
             return ensureData$5(this).mask;
         }, prototypeAccessors$3.mask.set = function(value) {
             setMaskForPixi(ensureData$5(this), value);
         }, CreatejsMovieClip.prototype._updateChildrenBlendModeForPixi = function(child) {
-            var data = ensureData$5(this), blendMode = data.compositeOperation && blendModes[data.compositeOperation] || data.reservedBlendMode;
-            blendMode && child.updateBlendModeForPixi(blendMode);
+            child.parent !== this && child.updateBlendModeForPixi(blendModeForPixi(ensureData$5(this)));
         }, CreatejsMovieClip.prototype.addChild = function() {
             for (var children = [], len = arguments.length; len--; ) {
                 children[len] = arguments[len];
@@ -605,7 +613,8 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             superclass.prototype.removeAllEventListeners.call(this, type), removeAllInteractionListeners(this, type);
         }, Object.defineProperties(CreatejsMovieClip.prototype, prototypeAccessors$3), CreatejsMovieClip;
     }(createjs.MovieClip);
-    delete CreatejsMovieClip$1.prototype.endAnimation, delete CreatejsMovieClip$1.prototype.reachLabel;
+    defineDisplayAccessors(CreatejsMovieClip$1.prototype, ensureData$5), delete CreatejsMovieClip$1.prototype.endAnimation, 
+    delete CreatejsMovieClip$1.prototype.reachLabel;
     var PixiSprite = function(Sprite) {
         function PixiSprite(cjs) {
             Sprite.call(this), this._createjs = cjs;
@@ -621,18 +630,18 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiSprite.prototype, prototypeAccessors$4), PixiSprite;
     }(PIXI.Sprite);
+    var dataStore$4 = new WeakMap;
     function resetData$4(cjs) {
         var data = function(cjs) {
             var pixi = new PixiSprite(cjs);
             return createPixiData(pixi, pixi.anchor);
         }(cjs);
-        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
+        return dataStore$4.set(cjs, data), registerPixiData(cjs, data), data;
     }
     function ensureData$4(cjs) {
-        var data = cjs[PIXI_DATA];
-        return data && data.owner === cjs ? data : resetData$4(cjs);
+        var data = dataStore$4.get(cjs);
+        return data || resetData$4(cjs);
     }
-    logPixiWrites(PixiSprite.prototype);
     var CreatejsSprite$1 = function(superclass) {
         function CreatejsSprite() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -644,6 +653,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CreatejsSprite.prototype.constructor = CreatejsSprite;
         var prototypeAccessors$5 = {
             pixi: {
+                configurable: !0
+            },
+            compositeOperation: {
                 configurable: !0
             },
             mask: {
@@ -658,7 +670,13 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }, prototypeAccessors$5.pixi.get = function() {
             return ensureData$4(this).instance;
         }, CreatejsSprite.prototype.advance = function(time) {}, CreatejsSprite.prototype.updateBlendModeForPixi = function(mode) {
-            ensureData$4(this).instance.blendMode = mode;
+            var data = ensureData$4(this);
+            data.reservedBlendMode = mode, data.instance.blendMode = blendModeForPixi(data);
+        }, prototypeAccessors$5.compositeOperation.get = function() {
+            return ensureData$4(this).compositeOperation;
+        }, prototypeAccessors$5.compositeOperation.set = function(value) {
+            var data = ensureData$4(this);
+            data.compositeOperation = value, data.instance.blendMode = blendModeForPixi(data);
         }, CreatejsSprite.prototype.gotoAndStop = function(frameOrAnimation) {
             superclass.prototype.gotoAndStop.call(this, frameOrAnimation);
             var frame = this.spriteSheet.getFrame(this.currentFrame), baseTexture = PIXI.BaseTexture.from(frame.image), rect = new PIXI.Rectangle(frame.rect.x, frame.rect.y, frame.rect.width, frame.rect.height), texture = new PIXI.Texture(baseTexture, rect);
@@ -684,7 +702,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }, CreatejsSprite.prototype.removeAllEventListeners = function(type) {
             superclass.prototype.removeAllEventListeners.call(this, type), removeAllInteractionListeners(this, type);
         }, Object.defineProperties(CreatejsSprite.prototype, prototypeAccessors$5), CreatejsSprite;
-    }(createjs.Sprite), PixiShape = function(Container$1) {
+    }(createjs.Sprite);
+    defineDisplayAccessors(CreatejsSprite$1.prototype, ensureData$4);
+    var PixiShape = function(Container$1) {
         function PixiShape(cjs) {
             Container$1.call(this), this._createjs = cjs;
         }
@@ -699,6 +719,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiShape.prototype, prototypeAccessors$6), PixiShape;
     }(PIXI.Container);
+    var dataStore$3 = new WeakMap;
     function resetData$3(cjs) {
         var data = function(cjs) {
             var pixi = new PixiShape(cjs);
@@ -707,13 +728,12 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 graphics: null
             });
         }(cjs);
-        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
+        return dataStore$3.set(cjs, data), registerPixiData(cjs, data), data;
     }
     function ensureData$3(cjs) {
-        var data = cjs[PIXI_DATA];
-        return data && data.owner === cjs ? data : resetData$3(cjs);
+        var data = dataStore$3.get(cjs);
+        return data || resetData$3(cjs);
     }
-    logPixiWrites(PixiShape.prototype);
     var CreatejsShape = function(superclass) {
         function CreatejsShape(graphics) {
             superclass.call(this, graphics), ensureData$3(this);
@@ -722,6 +742,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CreatejsShape.prototype.constructor = CreatejsShape;
         var prototypeAccessors$7 = {
             pixi: {
+                configurable: !0
+            },
+            compositeOperation: {
                 configurable: !0
             },
             graphics: {
@@ -738,13 +761,18 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return ensureData$3(this).instance;
         }, CreatejsShape.prototype.updateBlendModeForPixi = function(mode) {
             var _a, data = ensureData$3(this);
-            data.reservedBlendMode = mode, null === (_a = data.graphics) || void 0 === _a || _a.updateBlendModeForPixi(mode);
+            data.reservedBlendMode = mode, null === (_a = data.graphics) || void 0 === _a || _a.updateBlendModeForPixi(blendModeForPixi(data));
+        }, prototypeAccessors$7.compositeOperation.get = function() {
+            return ensureData$3(this).compositeOperation;
+        }, prototypeAccessors$7.compositeOperation.set = function(value) {
+            var _a, data = ensureData$3(this);
+            data.compositeOperation = value, null === (_a = data.graphics) || void 0 === _a || _a.updateBlendModeForPixi(blendModeForPixi(data));
         }, prototypeAccessors$7.graphics.get = function() {
             return ensureData$3(this).graphics;
         }, prototypeAccessors$7.graphics.set = function(value) {
             var data = ensureData$3(this);
-            if (data.masked.length) {
-                if (data.instance.removeChildren(), value) {
+            if (data.instance.removeChildren(), data.masked.length) {
+                if (value) {
                     for (var i = 0; i < data.masked.length; i++) {
                         data.masked[i].mask = data.instance;
                     }
@@ -754,7 +782,8 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                     }
                 }
             }
-            value && data.instance.addChild(value.pixi), data.graphics = value;
+            value && (data.instance.addChild(value.pixi), value.updateBlendModeForPixi(blendModeForPixi(data))), 
+            data.graphics = value;
         }, prototypeAccessors$7.masked.get = function() {
             return ensureData$3(this).masked;
         }, prototypeAccessors$7.mask.get = function() {
@@ -778,7 +807,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }, CreatejsShape.prototype.removeAllEventListeners = function(type) {
             superclass.prototype.removeAllEventListeners.call(this, type), removeAllInteractionListeners(this, type);
         }, Object.defineProperties(CreatejsShape.prototype, prototypeAccessors$7), CreatejsShape;
-    }(createjs.Shape), PixiBitmap = function(Sprite) {
+    }(createjs.Shape);
+    defineDisplayAccessors(CreatejsShape.prototype, ensureData$3);
+    var PixiBitmap = function(Sprite) {
         function PixiBitmap(cjs) {
             Sprite.call(this), this._createjs = cjs;
         }
@@ -793,18 +824,18 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjs;
         }, Object.defineProperties(PixiBitmap.prototype, prototypeAccessors$8), PixiBitmap;
     }(PIXI.Sprite);
+    var dataStore$2 = new WeakMap;
     function resetData$2(cjs) {
         var data = function(cjs) {
             var pixi = new PixiBitmap(cjs);
             return createPixiData(pixi, pixi.anchor);
         }(cjs);
-        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
+        return dataStore$2.set(cjs, data), registerPixiData(cjs, data), data;
     }
     function ensureData$2(cjs) {
-        var data = cjs[PIXI_DATA];
-        return data && data.owner === cjs ? data : resetData$2(cjs);
+        var data = dataStore$2.get(cjs);
+        return data || resetData$2(cjs);
     }
-    logPixiWrites(PixiBitmap.prototype);
     var CreatejsBitmap$1 = function(superclass) {
         function CreatejsBitmap() {
             for (var args = [], len = arguments.length; len--; ) {
@@ -816,6 +847,9 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CreatejsBitmap.prototype.constructor = CreatejsBitmap;
         var prototypeAccessors$9 = {
             pixi: {
+                configurable: !0
+            },
+            compositeOperation: {
                 configurable: !0
             },
             mask: {
@@ -831,7 +865,13 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }, prototypeAccessors$9.pixi.get = function() {
             return ensureData$2(this).instance;
         }, CreatejsBitmap.prototype.updateBlendModeForPixi = function(mode) {
-            ensureData$2(this).instance.blendMode = mode;
+            var data = ensureData$2(this);
+            data.reservedBlendMode = mode, data.instance.blendMode = blendModeForPixi(data);
+        }, prototypeAccessors$9.compositeOperation.get = function() {
+            return ensureData$2(this).compositeOperation;
+        }, prototypeAccessors$9.compositeOperation.set = function(value) {
+            var data = ensureData$2(this);
+            data.compositeOperation = value, data.instance.blendMode = blendModeForPixi(data);
         }, prototypeAccessors$9.mask.get = function() {
             return ensureData$2(this).mask;
         }, prototypeAccessors$9.mask.set = function(value) {
@@ -853,34 +893,128 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }, CreatejsBitmap.prototype.removeAllEventListeners = function(type) {
             superclass.prototype.removeAllEventListeners.call(this, type), removeAllInteractionListeners(this, type);
         }, Object.defineProperties(CreatejsBitmap.prototype, prototypeAccessors$9), CreatejsBitmap;
-    }(createjs.Bitmap), PixiGraphics = function(Graphics) {
+    }(createjs.Bitmap);
+    defineDisplayAccessors(CreatejsBitmap$1.prototype, ensureData$2);
+    var GradientBaseTexture = function(BaseTexture) {
+        function GradientBaseTexture() {
+            BaseTexture.apply(this, arguments);
+        }
+        BaseTexture && (GradientBaseTexture.__proto__ = BaseTexture), GradientBaseTexture.prototype = Object.create(BaseTexture && BaseTexture.prototype), 
+        GradientBaseTexture.prototype.constructor = GradientBaseTexture;
+        var prototypeAccessors$10 = {
+            wrapMode: {
+                configurable: !0
+            }
+        };
+        return prototypeAccessors$10.wrapMode.get = function() {
+            return PIXI.WRAP_MODES.CLAMP;
+        }, prototypeAccessors$10.wrapMode.set = function(value) {}, Object.defineProperties(GradientBaseTexture.prototype, prototypeAccessors$10), 
+        GradientBaseTexture;
+    }(PIXI.BaseTexture), GradientTexture = function(Texture) {
+        function GradientTexture(canvas, gradient, local, toShape) {
+            Texture.call(this, new GradientBaseTexture(canvas, {
+                mipmap: PIXI.MIPMAP_MODES.OFF
+            })), this.gradient = gradient, this.local = local, this.toShape = toShape;
+        }
+        return Texture && (GradientTexture.__proto__ = Texture), GradientTexture.prototype = Object.create(Texture && Texture.prototype), 
+        GradientTexture.prototype.constructor = GradientTexture, GradientTexture;
+    }(PIXI.Texture), gradientTextures = new Map;
+    function paintGradient(canvas, local) {
+        var context = canvas.getContext("2d");
+        if (context) {
+            for (var paint = "linear" === local.type ? context.createLinearGradient(local.x0, local.y0, local.x1, local.y1) : context.createRadialGradient(local.x0, local.y0, local.r0, local.x1, local.y1, local.r1), i = 0; i < local.colors.length; i++) {
+                paint.addColorStop(local.ratios[i], local.colors[i]);
+            }
+            context.fillStyle = paint, context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    function getGradientTexture(gradient) {
+        var key = JSON.stringify(gradient), known = gradientTextures.get(key);
+        if (void 0 !== known) {
+            return known;
+        }
+        var texture = "linear" === gradient.type ? function(gradient) {
+            var dx = gradient.x1 - gradient.x0, dy = gradient.y1 - gradient.y0, length = Math.sqrt(dx * dx + dy * dy);
+            if (!length) {
+                return null;
+            }
+            var canvas = document.createElement("canvas");
+            canvas.width = 258, canvas.height = 1;
+            var local = {
+                type: "linear",
+                colors: gradient.colors,
+                ratios: gradient.ratios,
+                x0: 1,
+                y0: 0,
+                r0: 0,
+                x1: 257,
+                y1: 0,
+                r1: 0
+            };
+            paintGradient(canvas, local);
+            var a = dx / 256, b = dy / 256, toShape = new PIXI.Matrix(a, b, -dy / length, dx / length, gradient.x0 - a, gradient.y0 - b);
+            return new GradientTexture(canvas, gradient, local, toShape);
+        }(gradient) : function(gradient) {
+            var left = Math.min(gradient.x0 - gradient.r0, gradient.x1 - gradient.r1), top = Math.min(gradient.y0 - gradient.r0, gradient.y1 - gradient.r1), right = Math.max(gradient.x0 + gradient.r0, gradient.x1 + gradient.r1), bottom = Math.max(gradient.y0 + gradient.r0, gradient.y1 + gradient.r1), size = Math.max(right - left, bottom - top);
+            if (!(size > 0) || gradient.r1 === gradient.r0 && gradient.x0 === gradient.x1 && gradient.y0 === gradient.y1) {
+                return null;
+            }
+            var scale = 256 / size, canvas = document.createElement("canvas");
+            canvas.width = 256, canvas.height = 256;
+            var local = {
+                type: "radial",
+                colors: gradient.colors,
+                ratios: gradient.ratios,
+                x0: (gradient.x0 - left) * scale,
+                y0: (gradient.y0 - top) * scale,
+                r0: gradient.r0 * scale,
+                x1: (gradient.x1 - left) * scale,
+                y1: (gradient.y1 - top) * scale,
+                r1: gradient.r1 * scale
+            };
+            paintGradient(canvas, local);
+            var toShape = new PIXI.Matrix(1 / scale, 0, 0, 1 / scale, left, top);
+            return new GradientTexture(canvas, gradient, local, toShape);
+        }(gradient);
+        if (gradientTextures.set(key, texture), gradientTextures.size > 256) {
+            var oldest = gradientTextures.keys().next();
+            oldest.done || gradientTextures.delete(oldest.value);
+        }
+        return texture;
+    }
+    var PixiGraphics = function(Graphics) {
         function PixiGraphics(cjs) {
             Graphics.call(this), this._createjs = cjs;
         }
         Graphics && (PixiGraphics.__proto__ = Graphics), PixiGraphics.prototype = Object.create(Graphics && Graphics.prototype), 
         PixiGraphics.prototype.constructor = PixiGraphics;
-        var prototypeAccessors$10 = {
+        var prototypeAccessors$11 = {
             createjs: {
                 configurable: !0
             }
         };
-        return prototypeAccessors$10.createjs.get = function() {
+        return prototypeAccessors$11.createjs.get = function() {
             return this._createjs;
-        }, Object.defineProperties(PixiGraphics.prototype, prototypeAccessors$10), PixiGraphics;
+        }, PixiGraphics.prototype.setBlendModeForPixi = function(mode) {
+            this.blendMode !== mode && (this.blendMode = mode, this.batchDirty = -1);
+        }, Object.defineProperties(PixiGraphics.prototype, prototypeAccessors$11), PixiGraphics;
     }(PIXI.Graphics);
+    var dataStore$1 = new WeakMap;
     function resetData$1(cjs) {
         var data = function(cjs) {
             var pixi = new PixiGraphics(cjs);
             return Object.assign(createPixiData(pixi, null), {
                 strokeFill: 0,
-                strokeAlpha: 1
+                strokeAlpha: 1,
+                strokeTexture: null,
+                strokeMatrix: null
             });
         }(cjs);
-        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
+        return dataStore$1.set(cjs, data), registerPixiData(cjs, data), data;
     }
     function ensureData$1(cjs) {
-        var data = cjs[PIXI_DATA];
-        return data && data.owner === cjs ? data : resetData$1(cjs);
+        var data = dataStore$1.get(cjs);
+        return data || resetData$1(cjs);
     }
     var LineCap = {
         0: PIXI.LINE_CAP.BUTT,
@@ -890,7 +1024,13 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         0: PIXI.LINE_JOIN.MITER,
         1: PIXI.LINE_JOIN.ROUND,
         2: PIXI.LINE_JOIN.BEVEL
-    }, CreatejsGraphics = function(superclass) {
+    }, bitmapFillTextures = new WeakMap;
+    function getBitmapFillTexture(image) {
+        var texture = bitmapFillTextures.get(image);
+        return texture || (texture = new PIXI.Texture(new PIXI.BaseTexture(image)), bitmapFillTextures.set(image, texture)), 
+        texture;
+    }
+    var CreatejsGraphics = function(superclass) {
         function CreatejsGraphics() {
             for (var args = [], len = arguments.length; len--; ) {
                 args[len] = arguments[len];
@@ -901,7 +1041,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }
         superclass && (CreatejsGraphics.__proto__ = superclass), CreatejsGraphics.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsGraphics.prototype.constructor = CreatejsGraphics;
-        var prototypeAccessors$11 = {
+        var prototypeAccessors$12 = {
             pixi: {
                 configurable: !0
             },
@@ -909,10 +1049,10 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 configurable: !0
             }
         };
-        return prototypeAccessors$11.pixi.get = function() {
+        return prototypeAccessors$12.pixi.get = function() {
             return ensureData$1(this).instance;
         }, CreatejsGraphics.prototype.updateBlendModeForPixi = function(mode) {
-            mode && (ensureData$1(this).instance.blendMode = mode);
+            ensureData$1(this).instance.setBlendModeForPixi(mode);
         }, CreatejsGraphics.prototype.moveTo = function(x, y) {
             var pixi = ensureData$1(this).instance;
             return pixi.clone().endFill().containsPoint({
@@ -989,19 +1129,76 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             this;
         }, CreatejsGraphics.prototype.f = function(color) {
             return this.beginFill(color);
+        }, CreatejsGraphics.prototype.beginBitmapFill = function(image, repetition, matrix) {
+            return ensureData$1(this).instance.beginTextureFill({
+                texture: getBitmapFillTexture(image),
+                color: 16777215,
+                alpha: 1,
+                matrix: matrix ? new PIXI.Matrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty) : void 0
+            }), superclass.prototype.beginBitmapFill.call(this, image, repetition, matrix), 
+            this;
+        }, CreatejsGraphics.prototype.bf = function(image, repetition, matrix) {
+            return this.beginBitmapFill(image, repetition, matrix);
+        }, CreatejsGraphics.prototype.beginLinearGradientFill = function(colors, ratios, x0, y0, x1, y1) {
+            return this._beginGradientFill({
+                type: "linear",
+                colors: colors,
+                ratios: ratios,
+                x0: x0,
+                y0: y0,
+                r0: 0,
+                x1: x1,
+                y1: y1,
+                r1: 0
+            }), superclass.prototype.beginLinearGradientFill.call(this, colors, ratios, x0, y0, x1, y1), 
+            this;
+        }, CreatejsGraphics.prototype.lf = function(colors, ratios, x0, y0, x1, y1) {
+            return this.beginLinearGradientFill(colors, ratios, x0, y0, x1, y1);
+        }, CreatejsGraphics.prototype.beginRadialGradientFill = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
+            return this._beginGradientFill({
+                type: "radial",
+                colors: colors,
+                ratios: ratios,
+                x0: x0,
+                y0: y0,
+                r0: r0,
+                x1: x1,
+                y1: y1,
+                r1: r1
+            }), superclass.prototype.beginRadialGradientFill.call(this, colors, ratios, x0, y0, r0, x1, y1, r1), 
+            this;
+        }, CreatejsGraphics.prototype.rf = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
+            return this.beginRadialGradientFill(colors, ratios, x0, y0, r0, x1, y1, r1);
+        }, CreatejsGraphics.prototype._beginGradientFill = function(gradient) {
+            var instance = ensureData$1(this).instance, texture = getGradientTexture(gradient);
+            texture ? instance.beginTextureFill({
+                texture: texture,
+                color: 16777215,
+                alpha: 1,
+                matrix: texture.toShape
+            }) : instance.beginFill(0, 0);
         }, CreatejsGraphics.prototype.endFill = function() {
             return ensureData$1(this).instance.endFill(), superclass.prototype.endFill.call(this), 
             this;
         }, CreatejsGraphics.prototype.ef = function() {
             return this.endFill();
         }, CreatejsGraphics.prototype.setStrokeStyle = function(thickness, caps, joints, miterLimit, ignoreScale) {
-            var data = ensureData$1(this);
-            return data.instance.lineTextureStyle({
+            var data = ensureData$1(this), cap = caps in LineCap ? LineCap[caps] : LineCap[0], join = joints in LineJoin ? LineJoin[joints] : LineJoin[0], gradient = data.strokeTexture;
+            return gradient ? data.instance.lineTextureStyle({
+                width: thickness,
+                texture: gradient,
+                color: 16777215,
+                alpha: 1,
+                matrix: data.strokeMatrix || void 0,
+                cap: cap,
+                join: join,
+                miterLimit: miterLimit
+            }) : data.instance.lineTextureStyle({
                 width: thickness,
                 color: data.strokeFill,
                 alpha: data.strokeAlpha,
-                cap: caps in LineCap ? LineCap[caps] : LineCap[0],
-                join: joints in LineJoin ? LineJoin[joints] : LineJoin[0],
+                cap: cap,
+                join: join,
                 miterLimit: miterLimit
             }), superclass.prototype.setStrokeStyle.call(this, thickness, caps, joints, miterLimit, ignoreScale), 
             this;
@@ -1009,10 +1206,44 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this.setStrokeStyle(thickness, caps, joints, miterLimit, ignoreScale);
         }, CreatejsGraphics.prototype.beginStroke = function(color) {
             var data = ensureData$1(this), c = this._parseColor(color);
-            return data.strokeFill = c.color, data.strokeAlpha = c.alpha, superclass.prototype.beginStroke.call(this, color), 
-            this;
+            return data.strokeFill = c.color, data.strokeAlpha = c.alpha, data.strokeTexture = null, 
+            data.strokeMatrix = null, superclass.prototype.beginStroke.call(this, color), this;
         }, CreatejsGraphics.prototype.s = function(color) {
             return this.beginStroke(color);
+        }, CreatejsGraphics.prototype.beginLinearGradientStroke = function(colors, ratios, x0, y0, x1, y1) {
+            return this._setGradientStroke({
+                type: "linear",
+                colors: colors,
+                ratios: ratios,
+                x0: x0,
+                y0: y0,
+                r0: 0,
+                x1: x1,
+                y1: y1,
+                r1: 0
+            }), superclass.prototype.beginLinearGradientStroke.call(this, colors, ratios, x0, y0, x1, y1), 
+            this;
+        }, CreatejsGraphics.prototype.ls = function(colors, ratios, x0, y0, x1, y1) {
+            return this.beginLinearGradientStroke(colors, ratios, x0, y0, x1, y1);
+        }, CreatejsGraphics.prototype.beginRadialGradientStroke = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
+            return this._setGradientStroke({
+                type: "radial",
+                colors: colors,
+                ratios: ratios,
+                x0: x0,
+                y0: y0,
+                r0: r0,
+                x1: x1,
+                y1: y1,
+                r1: r1
+            }), superclass.prototype.beginRadialGradientStroke.call(this, colors, ratios, x0, y0, r0, x1, y1, r1), 
+            this;
+        }, CreatejsGraphics.prototype.rs = function(colors, ratios, x0, y0, r0, x1, y1, r1) {
+            return this.beginRadialGradientStroke(colors, ratios, x0, y0, r0, x1, y1, r1);
+        }, CreatejsGraphics.prototype._setGradientStroke = function(gradient) {
+            var data = ensureData$1(this), texture = getGradientTexture(gradient);
+            data.strokeTexture = texture, data.strokeMatrix = texture ? texture.toShape : null, 
+            data.strokeFill = 16777215, data.strokeAlpha = texture ? 1 : 0;
         }, CreatejsGraphics.prototype.drawRoundRect = function(x, y, w, h, radius) {
             return ensureData$1(this).instance.drawRoundedRect(x, y, w, h, radius), superclass.prototype.drawRoundRect.call(this, x, y, w, h, radius), 
             this;
@@ -1034,11 +1265,11 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             this;
         }, CreatejsGraphics.prototype.dp = function(x, y, radius, sides, pointSize, angle) {
             return this.drawPolyStar(x, y, radius, sides, pointSize, angle);
-        }, prototypeAccessors$11.mask.get = function() {
+        }, prototypeAccessors$12.mask.get = function() {
             return ensureData$1(this).mask;
-        }, prototypeAccessors$11.mask.set = function(value) {
+        }, prototypeAccessors$12.mask.set = function(value) {
             setMaskForPixi(ensureData$1(this), value);
-        }, Object.defineProperties(CreatejsGraphics.prototype, prototypeAccessors$11), CreatejsGraphics;
+        }, Object.defineProperties(CreatejsGraphics.prototype, prototypeAccessors$12), CreatejsGraphics;
     }(createjs.Graphics), PixiText = function(Text) {
         function PixiText() {
             Text.apply(this, arguments);
@@ -1051,7 +1282,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }
         Container$1 && (PixiTextContainer.__proto__ = Container$1), PixiTextContainer.prototype = Object.create(Container$1 && Container$1.prototype), 
         PixiTextContainer.prototype.constructor = PixiTextContainer;
-        var prototypeAccessors$12 = {
+        var prototypeAccessors$13 = {
             createjs: {
                 configurable: !0
             },
@@ -1059,14 +1290,14 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 configurable: !0
             }
         };
-        return prototypeAccessors$12.createjs.get = function() {
+        return prototypeAccessors$13.createjs.get = function() {
             return this._createjs;
-        }, prototypeAccessors$12.text.get = function() {
+        }, prototypeAccessors$13.text.get = function() {
             return this._text;
-        }, Object.defineProperties(PixiTextContainer.prototype, prototypeAccessors$12), 
+        }, Object.defineProperties(PixiTextContainer.prototype, prototypeAccessors$13), 
         PixiTextContainer;
     }(PIXI.Container);
-    logPixiWrites(PixiTextContainer.prototype);
+    var dataStore = new WeakMap;
     function resetData(cjs) {
         var data = function(cjs) {
             var text = new PixiText("", {
@@ -1081,11 +1312,11 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 lineWidth: 0
             });
         }(cjs);
-        return cjs[PIXI_DATA] = data, registerPixiData(cjs, data), data;
+        return dataStore.set(cjs, data), registerPixiData(cjs, data), data;
     }
     function ensureData(cjs) {
-        var data = cjs[PIXI_DATA];
-        return data && data.owner === cjs ? data : resetData(cjs);
+        var data = dataStore.get(cjs);
+        return data || resetData(cjs);
     }
     var CreatejsText = function(superclass) {
         function CreatejsText(text, font, color) {
@@ -1094,8 +1325,11 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }
         superclass && (CreatejsText.__proto__ = superclass), CreatejsText.prototype = Object.create(superclass && superclass.prototype), 
         CreatejsText.prototype.constructor = CreatejsText;
-        var prototypeAccessors$13 = {
+        var prototypeAccessors$14 = {
             pixi: {
+                configurable: !0
+            },
+            compositeOperation: {
                 configurable: !0
             },
             text: {
@@ -1120,13 +1354,19 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 configurable: !0
             }
         };
-        return prototypeAccessors$13.pixi.get = function() {
+        return prototypeAccessors$14.pixi.get = function() {
             return ensureData(this).instance;
         }, CreatejsText.prototype.updateBlendModeForPixi = function(mode) {
-            ensureData(this).instance.text.blendMode = mode;
-        }, prototypeAccessors$13.text.get = function() {
+            var data = ensureData(this);
+            data.reservedBlendMode = mode, data.instance.text.blendMode = blendModeForPixi(data);
+        }, prototypeAccessors$14.compositeOperation.get = function() {
+            return ensureData(this).compositeOperation;
+        }, prototypeAccessors$14.compositeOperation.set = function(value) {
+            var data = ensureData(this);
+            data.compositeOperation = value, data.instance.text.blendMode = blendModeForPixi(data);
+        }, prototypeAccessors$14.text.get = function() {
             return ensureData(this).text;
-        }, prototypeAccessors$13.text.set = function(text) {
+        }, prototypeAccessors$14.text.set = function(text) {
             var data = ensureData(this);
             data.instance.text.text = text, this._align(data.textAlign), data.text = text;
         }, CreatejsText.prototype._parseFont = function(font) {
@@ -1136,40 +1376,40 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 fontSize: Number((s || "0px").replace("px", "")),
                 fontFamily: p.join(" ").replace(/'/g, "")
             };
-        }, prototypeAccessors$13.font.get = function() {
+        }, prototypeAccessors$14.font.get = function() {
             return ensureData(this).font;
-        }, prototypeAccessors$13.font.set = function(font) {
+        }, prototypeAccessors$14.font.set = function(font) {
             var data = ensureData(this), _font = this._parseFont(font);
             data.instance.text.style.fontWeight = _font.fontWeight, data.instance.text.style.fontSize = _font.fontSize, 
             data.instance.text.style.fontFamily = _font.fontFamily, data.font = font;
         }, CreatejsText.prototype._parseColor = function(color) {
             return parseInt(color.slice(1), 16);
-        }, prototypeAccessors$13.color.get = function() {
+        }, prototypeAccessors$14.color.get = function() {
             return ensureData(this).color;
-        }, prototypeAccessors$13.color.set = function(color) {
+        }, prototypeAccessors$14.color.set = function(color) {
             var data = ensureData(this);
             data.instance.text.style.fill = this._parseColor(color), data.color = color;
         }, CreatejsText.prototype._align = function(align) {
             var pixiText = ensureData(this).instance.text;
             "left" !== align ? "center" !== align ? "right" !== align || (pixiText.x = -pixiText.width) : pixiText.x = -pixiText.width / 2 : pixiText.x = 0;
-        }, prototypeAccessors$13.textAlign.get = function() {
+        }, prototypeAccessors$14.textAlign.get = function() {
             return ensureData(this).textAlign;
-        }, prototypeAccessors$13.textAlign.set = function(align) {
+        }, prototypeAccessors$14.textAlign.set = function(align) {
             var data = ensureData(this);
             data.instance.text.style.align = align, this._align(align), data.textAlign = align;
-        }, prototypeAccessors$13.lineHeight.get = function() {
+        }, prototypeAccessors$14.lineHeight.get = function() {
             return ensureData(this).lineHeight;
-        }, prototypeAccessors$13.lineHeight.set = function(height) {
+        }, prototypeAccessors$14.lineHeight.set = function(height) {
             var data = ensureData(this);
             data.instance.text.style.lineHeight = height, data.lineHeight = height;
-        }, prototypeAccessors$13.lineWidth.get = function() {
+        }, prototypeAccessors$14.lineWidth.get = function() {
             return ensureData(this).lineWidth;
-        }, prototypeAccessors$13.lineWidth.set = function(width) {
+        }, prototypeAccessors$14.lineWidth.set = function(width) {
             var data = ensureData(this);
             data.instance.text.style.wordWrapWidth = width, this._align(data.textAlign), data.lineWidth = width;
-        }, prototypeAccessors$13.mask.get = function() {
+        }, prototypeAccessors$14.mask.get = function() {
             return ensureData(this).mask;
-        }, prototypeAccessors$13.mask.set = function(value) {
+        }, prototypeAccessors$14.mask.set = function(value) {
             setMaskForPixi(ensureData(this), value);
         }, CreatejsText.prototype.addEventListener = function(type, listener, useCapture) {
             if ("function" == typeof listener) {
@@ -1187,7 +1427,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             this.removeEventListener(type, listener, useCapture);
         }, CreatejsText.prototype.removeAllEventListeners = function(type) {
             superclass.prototype.removeAllEventListeners.call(this, type), removeAllInteractionListeners(this, type);
-        }, Object.defineProperties(CreatejsText.prototype, prototypeAccessors$13), CreatejsText;
+        }, Object.defineProperties(CreatejsText.prototype, prototypeAccessors$14), CreatejsText;
     }(createjs.Text);
     function isWrapped(obj) {
         return "pixi" in obj && "updateBlendModeForPixi" in obj;
@@ -1195,6 +1435,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
     function gotoAndStopVerbatim(target, positionOrLabel) {
         target.gotoAndStop(positionOrLabel);
     }
+    defineDisplayAccessors(CreatejsText.prototype, ensureData);
     var CreatejsButtonHelper = function(superclass) {
         function CreatejsButtonHelper(target, outLabel, overLabel, downLabel, play, hitArea, hitLabel) {
             if (superclass.call(this, target, outLabel, overLabel, downLabel, play, hitArea, hitLabel), 
@@ -1308,7 +1549,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             targets: {},
             container: container
         };
-    }, prototypeAccessors$14 = {
+    }, prototypeAccessors$15 = {
         speed: {
             configurable: !0
         },
@@ -1319,29 +1560,28 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             configurable: !0
         }
     };
-    prototypeAccessors$14.speed.get = function() {
+    prototypeAccessors$15.speed.get = function() {
         return this._speed;
-    }, prototypeAccessors$14.speed.set = function(value) {
+    }, prototypeAccessors$15.speed.set = function(value) {
         this._speed = value;
-    }, prototypeAccessors$14.overSpeed.get = function() {
+    }, prototypeAccessors$15.overSpeed.get = function() {
         return this._overSpeed;
-    }, prototypeAccessors$14.overSpeed.set = function(value) {
+    }, prototypeAccessors$15.overSpeed.set = function(value) {
         this._overSpeed = value;
-    }, prototypeAccessors$14.smooth.get = function() {
+    }, prototypeAccessors$15.smooth.get = function() {
         return this._smooth;
-    }, prototypeAccessors$14.smooth.set = function(value) {
+    }, prototypeAccessors$15.smooth.set = function(value) {
         this._smooth = value;
     }, CreatejsController.prototype.handleTick = function(delta) {
         var speed = this._speed > 0 ? this._speed : 0, d = delta * speed, usual = this._usualDelta(delta) * speed;
-        beginDrive(), pullFromPixi();
+        beginDrive();
         var targets = this._createjsData.targets;
         for (var i in targets) {
             var target = targets[i], fps = target.cjs.fps;
             target.t += d * fps / 60;
             var step = usual * fps / 60, lead = Math.min(step, 1) / 2;
             if (target.isFirst) {
-                target.isFirst = !1, target.clock = target.t + lead, target.cjs.updateStateForPixi(), 
-                syncToPixi(target.cjs);
+                target.isFirst = !1, target.clock = target.t + lead, target.cjs.updateStateForPixi();
             } else {
                 var p = void 0;
                 if (this._smooth) {
@@ -1357,7 +1597,6 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 for (var f = 0; f < frame; f++) {
                     target.cjs._tick(new CreatejsEvent("tick")), target.cjs.updateStateForPixi();
                 }
-                syncToPixi(target.cjs);
             }
         }
         endDrive();
@@ -1366,7 +1605,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         var targets = this._createjsData.targets;
         for (var i in targets) {
             var root = targets[i].cjs;
-            takeSettleMark(root) && root.settleForPixi(), syncToPixi(root);
+            takeSettleMark(root) && root.settleForPixi();
         }
         endDrive();
     }, CreatejsController.prototype._usualDelta = function(delta) {
@@ -1401,7 +1640,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         cjs;
     }, CreatejsController.prototype.removeCreatejs = function(cjs) {
         return this._createjsData.container.removeChild(cjs.pixi), cjs;
-    }, Object.defineProperties(CreatejsController.prototype, prototypeAccessors$14);
+    }, Object.defineProperties(CreatejsController.prototype, prototypeAccessors$15);
     var Container$1 = function(Container$1) {
         function Container() {
             Container$1.call(this), this._createjsData = {
@@ -1410,7 +1649,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         }
         Container$1 && (Container.__proto__ = Container$1), Container.prototype = Object.create(Container$1 && Container$1.prototype), 
         Container.prototype.constructor = Container;
-        var prototypeAccessors$15 = {
+        var prototypeAccessors$16 = {
             createjsSpeed: {
                 configurable: !0
             },
@@ -1421,17 +1660,17 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
                 configurable: !0
             }
         };
-        return prototypeAccessors$15.createjsSpeed.get = function() {
+        return prototypeAccessors$16.createjsSpeed.get = function() {
             return this._createjsData.controller.speed;
-        }, prototypeAccessors$15.createjsSpeed.set = function(value) {
+        }, prototypeAccessors$16.createjsSpeed.set = function(value) {
             this._createjsData.controller.speed = value;
-        }, prototypeAccessors$15.createjsOverSpeed.get = function() {
+        }, prototypeAccessors$16.createjsOverSpeed.get = function() {
             return this._createjsData.controller.overSpeed;
-        }, prototypeAccessors$15.createjsOverSpeed.set = function(value) {
+        }, prototypeAccessors$16.createjsOverSpeed.set = function(value) {
             this._createjsData.controller.overSpeed = value;
-        }, prototypeAccessors$15.createjsSmooth.get = function() {
+        }, prototypeAccessors$16.createjsSmooth.get = function() {
             return this._createjsData.controller.smooth;
-        }, prototypeAccessors$15.createjsSmooth.set = function(value) {
+        }, prototypeAccessors$16.createjsSmooth.set = function(value) {
             this._createjsData.controller.smooth = value;
         }, Container.prototype.handleTick = function(delta) {
             return this._createjsData.controller.handleTick(delta);
@@ -1443,7 +1682,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
             return this._createjsData.controller.addCreatejsAt(cjs, index);
         }, Container.prototype.removeCreatejs = function(cjs) {
             return this._createjsData.controller.removeCreatejs(cjs);
-        }, Object.defineProperties(Container.prototype, prototypeAccessors$15), Container;
+        }, Object.defineProperties(Container.prototype, prototypeAccessors$16), Container;
     }(PIXI.Container);
     createjs.MovieClip = CreatejsMovieClip$1, createjs.Sprite = CreatejsSprite$1, createjs.Shape = CreatejsShape, 
     createjs.Bitmap = CreatejsBitmap$1, createjs.Graphics = CreatejsGraphics, createjs.Text = CreatejsText, 
@@ -1468,9 +1707,7 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         CreatejsShape: CreatejsShape,
         CreatejsSprite: CreatejsSprite$1,
         CreatejsText: CreatejsText,
-        EVENT_MANAGER: EVENT_MANAGER,
-        PIXI_DATA: PIXI_DATA,
-        PIXI_FILTER: PIXI_FILTER,
+        DISPLAY_ACCESSOR_NAMES: [ "x", "y", "scaleX", "scaleY", "rotation", "skewX", "skewY", "regX", "regY", "visible", "alpha" ],
         PixiBitmap: PixiBitmap,
         PixiColorMatrixFilter: PixiColorMatrixFilter,
         PixiGraphics: PixiGraphics,
@@ -1479,24 +1716,24 @@ this.Pixim = this.Pixim || {}, function(exports, PIXI, createjs, pixim_js) {
         PixiSprite: PixiSprite,
         PixiText: PixiText,
         PixiTextContainer: PixiTextContainer,
-        SETTLE_MARK: SETTLE_MARK,
         addInteractionListener: addInteractionListener,
         beginDrive: beginDrive,
+        blendModeForPixi: blendModeForPixi,
         createPixiData: createPixiData,
         createjs: createjs,
         get createjsInteractionEvents() {
             return createjsInteractionEvents;
         },
+        defineDisplayAccessors: defineDisplayAccessors,
         endDrive: endDrive,
         findPixiData: function(cjs) {
-            var data = cjs[PIXI_DATA];
-            return data && data.owner === cjs ? data : null;
+            var data = pixiDataStore.get(cjs);
+            return data || null;
         },
         getPixiColorMatrixFilter: getPixiColorMatrixFilter,
         isDriving: isDriving,
         loadAssetAsync: loadAssetAsync,
         markForSettle: markForSettle,
-        pullFromPixi: pullFromPixi,
         registerPixiData: registerPixiData,
         removeAllInteractionListeners: removeAllInteractionListeners,
         removeInteractionListener: removeInteractionListener,

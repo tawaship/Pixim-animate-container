@@ -11,9 +11,9 @@
 
 ## Supported version
 
-- A complete set of content created with Adobe Animate version 24.0.1
+- Content published for HTML5 Canvas by Adobe Animate 24.0 (the samples and the checks use content published by it)
 - pixi.js 5.3.x
-- Pixim.js 1.14.0
+- Pixim.js 1.15 (checked with 1.15.2)
 
 It may work with other versions as well.
 
@@ -22,7 +22,7 @@ It may work with other versions as well.
 ### NPM
 
 ```sh
-npm install --save pixi.js @tawaship/pixim.js @tawaship/pixim-animate-container
+npm install --save pixi.js @tawaship/pixim.js @tawaship/pixim-animate-container@3.1.0
 ```
 
 <br />

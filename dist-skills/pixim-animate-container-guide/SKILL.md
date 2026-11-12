@@ -29,7 +29,7 @@ Animate content runs on createjs. This plugin extends createjs and integrates it
 
 Type definitions are read from the package installed in the project (`node_modules/`). That is the single source of truth that exactly matches the runtime code.
 
-- If the package is not installed, run `npm install @tawaship/pixim-animate-container` first (the dependency `@tawaship/pixi-animate-container` comes with it)
+- If the package is not installed, run `npm install @tawaship/pixim-animate-container@3.1.0` first (the dependency `@tawaship/pixi-animate-container` comes with it)
 - If the installed version differs from this skill's target version, **treat the type definitions in node_modules as authoritative** and follow them wherever they disagree with this skill
 
 | Module | Location of type definitions |
